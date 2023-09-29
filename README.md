@@ -17,8 +17,3 @@ Some of the features include:
 Yahoo Finance: https://github.com/sstrickx/yahoofinance-api
 
 ![Screenshot of api call](/src/images/ApiCall.png)
-
-# Java Sample Code
-
-![Java Output Screenshot] (/src/images)
-
