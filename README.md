@@ -17,4 +17,4 @@ Some of the features include:
 
 Yahoo Finance: https://github.com/sstrickx/yahoofinance-api
 
-![Screenshot of api call](/src/images/sample_api_call.png)
+![Screenshot of api call](/images/sample_api_call.png)
