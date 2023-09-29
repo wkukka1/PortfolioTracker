@@ -20,4 +20,4 @@ Yahoo Finance: https://github.com/sstrickx/yahoofinance-api
 
 # Java Output Sample
 
-![Screeshot of Java Code Output](/images/java_sample_output.png)
+![Screeshot of Java Code Output](/images/sample_output.png)
