@@ -13,8 +13,12 @@ Some of the features include:
 * Relevent news to updates related to ones stock picks
 * Analytics on the market including fastest growing stock
 
-# APIs we are using
-
+# APIS
 Yahoo Finance: https://github.com/sstrickx/yahoofinance-api
 
 ![Screenshot of api call](/src/images/ApiCall.png)
+
+# Java Sample Code
+
+![Java Output Screenshot] (/src/images)
+
