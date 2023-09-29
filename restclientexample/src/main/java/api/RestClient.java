@@ -11,14 +11,15 @@ public class RestClient {
     public static String getMarketData() throws RuntimeException {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
-                .url(REST_URL) // Add headers here, use String.format to add query params
-                .build();
+                .url(REST_URL)  // use String.format to add query params
+                .build();  // add headers before here, if required
         try {
             Response response = client.newCall(request).execute();
             // we can serialize into json here but idk if we have to
 
             String strResponse = response.body().string();
-            System.out.println(strResponse);
+            System.out.println("HTTP Status: " + response.code());
+            System.out.println("JSON Response String: " + strResponse);
             return strResponse;
         } catch (IOException | JSONException e) {
             throw new RuntimeException(e);
