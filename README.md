@@ -14,8 +14,8 @@ Some of the features include:
 * Analytics on the market including fastest growing stock
 
 # APIS
-Yahoo Finance: https://github.com/sstrickx/yahoofinance-api
-
+MarketStack: https://marketstack.com/documentation
+* Gets Realtime stock prices
 ![Screenshot of api call](/images/sample_api_call.png)
 
 # Java Output Sample
