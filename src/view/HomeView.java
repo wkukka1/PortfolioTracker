@@ -1,2 +1,4 @@
-package view;public class HomeView {
+package view;
+
+public class HomeView {
 }

@@ -4,7 +4,7 @@ The problem domain that we have chosen is Finance
 
 # Overview
 
-PortfolioTracker is a app that allows the user to input their portfolio and track it in realtime with tools to make better decsions about investing. 
+PortfolioTracker is a app that allows the user to input their portfolio and track it in realtime with tools to make better decsions about investing.
 
 Some of the features include:
 
@@ -14,10 +14,10 @@ Some of the features include:
 * Analytics on the market including fastest growing stock
 
 # APIS
-Yahoo Finance: https://github.com/sstrickx/yahoofinance-api
-
-![Screenshot of api call](/images/sample_api_call.png)
+MarketStack: https://marketstack.com/documentation
+* Gets Realtime stock prices
+  ![Screenshot of api call](/images/sample_api_call.png)
 
 # Java Output Sample
 
-![Screeshot of Java Code Output](/images/sample_output.png)
+![Screeshot of Java Code Output](/images/java_sample_output.png)
