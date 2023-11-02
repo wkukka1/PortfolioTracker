@@ -2,16 +2,18 @@ package data_access;
 
 import entity.User;
 import entity.UserFactory;
+import use_case.clear_users.ClearUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface {
+public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface, ClearUserDataAccessInterface {
 
     private final File csvFile;
 
@@ -94,6 +96,36 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
     @Override
     public boolean existsByName(String identifier) {
         return accounts.containsKey(identifier);
+    }
+
+    @Override
+    public void clearUsers(){
+        //TODO IMPLEMENT THIS PLEASE
+        System.out.println(accounts.toString());
+        accounts.clear();
+        this.save();
+        System.out.println(accounts.toString());
+    }
+
+    public ArrayList<String> getUserList(){
+        ArrayList<String> users = new ArrayList<>();
+        BufferedReader reader;
+        try{
+            String line;
+            reader = new BufferedReader(new FileReader(csvFile));
+            int count = 0;
+            while((line = reader.readLine()) != null){
+                String[] columns = line.split(",");
+                if(count > 0){
+                    users.add(columns[0]);
+                }
+                count ++;
+            }
+            reader.close();
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+        return users;
     }
 
 }
