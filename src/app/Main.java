@@ -62,7 +62,7 @@ public class Main {
         views.add(loggedInView, loggedInView.viewName);
 
 
-        viewManagerModel.setActiveView(signupView.viewName);
+        viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();
