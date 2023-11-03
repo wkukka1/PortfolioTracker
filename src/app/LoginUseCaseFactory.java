@@ -12,6 +12,7 @@ import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginUserDataAccessInterface;
 import view.LoginView;
+import view.SignupView;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -25,11 +26,11 @@ public class LoginUseCaseFactory {
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
-            LoginUserDataAccessInterface userDataAccessObject) {
+            LoginUserDataAccessInterface userDataAccessObject, SignupView signupView) {
 
         try {
-            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject);
-            return new LoginView(loginViewModel, loginController);
+            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject, signupView);
+            return new LoginView(loginViewModel, loginController, viewManagerModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -41,10 +42,11 @@ public class LoginUseCaseFactory {
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
-            LoginUserDataAccessInterface userDataAccessObject) throws IOException {
+            LoginUserDataAccessInterface userDataAccessObject,
+            SignupView signupView) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loggedInViewModel, loginViewModel);
+        LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loggedInViewModel, loginViewModel, signupView);
 
         UserFactory userFactory = new CommonUserFactory();
 

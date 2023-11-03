@@ -1,6 +1,7 @@
 package use_case.login;
 
 import entity.User;
+import view.SignupView;
 
 public class LoginInteractor implements LoginInputBoundary {
     final LoginUserDataAccessInterface userDataAccessObject;
@@ -10,6 +11,10 @@ public class LoginInteractor implements LoginInputBoundary {
                            LoginOutputBoundary loginOutputBoundary) {
         this.userDataAccessObject = userDataAccessInterface;
         this.loginPresenter = loginOutputBoundary;
+    }
+
+    public void signup(){
+        loginPresenter.setUpSignUp();
     }
 
     @Override

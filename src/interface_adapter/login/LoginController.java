@@ -4,6 +4,7 @@ import use_case.login.LoginInputData;
 import use_case.login.LoginInputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInputData;
+import view.SignupView;
 
 public class LoginController {
 
@@ -12,6 +13,9 @@ public class LoginController {
         this.loginUseCaseInteractor = loginUseCaseInteractor;
     }
 
+    public void setUpSignup(){
+        loginUseCaseInteractor.signup();
+    }
 
     public void execute(String username, String password) {
         LoginInputData loginInputData = new LoginInputData(
