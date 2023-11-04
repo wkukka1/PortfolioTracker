@@ -2,18 +2,16 @@ package interface_adapter.login;
 
 import use_case.login.LoginInputData;
 import use_case.login.LoginInputBoundary;
-import use_case.signup.SignupInputBoundary;
-import use_case.signup.SignupInputData;
-import view.SignupView;
 
 public class LoginController {
 
     final LoginInputBoundary loginUseCaseInteractor;
+
     public LoginController(LoginInputBoundary loginUseCaseInteractor) {
         this.loginUseCaseInteractor = loginUseCaseInteractor;
     }
 
-    public void setUpSignup(){
+    public void setUpSignup() {
         loginUseCaseInteractor.signup();
     }
 

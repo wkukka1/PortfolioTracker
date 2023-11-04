@@ -10,6 +10,7 @@ class CommonUser implements User {
 
     /**
      * Requires: password is valid.
+     *
      * @param name
      * @param password
      */

@@ -10,7 +10,6 @@ import interface_adapter.signup.SignupViewModel;
 import use_case.clear_users.ClearInputBoundary;
 import use_case.clear_users.ClearInteractor;
 import use_case.clear_users.ClearOutputBoundary;
-import use_case.clear_users.ClearUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import entity.CommonUserFactory;
 import entity.UserFactory;
@@ -25,8 +24,11 @@ import java.io.IOException;
 
 public class SignupUseCaseFactory {
 
-    /** Prevent instantiation. */
-    private SignupUseCaseFactory() {}
+    /**
+     * Prevent instantiation.
+     */
+    private SignupUseCaseFactory() {
+    }
 
     public static SignupView create(
             ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel, SignupUserDataAccessInterface userDataAccessObject, ClearViewModel clearViewModel) {
@@ -41,6 +43,7 @@ public class SignupUseCaseFactory {
 
         return null;
     }
+
     private static ClearController createUserClearUseCase(ClearViewModel clearViewModel, ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel, SignupUserDataAccessInterface userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.

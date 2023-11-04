@@ -13,7 +13,7 @@ public class LoginInteractor implements LoginInputBoundary {
         this.loginPresenter = loginOutputBoundary;
     }
 
-    public void signup(){
+    public void signup() {
         loginPresenter.setUpSignUp();
     }
 

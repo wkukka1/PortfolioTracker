@@ -7,7 +7,7 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupViewModel;
 import use_case.clear_users.ClearOutputBoundary;
 import use_case.clear_users.ClearOutputData;
-import use_case.signup.SignupUserDataAccessInterface;
+
 
 public class ClearPresenter implements ClearOutputBoundary {
     private final ClearViewModel clearViewModel;
@@ -17,7 +17,7 @@ public class ClearPresenter implements ClearOutputBoundary {
 
     public ClearPresenter(ClearViewModel clearViewModel,
                           ViewManagerModel viewManagerModel, SignupViewModel signupViewModel,
-                          LoginViewModel loginViewModel){
+                          LoginViewModel loginViewModel) {
         this.clearViewModel = clearViewModel;
         this.viewManagerModel = viewManagerModel;
         this.signupViewModel = signupViewModel;
@@ -33,7 +33,7 @@ public class ClearPresenter implements ClearOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
-    public void prepareFail(String error){
+    public void prepareFail(String error) {
 
     }
 }

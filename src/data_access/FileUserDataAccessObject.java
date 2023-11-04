@@ -90,6 +90,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
 
     /**
      * Return whether a user exists with username identifier.
+     *
      * @param identifier the username to check.
      * @return whether a user exists with username identifier
      */
@@ -99,7 +100,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
     }
 
     @Override
-    public void clearUsers(){
+    public void clearUsers() {
         //TODO IMPLEMENT THIS PLEASE
         System.out.println(accounts.toString());
         accounts.clear();
@@ -107,22 +108,22 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         System.out.println(accounts.toString());
     }
 
-    public ArrayList<String> getUserList(){
+    public ArrayList<String> getUserList() {
         ArrayList<String> users = new ArrayList<>();
         BufferedReader reader;
-        try{
+        try {
             String line;
             reader = new BufferedReader(new FileReader(csvFile));
             int count = 0;
-            while((line = reader.readLine()) != null){
+            while ((line = reader.readLine()) != null) {
                 String[] columns = line.split(",");
-                if(count > 0){
+                if (count > 0) {
                     users.add(columns[0]);
                 }
-                count ++;
+                count++;
             }
             reader.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return users;

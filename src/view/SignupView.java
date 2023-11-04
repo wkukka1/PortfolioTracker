@@ -88,8 +88,8 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         clear.addActionListener(
                 new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e){
-                        if(e.getSource().equals(clear)){
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource().equals(clear)) {
                             clearController.execute();
 
                             ClearState state = clearViewModel.getState();

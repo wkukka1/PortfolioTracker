@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class CommonUserFactory implements UserFactory {
     /**
      * Requires: password is valid.
+     *
      * @param name
      * @param password
      * @return
