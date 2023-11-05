@@ -7,9 +7,10 @@ public class Portfolio {
     private long netWorth;
     private int userID;
 
-    public Portfolio(List<Stock> stockList, long netWorth) {
+    public Portfolio(List<Stock> stockList, long netWorth, int userID) {
         this.stockList = stockList;
         this.netWorth = netWorth;
+        this.userID = userID;
     }
 
     public List<Stock> getStockList() {
