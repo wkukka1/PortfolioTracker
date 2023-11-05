@@ -1,14 +1,14 @@
 package entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Stock {
     private String tickerSymbol;
-    private LocalDate purchaseLocalDate;
+    private LocalDateTime purchaseLocalDate;
     private double quantity;
     private double totalValueAtPurchase;
 
-    public Stock(String tickerSymbol, LocalDate purchaseLocalDate, double quantity, double totalValueAtPurchase) {
+    public Stock(String tickerSymbol, LocalDateTime purchaseLocalDate, double quantity, double totalValueAtPurchase) {
         this.tickerSymbol = tickerSymbol;
         this.purchaseLocalDate = purchaseLocalDate;
         this.quantity = quantity;
@@ -23,11 +23,11 @@ public class Stock {
         this.tickerSymbol = tickerSymbol;
     }
 
-    public LocalDate getPurchaseLocalDate() {
+    public LocalDateTime getPurchaseLocalDate() {
         return purchaseLocalDate;
     }
 
-    public void setPurchaseLocalDate(LocalDate purchaseLocalDate) {
+    public void setPurchaseLocalDate(LocalDateTime purchaseLocalDate) {
         this.purchaseLocalDate = purchaseLocalDate;
     }
 
