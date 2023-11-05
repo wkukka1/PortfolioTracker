@@ -25,7 +25,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                 String row;
                 reader.readLine();
                 while ((row = reader.readLine()) != null) {
-                    String[] col = row.split(",", 3);
+                    String[] col = row.split(",", headers.size());
 
                     int userID = Integer.parseInt(String.valueOf(col[headers.get("userID")]));
                     long netWorth = Long.parseLong(String.valueOf(col[headers.get("netWorth")]));
@@ -37,6 +37,29 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                     portfolios.put(userID, currPortfolio);
                 }
             }
+        }
+    }
+
+    private void save() {
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(csvFile));
+            writer.write(String.join(",", headers.keySet()));
+            writer.newLine();
+
+            for (Portfolio portfolio : portfolios.values()) {
+                String encodedStocks = encodeStockListIntoStockStr((ArrayList<Stock>) portfolio.getStockList());
+
+                String line = String.format("%s,%s,%s",
+                        portfolio.getUserID(), portfolio.getNetWorth(), encodedStocks);
+
+                writer.write(line);
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
