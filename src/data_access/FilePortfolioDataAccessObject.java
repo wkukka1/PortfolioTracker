@@ -13,8 +13,8 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<Integer, Portfolio> portfolios = new HashMap<>();
 
-    private final String STOCKATTRIBUTEDELIMITER = "-";
-    private final String STOCKDELIMITER = "_";
+    private final String STOCK_ATTRIBUTE_DELIMITER = "-";
+    private final String STOCK_DELIMITER = "_";
 
     public FilePortfolioDataAccessObject(String csvPath) throws IOException {
         this.csvFile = new File(csvPath);
@@ -135,18 +135,18 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
      *     </p>
      *
      * @param stockList
-     * @return
+     * @return encoded stock string
      */
     private String encodeStockListIntoStockStr(ArrayList<Stock> stockList) {
         String encodedStocks = "";
         for (int i = 0; i < stockList.size(); i++) {
             Stock currStock = stockList.get(i);
             if (i > 0) {
-                encodedStocks = encodedStocks + STOCKDELIMITER;
+                encodedStocks = encodedStocks + STOCK_DELIMITER;
             }
-            encodedStocks = encodedStocks + currStock.getTickerSymbol() + STOCKATTRIBUTEDELIMITER +
-                    currStock.getTotalValueAtPurchase() + STOCKATTRIBUTEDELIMITER + currStock.getQuantity() +
-                    STOCKATTRIBUTEDELIMITER + currStock.getPurchaseLocalDate();
+            encodedStocks = encodedStocks + currStock.getTickerSymbol() + STOCK_ATTRIBUTE_DELIMITER +
+                    currStock.getTotalValueAtPurchase() + STOCK_ATTRIBUTE_DELIMITER + currStock.getQuantity() +
+                    STOCK_ATTRIBUTE_DELIMITER + currStock.getPurchaseLocalDate();
         }
         return encodedStocks;
     }
