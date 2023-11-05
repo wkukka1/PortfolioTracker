@@ -1,22 +1,22 @@
 package entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Portfolio {
-    private ArrayList<Stock> stockList;
+    private List<Stock> stockList;
     private long netWorth;
     private int userID;
 
-    public Portfolio(ArrayList<Stock> stockList, long netWorth) {
+    public Portfolio(List<Stock> stockList, long netWorth) {
         this.stockList = stockList;
         this.netWorth = netWorth;
     }
 
-    public ArrayList<Stock> getStockList() {
+    public List<Stock> getStockList() {
         return stockList;
     }
 
-    public void setStockList(ArrayList<Stock> stockList) {
+    public void setStockList(List<Stock> stockList) {
         this.stockList = stockList;
     }
 
