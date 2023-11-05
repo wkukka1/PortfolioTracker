@@ -2,11 +2,17 @@ package entity;
 
 import java.time.LocalDateTime;
 
-public interface User {
+public abstract class User {
 
-    String getName();
+    public String getName() {
+        return null;
+    }
 
-    String getPassword();
+    public String getPassword() {
+        return null;
+    }
 
-    LocalDateTime getCreationTime();
+    public LocalDateTime getCreationTime() {
+        return null;
+    }
 }

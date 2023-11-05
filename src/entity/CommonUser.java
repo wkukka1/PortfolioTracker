@@ -2,7 +2,7 @@ package entity;
 
 import java.time.LocalDateTime;
 
-class CommonUser implements User {
+class CommonUser extends User {
 
     private final String name;
     private final String password;
