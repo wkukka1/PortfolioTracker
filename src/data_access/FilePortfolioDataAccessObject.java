@@ -12,6 +12,9 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<Integer, Portfolio> portfolios = new HashMap<>();
 
+    private final String STOCKATTRIBUTEDELIMITER = "-";
+    private final String STOCKDELIMITER = "_";
+
     public FilePortfolioDataAccessObject(String csvPath) throws IOException {
         this.csvFile = new File(csvPath);
         headers.put("userID", 0);
@@ -61,5 +64,34 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Takes an ArrayList of Stock objects and returns a string of encoded stock information, where stock attributes
+     *     like tickerSymbol, totalValueAtPurchase, quantity, purchaseLocalDate are concatenated in the form
+     *     "AAPL-500-5-2023-11-05T12:17:52.780799_GOOG-600-6-2023-11-06T12:17:52.780799".
+     *     <p>
+     *         Here, "-" is the delimiter between 2 attributes of the same stock and "_" is the delimiter between 2
+     *         unique stock objects.
+     *     </p>
+     *     <p>
+     *         If the input ArrayList is empty, this method returns "".
+     *     </p>
+     *
+     * @param stockList
+     * @return
+     */
+    private String encodeStockListIntoStockStr(ArrayList<Stock> stockList) {
+        String encodedStocks = "";
+        for (int i = 0; i < stockList.size(); i++) {
+            Stock currStock = stockList.get(i);
+            if (i > 0) {
+                encodedStocks = encodedStocks + STOCKDELIMITER;
+            }
+            encodedStocks = encodedStocks + currStock.getTickerSymbol() + STOCKATTRIBUTEDELIMITER +
+                    currStock.getTotalValueAtPurchase() + STOCKATTRIBUTEDELIMITER + currStock.getQuantity() +
+                    STOCKATTRIBUTEDELIMITER + currStock.getPurchaseLocalDate();
+        }
+        return encodedStocks;
     }
 }
