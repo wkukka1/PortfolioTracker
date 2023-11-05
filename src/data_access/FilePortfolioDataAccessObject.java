@@ -146,7 +146,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
             }
             encodedStocks = encodedStocks + currStock.getTickerSymbol() + STOCK_ATTRIBUTE_DELIMITER +
                     currStock.getTotalValueAtPurchase() + STOCK_ATTRIBUTE_DELIMITER + currStock.getQuantity() +
-                    STOCK_ATTRIBUTE_DELIMITER + currStock.getPurchaseLocalDate();
+                    STOCK_ATTRIBUTE_DELIMITER + currStock.getPurchaseLocalDateTime();
         }
         return encodedStocks;
     }

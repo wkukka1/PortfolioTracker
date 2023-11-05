@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 
 public class Stock {
     private String tickerSymbol;
-    private LocalDateTime purchaseLocalDate;
+    private LocalDateTime purchaseLocalDateTime;
     private double quantity;
     private double totalValueAtPurchase;
 
-    public Stock(String tickerSymbol, LocalDateTime purchaseLocalDate, double quantity, double totalValueAtPurchase) {
+    public Stock(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double quantity, double totalValueAtPurchase) {
         this.tickerSymbol = tickerSymbol;
-        this.purchaseLocalDate = purchaseLocalDate;
+        this.purchaseLocalDateTime = purchaseLocalDateTime;
         this.quantity = quantity;
         this.totalValueAtPurchase = totalValueAtPurchase;
     }
@@ -23,12 +23,12 @@ public class Stock {
         this.tickerSymbol = tickerSymbol;
     }
 
-    public LocalDateTime getPurchaseLocalDate() {
-        return purchaseLocalDate;
+    public LocalDateTime getPurchaseLocalDateTime() {
+        return purchaseLocalDateTime;
     }
 
-    public void setPurchaseLocalDate(LocalDateTime purchaseLocalDate) {
-        this.purchaseLocalDate = purchaseLocalDate;
+    public void setPurchaseLocalDateTime(LocalDateTime purchaseLocalDateTime) {
+        this.purchaseLocalDateTime = purchaseLocalDateTime;
     }
 
     public double getQuantity() {
