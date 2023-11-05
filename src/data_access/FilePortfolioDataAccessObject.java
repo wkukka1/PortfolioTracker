@@ -150,4 +150,15 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
         }
         return encodedStocks;
     }
+
+    @Override
+    public void savePortfolio(Portfolio currPortfolio) {
+        portfolios.put(currPortfolio.getUserID(), currPortfolio);
+        this.save();
+    }
+
+    @Override
+    public Portfolio getPortfolioByID(int userID) {
+        return this.portfolios.get(userID);
+    }
 }
