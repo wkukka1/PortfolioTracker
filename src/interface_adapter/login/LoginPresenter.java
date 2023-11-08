@@ -24,6 +24,12 @@ public class LoginPresenter implements LoginOutputBoundary {
         this.signupView = signupView;
     }
 
+    /**
+     *
+     * @param response
+     * Takes in the response and switches the users screens from the login page to the home screen where they can look
+     * at their portfolio
+     */
     @Override
     public void prepareSuccessView(LoginOutputData response) {
         // On success, switch to the logged in view.

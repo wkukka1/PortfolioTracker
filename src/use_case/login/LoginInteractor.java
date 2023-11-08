@@ -17,14 +17,17 @@ public class LoginInteractor implements LoginInputBoundary {
         loginPresenter.setUpSignUp();
     }
 
+
     @Override
     public void execute(LoginInputData loginInputData) {
         String username = loginInputData.getUsername();
         String password = loginInputData.getPassword();
+        //checks if the username is not in the csv file
         if (!userDataAccessObject.existsByName(username)) {
             loginPresenter.prepareFailView(username + ": Account does not exist.");
         } else {
             String pwd = userDataAccessObject.get(username).getPassword();
+            //checks if the password on the csv file does not match the password the user inputted
             if (!password.equals(pwd)) {
                 loginPresenter.prepareFailView("Incorrect password for " + username + ".");
             } else {

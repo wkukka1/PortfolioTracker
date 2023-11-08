@@ -65,6 +65,10 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         return accounts.get(username);
     }
 
+
+    /**
+    Using the map attribute save overwrites the csv file with all the saved usernames
+     */
     private void save() {
         BufferedWriter writer;
         try {
@@ -98,7 +102,10 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         return accounts.containsKey(identifier);
     }
 
-
+    /**
+     *
+     * @return a arraylist of strings that contain the usernames of the users
+     */
     public ArrayList<String> getUserList() {
         ArrayList<String> users = new ArrayList<>();
         BufferedReader reader;
