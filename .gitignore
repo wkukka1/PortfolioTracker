@@ -11,7 +11,10 @@ buildNumber.properties
 
 .project
 .classpath
-.imi
+*.iml
+.idea
+.DS_Store
+*.csv
 
 # Compiled class file
 *.class
