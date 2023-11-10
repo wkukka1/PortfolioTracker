@@ -14,7 +14,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     private final Map<Integer, Portfolio> portfolios = new HashMap<>();
 
     private final String STOCK_ATTRIBUTE_DELIMITER = "-";
-    private final String STOCK_DELIMITER = "_";
+    private final String STOCK_ENTITY_DELIMITER = "_";
 
     public FilePortfolioDataAccessObject(String csvPath) throws IOException {
         this.csvFile = new File(csvPath);
@@ -44,6 +44,17 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
         }
     }
 
+    @Override
+    public void savePortfolio(Portfolio currPortfolio) {
+        portfolios.put(currPortfolio.getUserID(), currPortfolio);
+        this.save();
+    }
+
+    @Override
+    public Portfolio getPortfolioByID(int userID) {
+        return this.portfolios.get(userID);
+    }
+
     private void save() {
         BufferedWriter writer;
         try {
@@ -68,13 +79,16 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     }
 
     /**
-     * Takes a string of encoded stock information, where stock attributes like tickerSymbol, totalValueAtPurchase,
-     * quantity, purchaseLocalDate are concatenated in the form
-     *     "AAPL-500-5-2023-11-05T12:17:52.780799_GOOG-600-6-2023-11-06T12:17:52.780799" and returns an ArrayList of
+     * Takes a string of encoded stock information, where stock attributes tickerSymbol, totalValueAtPurchase,
+     * quantity, and purchaseLocalDate are concatenated in the form
+     *  {tickerSymbol1}-{totalValueAtPurchase1}-{quantity1}-{purchaseLocalDate1}_{tickerSymbol2}-{totalValueAtPurchase2}-...
+     *  Ex.
+     *     "AAPL-500.0-5.0-2023-11-05T12:17:52.780799_GOOG-600.0-6.0-2023-11-06T12:17:52.780799" and returns an ArrayList of
      *     Stock objects.
      *     <p>
      *         Here, "-" is the delimiter between 2 attributes of the same stock and "_" is the delimiter between 2
-     *         unique stock objects. The attributes are extracted from the string based on the specification above.
+     *         unique stock objects. The attributes are extracted from the string based on the specification above. Note:
+     *         the "-" symbols in the String representation of LocalDateTime objects are considered different to the "-" delimiter.
      *     </p>
      *     <p>
      *         If the input String is empty, this method returns an empty ArrayList.
@@ -123,12 +137,15 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     }
 
     /**
-     * Takes an ArrayList of Stock objects and returns a string of encoded stock information, where stock attributes
-     *     like tickerSymbol, totalValueAtPurchase, quantity, purchaseLocalDate are concatenated in the form
-     *     "AAPL-500-5-2023-11-05T12:17:52.780799_GOOG-600-6-2023-11-06T12:17:52.780799".
+     * Takes an ArrayList of Stock objects and returns an encoded string where Stock attributes tickerSymbol,
+     * totalValueAtPurchase, quantity, and purchaseLocalDate are concatenated in the form
+     *  {tickerSymbol1}-{totalValueAtPurchase1}-{quantity1}-{purchaseLocalDate1}_{tickerSymbol2}-{totalValueAtPurchase2}-...
+     *  Ex.
+     *     "AAPL-500.0-5.0-2023-11-05T12:17:52.780799_GOOG-600.0-6.0-2023-11-06T12:17:52.780799"
      *     <p>
      *         Here, "-" is the delimiter between 2 attributes of the same stock and "_" is the delimiter between 2
-     *         unique stock objects.
+     *         unique stock objects. Note: the "-" symbols in the String representation of LocalDateTime objects are
+     *         considered different to the "-" delimiter.
      *     </p>
      *     <p>
      *         If the input ArrayList is empty, this method returns "".
@@ -142,23 +159,12 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
         for (int i = 0; i < stockList.size(); i++) {
             Stock currStock = stockList.get(i);
             if (i > 0) {
-                encodedStocks = encodedStocks + STOCK_DELIMITER;
+                encodedStocks = encodedStocks + STOCK_ENTITY_DELIMITER;
             }
             encodedStocks = encodedStocks + currStock.getTickerSymbol() + STOCK_ATTRIBUTE_DELIMITER +
                     currStock.getTotalValueAtPurchase() + STOCK_ATTRIBUTE_DELIMITER + currStock.getQuantity() +
                     STOCK_ATTRIBUTE_DELIMITER + currStock.getPurchaseLocalDateTime();
         }
         return encodedStocks;
-    }
-
-    @Override
-    public void savePortfolio(Portfolio currPortfolio) {
-        portfolios.put(currPortfolio.getUserID(), currPortfolio);
-        this.save();
-    }
-
-    @Override
-    public Portfolio getPortfolioByID(int userID) {
-        return this.portfolios.get(userID);
     }
 }
