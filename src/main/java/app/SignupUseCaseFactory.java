@@ -37,14 +37,14 @@ public class SignupUseCaseFactory {
 
 
 
-    private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel, LoginViewModel loginViewModel, SignupUserDataAccessInterface userDataAccessObject, PortfolioDataAccessInterface portfolioDataAccessObject) throws IOException {
-
+    private static SignupController createUserSignupUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel,
+                                                            LoginViewModel loginViewModel, SignupUserDataAccessInterface userDataAccessObject,
+                                                            PortfolioDataAccessInterface portfolioDataAccessObject) throws IOException {
         SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
-
         UserFactory userFactory = new CommonUserFactory();
 
-        SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, portfolioDataAccessObject, signupOutputBoundary, userFactory);
+        SignupInputBoundary userSignupInteractor = new SignupInteractor(userDataAccessObject, portfolioDataAccessObject,
+                signupOutputBoundary, userFactory);
 
         return new SignupController(userSignupInteractor);
     }

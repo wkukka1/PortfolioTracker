@@ -18,7 +18,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Main {
-    private static final String PORTFOLIOS_FILE_PATH = "./portfolios.csv";
+    private static final String PORTFOLIOS_CSV_FILE_PATH = "./portfolios.csv";
 
     public static void main(String[] args) {
         // Build the main program window, the main panel containing the
@@ -55,16 +55,17 @@ public class Main {
 
         FilePortfolioDataAccessObject portfolioDataAccessObject;
         try {
-            portfolioDataAccessObject = new FilePortfolioDataAccessObject(PORTFOLIOS_FILE_PATH);
+            portfolioDataAccessObject = new FilePortfolioDataAccessObject(PORTFOLIOS_CSV_FILE_PATH);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel, userDataAccessObject,
-                portfolioDataAccessObject);
+        SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
+                userDataAccessObject, portfolioDataAccessObject);
         views.add(signupView, signupView.viewName);
 
-        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject, signupView);
+        LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
+                userDataAccessObject, signupView);
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
