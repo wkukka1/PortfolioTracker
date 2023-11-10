@@ -2,6 +2,7 @@ package data_access;
 
 import entity.Portfolio;
 import entity.Stock;
+import org.apache.commons.lang3.StringUtils;
 import use_case.signup.PortfolioDataAccessInterface;
 
 import java.io.*;
@@ -99,39 +100,39 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
      */
     private ArrayList<Stock> decodeStockStrIntoStockList(String encodedStocks) {
         ArrayList<Stock> stockList = new ArrayList<>();
-        if ("".equals(encodedStocks)) {
+        if (StringUtils.isEmpty(encodedStocks)) {
             return stockList;
         }
 
-        int lastStockDelimiterIndex = -1;
-        int indexOfStockDelimiter = encodedStocks.indexOf("_");
+        int prevStockDelimiterIndex = -1;
+        int currStockDelimiterIndex = encodedStocks.indexOf("_");
 
-        while (indexOfStockDelimiter != -1) {
-            Stock newStock = decodeIndividualStockIntoStockObj(encodedStocks, lastStockDelimiterIndex, indexOfStockDelimiter);
+        while (currStockDelimiterIndex != -1) {
+            Stock newStock = decodeIndividualStockIntoStockObj(encodedStocks, prevStockDelimiterIndex, currStockDelimiterIndex);
             stockList.add(newStock);
 
-            lastStockDelimiterIndex = indexOfStockDelimiter;
-            indexOfStockDelimiter = encodedStocks.indexOf("_", lastStockDelimiterIndex + 1);
+            prevStockDelimiterIndex = currStockDelimiterIndex;
+            currStockDelimiterIndex = encodedStocks.indexOf("_", prevStockDelimiterIndex + 1);
         }
-        Stock newStock = decodeIndividualStockIntoStockObj(encodedStocks, lastStockDelimiterIndex, encodedStocks.length());
+        Stock newStock = decodeIndividualStockIntoStockObj(encodedStocks, prevStockDelimiterIndex, encodedStocks.length());
         stockList.add(newStock);
 
         return stockList;
     }
 
-    private Stock decodeIndividualStockIntoStockObj(String encodedStocks, int initialIndexOfStockDelimiter,
-                                              int endIndexOfStockDelimiter) {
-        int firstAttributeDelimiterIndex = encodedStocks.indexOf("-", initialIndexOfStockDelimiter + 1);
-        int secondAttributeDelimiterIndex = encodedStocks.indexOf("-", firstAttributeDelimiterIndex + 1);
-        int thirdAttributeDelimiterIndex = encodedStocks.indexOf("-", secondAttributeDelimiterIndex + 1);
+    private Stock decodeIndividualStockIntoStockObj(String encodedStocks, int startIndex,
+                                              int endIndex) {
+        int firstAttrDelimiterIndex = encodedStocks.indexOf("-", startIndex + 1);
+        int secondAttrDelimiterIndex = encodedStocks.indexOf("-", firstAttrDelimiterIndex + 1);
+        int thirdAttrDelimiterIndex = encodedStocks.indexOf("-", secondAttrDelimiterIndex + 1);
 
-        String tickerSymbol = encodedStocks.substring(initialIndexOfStockDelimiter + 1, firstAttributeDelimiterIndex);
-        double stockValueAtPurchase = Double.parseDouble(encodedStocks.substring(firstAttributeDelimiterIndex + 1,
-                secondAttributeDelimiterIndex));
-        double stockQuantity = Double.parseDouble(encodedStocks.substring(secondAttributeDelimiterIndex + 1,
-                thirdAttributeDelimiterIndex));
+        String tickerSymbol = encodedStocks.substring(startIndex + 1, firstAttrDelimiterIndex);
+        double stockValueAtPurchase = Double.parseDouble(encodedStocks.substring(firstAttrDelimiterIndex + 1,
+                secondAttrDelimiterIndex));
+        double stockQuantity = Double.parseDouble(encodedStocks.substring(secondAttrDelimiterIndex + 1,
+                thirdAttrDelimiterIndex));
         LocalDateTime purchaseLocalDateTime = LocalDateTime.parse(
-                encodedStocks.substring(thirdAttributeDelimiterIndex + 1, endIndexOfStockDelimiter));
+                encodedStocks.substring(thirdAttrDelimiterIndex + 1, endIndex));
 
         return new Stock(tickerSymbol, purchaseLocalDateTime, stockQuantity, stockValueAtPurchase);
     }
