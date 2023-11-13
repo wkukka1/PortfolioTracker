@@ -15,6 +15,7 @@ Some of the features include:
 # APIS
 MarketStack: https://marketstack.com/documentation
 * Gets Realtime stock prices
+
 ![Screenshot of API call](/images/sample_api_call.png)
 
 # Java Output Sample
