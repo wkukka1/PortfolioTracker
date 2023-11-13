@@ -4,15 +4,11 @@ import java.time.LocalDateTime;
 
 public abstract class User {
 
-    public String getName() {
-        return null;
-    }
+    abstract public String getName();
 
-    public String getPassword() {
-        return null;
-    }
+    abstract public String getPassword();
 
-    public LocalDateTime getCreationTime() {
-        return null;
-    }
+    abstract public LocalDateTime getCreationTime();
+
+    abstract public int getUserID();
 }
