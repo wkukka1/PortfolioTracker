@@ -4,6 +4,7 @@ import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import use_case.delete_user.DeleteOutputData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final LoggedInViewModel loggedInViewModel;
     private final DeleteState deleteState;
     private final DeleteController deleteController;
+    private final LoginView loginView;
 
     JLabel title;
     JLabel netProfitLabel;
@@ -29,11 +31,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
+                        LoginView loginView) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
+        this.loginView = loginView;
 
         this.setLayout(new GridBagLayout());
 
@@ -100,8 +104,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         if (choice == JOptionPane.YES_OPTION) {
             // User clicked YES
             System.out.println("Account deleted");
-            System.out.print(loggedInViewModel.getLoggedInUser());
-            //TODO ADD logic for handling the cancellation of account deletion here
+            deleteController.execute(loggedInViewModel.getLoggedInUser());
+//            DeleteState state = deleteState.getState();
+            JOptionPane.showMessageDialog(loginView, "Successfully Deleted Account");
         } else {
             // User clicked NO or closed the dialog
             System.out.println("Account not deleted");

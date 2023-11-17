@@ -14,6 +14,7 @@ import use_case.delete_user.DeleteOutputBoundary;
 import use_case.delete_user.DeleteUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoggedInView;
+import view.LoginView;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -27,12 +28,12 @@ public class LoggedInUseCaseFactory {
                                       ViewManagerModel viewManagerModel
             , SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
-                                      FilePortfolioDataAccessObject portfolioDataAccessObject) {
+                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
-            return new LoggedInView(loggedInViewModel, deleteState, deleteController);
+            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }

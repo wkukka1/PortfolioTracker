@@ -133,8 +133,9 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
     }
 
     @Override
-    public void deleteUser(String id) {
-
+    public void deleteUser(String username) {
+        accounts.remove(username);
+        this.save();
     }
 
     @Override

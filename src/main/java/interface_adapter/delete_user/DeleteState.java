@@ -18,4 +18,5 @@ public class DeleteState {
     public boolean isSuccess() {
         return success;
     }
+
 }
