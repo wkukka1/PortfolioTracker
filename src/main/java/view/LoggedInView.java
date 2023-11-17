@@ -94,6 +94,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         if (choice == JOptionPane.YES_OPTION) {
             // User clicked YES
             System.out.println("Account deleted");
+            System.out.print(loggedInViewModel.getLoggedInUser());
             //TODO ADD logic for handling the cancellation of account deletion here
         } else {
             // User clicked NO or closed the dialog
