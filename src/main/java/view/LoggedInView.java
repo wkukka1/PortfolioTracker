@@ -20,7 +20,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JLabel netProfitValue;
     JButton addStockButton;
     JButton logOut;
-    JButton DeleteUser;
+    JButton deleteUser;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
@@ -40,8 +40,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         addStockButton = new JButton("Add Stock");
         addStockButton.addActionListener(this);
 
-        logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
-        DeleteUser = new JButton(loggedInViewModel.DELETE_USER_LABEL);
+        logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut.addActionListener(this);
+        deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
+        deleteUser.addActionListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -76,7 +78,28 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridy = 2;
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        this.add(DeleteUser, gbc);
+        this.add(deleteUser, gbc);
+    }
+    /*
+    Creates a pop that the user needs to click to continue deleting their account
+     */
+    private void showDeleteAccountConfirmation() {
+        // Create a JOptionPane with a YES_NO_OPTION dialog type
+        int choice = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete your account?",
+                "Delete Account Confirmation",
+                JOptionPane.YES_NO_OPTION);
+
+        // Check the user's choice
+        if (choice == JOptionPane.YES_OPTION) {
+            // User clicked YES
+            System.out.println("Account deleted");
+            //TODO ADD logic for handling the cancellation of account deletion here
+        } else {
+            // User clicked NO or closed the dialog
+            System.out.println("Account not deleted");
+            //TODO Send the user back to the loggedIn screen
+        }
     }
 
     /**
@@ -118,7 +141,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     JOptionPane.showMessageDialog(this, "Please fill in all fields.");
                 }
             }
-        } else if (evt.getSource() == logOut) {
+
+        }if (evt.getSource() == deleteUser){
+            showDeleteAccountConfirmation();
+        }else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
         }
     }
