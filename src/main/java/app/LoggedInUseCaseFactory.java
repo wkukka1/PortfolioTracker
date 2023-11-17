@@ -44,7 +44,7 @@ public class LoggedInUseCaseFactory {
                                                            LoggedInViewModel loggedInViewModel) throws IOException {
         DeleteOutputBoundary deleteOutputBoundary = new DeletePresenter(deleteViewModel, viewManagerModel,
                 loggedInViewModel, loginViewModel);
-        DeleteInputBoundary deleteInteractor = new DeleteInteractor((DeleteUserDataAccessInterface) userDataAccessInterface, deleteOutputBoundary);
+        DeleteInputBoundary deleteInteractor = new DeleteInteractor(userDataAccessInterface, deleteOutputBoundary);
         return new DeleteController(deleteInteractor);
     }
 }
