@@ -20,6 +20,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JLabel netProfitValue;
     JButton addStockButton;
     JButton logOut;
+    JButton DeleteUser;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
@@ -40,6 +41,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         addStockButton.addActionListener(this);
 
         logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
+        DeleteUser = new JButton(loggedInViewModel.DELETE_USER_LABEL);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -69,6 +71,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.anchor = GridBagConstraints.EAST;
 
         this.add(logOut, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(DeleteUser, gbc);
     }
 
     /**

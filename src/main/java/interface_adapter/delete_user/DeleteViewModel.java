@@ -1,2 +1,4 @@
-package interface_adapter.delete_user;public class DeleteViewModel {
+package interface_adapter.delete_user;
+
+public class DeleteViewModel {
 }
