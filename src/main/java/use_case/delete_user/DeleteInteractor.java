@@ -12,12 +12,12 @@ public class DeleteInteractor implements DeleteInputBoundary{
         this.deletePortfolioDataAccessObject = portfolioDataAccessObject;
     }
     @Override
-    public void execute(String id) {
+    public void execute(String username) {
         //TODO Fix this so that if the users/portfolio is not deleted it shows a fail view
-        deleteDataAccessObject.deleteUser(id);
+        int id = deleteDataAccessObject.getUserId(username);
+        deleteDataAccessObject.deleteUser(username);
         deletePortfolioDataAccessObject.deletePortfolio(id);
-        deletePortfolioDataAccessObject.deletePortfolio(id);
-        DeleteOutputData output = new DeleteOutputData(id, true);
+        DeleteOutputData output = new DeleteOutputData(username, true);
 
         deletePresenter.prepareSuccessView(output);
     }

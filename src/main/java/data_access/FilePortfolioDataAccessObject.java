@@ -171,7 +171,8 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     }
 
     @Override
-    public void deletePortfolio(String id) {
-
+    public void deletePortfolio(int id) {
+        portfolios.remove(id);
+        this.save();
     }
 }
