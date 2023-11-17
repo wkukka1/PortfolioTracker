@@ -2,6 +2,8 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.delete_user.DeleteController;
+import interface_adapter.delete_user.DeleteState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +16,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
+    private final DeleteState deleteState;
+    private final DeleteController deleteController;
 
     JLabel title;
     JLabel netProfitLabel;
@@ -25,9 +29,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
+        this.deleteState = deleteState;
+        this.deleteController = deleteController;
 
         this.setLayout(new GridBagLayout());
 

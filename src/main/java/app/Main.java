@@ -4,6 +4,7 @@ import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
 
+import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
@@ -45,6 +46,7 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+        DeleteViewModel deleteViewModel = new DeleteViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -68,7 +70,8 @@ public class Main {
                 userDataAccessObject, signupView);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
+        LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
+                userDataAccessObject, deleteViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
 
