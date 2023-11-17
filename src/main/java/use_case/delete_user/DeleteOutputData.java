@@ -12,4 +12,8 @@ public class DeleteOutputData {
     public String getUser() {
         return user;
     }
+
+    public boolean isSuccess() {
+        return success;
+    }
 }

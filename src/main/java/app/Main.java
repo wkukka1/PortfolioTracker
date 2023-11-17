@@ -71,7 +71,7 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
-                userDataAccessObject, deleteViewModel);
+                userDataAccessObject, deleteViewModel, portfolioDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
 

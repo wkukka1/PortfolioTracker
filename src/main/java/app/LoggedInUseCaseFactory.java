@@ -1,5 +1,6 @@
 package app;
 
+import data_access.FilePortfolioDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeletePresenter;
@@ -25,10 +26,11 @@ public class LoggedInUseCaseFactory {
                                       LoginViewModel loginViewModel,
                                       ViewManagerModel viewManagerModel
             , SignupUserDataAccessInterface userDataAccessInterface,
-                                      DeleteViewModel deleteViewModel) {
+                                      DeleteViewModel deleteViewModel,
+                                      FilePortfolioDataAccessObject portfolioDataAccessObject) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
-                    userDataAccessInterface, loggedInViewModel);
+                    userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
             return new LoggedInView(loggedInViewModel, deleteState, deleteController);
         }catch(IOException e){
@@ -41,10 +43,11 @@ public class LoggedInUseCaseFactory {
                                                            LoginViewModel loginViewModel,
                                                            ViewManagerModel viewManagerModel,
                                                            SignupUserDataAccessInterface userDataAccessInterface,
-                                                           LoggedInViewModel loggedInViewModel) throws IOException {
+                                                           LoggedInViewModel loggedInViewModel,
+                                                           FilePortfolioDataAccessObject portfolioDataAccessObject) throws IOException {
         DeleteOutputBoundary deleteOutputBoundary = new DeletePresenter(deleteViewModel, viewManagerModel,
                 loggedInViewModel, loginViewModel);
-        DeleteInputBoundary deleteInteractor = new DeleteInteractor(userDataAccessInterface, deleteOutputBoundary);
+        DeleteInputBoundary deleteInteractor = new DeleteInteractor(userDataAccessInterface, deleteOutputBoundary, portfolioDataAccessObject);
         return new DeleteController(deleteInteractor);
     }
 }

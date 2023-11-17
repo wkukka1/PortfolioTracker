@@ -133,7 +133,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
     }
 
     @Override
-    public void deleteUser() {
+    public void deleteUser(String id) {
 
     }
 

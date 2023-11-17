@@ -2,7 +2,7 @@ package interface_adapter.delete_user;
 
 public class DeleteState {
     private String user;
-    private boolean sucsess;
+    private boolean success;
     private String error = null;
     public DeleteState(DeleteState copy){
         this.user = copy.user;
@@ -12,7 +12,10 @@ public class DeleteState {
     public DeleteState(){};
     public void setUser(String user){this.user = user;}
 
-    public void setSucsess(boolean sucsess){this.sucsess = sucsess;}
+    public void setSuccess(boolean success){this.success = success;}
     public void error(String error){this.error = error;}
 
+    public boolean isSuccess() {
+        return success;
+    }
 }

@@ -25,13 +25,13 @@ public class DeletePresenter implements DeleteOutputBoundary{
     public void prepareSuccessView(DeleteOutputData user){
         DeleteState deleteState = deleteViewModel.getState();
         deleteState.setUser(user.getUser());
-        deleteState.setSucsess(true);
+        deleteState.setSuccess(true);
         viewManagerModel.setActiveView(loginViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 
     @Override
     public void prepareFailView(String error) {
-
+        //TODO: Create a failview
     }
 }

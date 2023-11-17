@@ -8,7 +8,7 @@ public class DeleteController {
         this.deleteUseCaseInteractor = deleteInteractor;
     }
 
-    public void execute(){
-        deleteUseCaseInteractor.execute();
+    public void execute(String id){
+        deleteUseCaseInteractor.execute(id);
     }
 }
