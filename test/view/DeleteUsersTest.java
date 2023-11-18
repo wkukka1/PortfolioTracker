@@ -63,7 +63,7 @@ public class DeleteUsersTest {
         return (JButton) buttons.getComponent(0);
     }
 
-    public LabelTextPanel getTextFeilds() {
+    public LabelTextPanel[] getTextFeilds() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -80,10 +80,10 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoginView lv = (LoginView) jp2.getComponent(1);
 
-        LabelTextPanel textField = (LabelTextPanel) lv.getComponent(3);
-
+        LabelTextPanel usernameTextField = (LabelTextPanel) lv.getComponent(1);
+        LabelTextPanel passwordTextField = (LabelTextPanel) lv.getComponent(3);
         // Assuming logIn button is at index 0 in the buttons
-        return textField;
+        return new LabelTextPanel[]{usernameTextField, passwordTextField};
     }
 
     public boolean deleteAccount(int num) {
@@ -126,9 +126,10 @@ public class DeleteUsersTest {
     @org.junit.Test
     public void testGetTextFeilds() {
         Main.main(null);
-        LabelTextPanel textField = getTextFeilds();
-        System.out.println(textField.getLabel().getText());
-        assert (textField.getLabel().getText().equals("Password"));
+        LabelTextPanel[] textField = getTextFeilds();
+        System.out.println(textField[0].getLabel().getText());
+        assert (textField[0].getLabel().getText().equals("Username") &&
+                textField[1].getLabel().getText().equals("Password"));
     }
 
     private Timer createCloseTimer() {
