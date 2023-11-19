@@ -1,17 +1,20 @@
+package main.java.data_access;
+
 import org.json.simple.JSONObject;
 
-/**
- * Returns a JSONObject that contains the end-of-day stock market data from
- * the MarketStack API.
- *
- * @param symbol The ticker symbol of the stock whose data is to be accessed.
- * @param date_from From-date in YYYY-MM-DD format
- * @param date_to End-date in YYYY-MM-DD format
- */
+
 public class MarketStackClient {
     private static final String BASE_URL = "http://api.marketstack.com/v1/eod";
     // Note: API key needs to be stored as environment variable in IDE; set this up locally
 
+    /**
+     * Returns a JSONObject that contains the end-of-day stock market data from
+     * the MarketStack API.
+     *
+     * @param symbol The ticker symbol of the stock whose data is to be accessed.
+     * @param date_from From-date in YYYY-MM-DD format
+     * @param date_to End-date in YYYY-MM-DD format
+     */
     public JSONObject getStockInfo(String symbol, String date_from, String date_to) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
