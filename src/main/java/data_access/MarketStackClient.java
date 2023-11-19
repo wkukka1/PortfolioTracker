@@ -1,9 +1,16 @@
-package main.java.data_access;
+package data_access;
 
-import org.json.simple.JSONObject;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
+import use_case.show.StockPriceDataAccessInterface;
+
+import java.io.IOException;
 
 
-public class MarketStackClient {
+public class MarketStackClient implements StockPriceDataAccessInterface{
     private static final String BASE_URL = "http://api.marketstack.com/v1/eod";
     // Note: API key needs to be stored as environment variable in IDE; set this up locally
 
