@@ -4,9 +4,11 @@ public class DeleteState {
     private String user;
     private boolean success;
     private String error = null;
+    private DeleteState state;
     public DeleteState(DeleteState copy){
         this.user = copy.user;
         this.error = copy.error;
+        this.state = null;
     }
 
     public DeleteState(){};
@@ -19,4 +21,5 @@ public class DeleteState {
         return success;
     }
 
+    public DeleteState getState() { return state;}
 }

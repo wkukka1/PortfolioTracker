@@ -6,6 +6,8 @@ import interface_adapter.login.LoginViewModel;
 import use_case.delete_user.DeleteOutputBoundary;
 import use_case.delete_user.DeleteOutputData;
 
+import javax.swing.*;
+
 
 public class DeletePresenter implements DeleteOutputBoundary{
     private final DeleteViewModel deleteViewModel;
@@ -32,6 +34,7 @@ public class DeletePresenter implements DeleteOutputBoundary{
 
     @Override
     public void prepareFailView(String error) {
-        //TODO: Create a failview
+        JOptionPane.showMessageDialog(null, "There was an error in deleting your account",
+                "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

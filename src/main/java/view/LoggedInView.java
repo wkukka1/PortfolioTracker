@@ -17,7 +17,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
-    private final DeleteState deleteState;
+    private DeleteState deleteState;
     private final DeleteController deleteController;
     private final LoginView loginView;
 
@@ -90,29 +90,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.anchor = GridBagConstraints.EAST;
         this.add(deleteUser, gbc);
     }
-    /*
-    Creates a pop that the user needs to click to continue deleting their account
-     */
-    private void showDeleteAccountConfirmation() {
-        // Create a JOptionPane with a YES_NO_OPTION dialog type
-        int choice = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete your account?",
-                "Delete Account Confirmation",
-                JOptionPane.YES_NO_OPTION);
-
-        // Check the user's choice
-        if (choice == JOptionPane.YES_OPTION) {
-            // User clicked YES
-            System.out.println("Account deleted");
-            deleteController.execute(loggedInViewModel.getLoggedInUser());
-//            DeleteState state = deleteState.getState();
-            JOptionPane.showMessageDialog(loginView, "Successfully Deleted Account");
-        } else {
-            // User clicked NO or closed the dialog
-            System.out.println("Account not deleted");
-            //TODO Send the user back to the loggedIn screen
-        }
-    }
 
     /**
      * React to a button click that results in evt.
@@ -155,7 +132,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             }
 
         }if (evt.getSource() == deleteUser){
-            showDeleteAccountConfirmation();
+            deleteController.execute(loggedInViewModel.getLoggedInUser());
+            deleteState = deleteState.getState();
         }else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
         }
