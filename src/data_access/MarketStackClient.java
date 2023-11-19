@@ -5,14 +5,18 @@ import org.json.simple.JSONObject;
  * the MarketStack API.
  *
  * @param symbol The ticker symbol of the stock whose data is to be accessed.
+ * @param date_from From-date in YYYY-MM-DD format
+ * @param date_to End-date in YYYY-MM-DD format
  */
 public class MarketStackClient {
     private static final String BASE_URL = "http://api.marketstack.com/v1/eod";
     // Note: API key needs to be stored as environment variable in IDE; set this up locally
-    public JSONObject getStockInfo(String symbol) {
+
+    public JSONObject getStockInfo(String symbol, String date_from, String date_to) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
-                .url(String.format(BASE_URL + "/?access_key=%s&symbols=%s", System.getenv("API_KEY"), symbol))
+                .url(String.format(BASE_URL + "/?access_key=%s&symbols=%s&date_from=%s&date_to=%s",
+                        System.getenv("API_KEY"), symbol, date_from, date_to))
                 .build();
 
         try {
