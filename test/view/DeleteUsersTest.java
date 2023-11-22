@@ -62,6 +62,7 @@ public class DeleteUsersTest {
         return (JButton) buttons.getComponent(0);
     }
 
+
     public LabelTextPanel[] getTextFields() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
@@ -85,7 +86,7 @@ public class DeleteUsersTest {
         return new LabelTextPanel[]{usernameTextField, passwordTextField};
     }
 
-    public JButton getDeleteBtn(){
+    public JButton getDeleteBtn() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -107,34 +108,38 @@ public class DeleteUsersTest {
 
 
     public boolean deleteAccount(int num) {
-        num = num -1;
-        //get all the buttons
-        JButton loginBtn = getLoginBtn();
-        LabelTextPanel[] textFields = getTextFields();
-        JButton deleteBtn = getDeleteBtn();
+        num = num - 1;
 
-        int initalUsers;
-        int intialPortfolios;
+        // Get all the buttons
+        LabelTextPanel[] textFields = getTextFields();
+
+        int initialUsers;
+        int initialPortfolios;
         int finalUsers;
         int finalPortfolios;
 
         try {
-            initalUsers = countLines("./users.csv");
-            intialPortfolios = countLines("./portfolios.csv");
+            initialUsers = countLines("./users.csv");
+            initialPortfolios = countLines("./portfolios.csv");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        textFields[0].setText("user"+String.valueOf(num));
-        textFields[1].setText("password"+String.valueOf(num));
         createCloseTimer().start();
 
-        loginBtn.doClick();
+        textFields[0].setText("user" + num);
+        textFields[1].setText("password" + num);
 
         createCloseTimer().start();
 
+        // Create a SwingWorker to perform the login operation in the background
+        getLoginBtn().doClick();
+
+        // Start the close timer before clicking the delete button
+        createCloseTimer().start();
+
+        JButton deleteBtn = getDeleteBtn();
         deleteBtn.doClick();
-
 
         try {
             finalUsers = countLines("./users.csv");
@@ -143,7 +148,7 @@ public class DeleteUsersTest {
             throw new RuntimeException(e);
         }
 
-        return initalUsers == finalUsers + num + 1 && intialPortfolios == finalPortfolios + num + 1;
+        return initialUsers == finalUsers + 1 && initialPortfolios == finalPortfolios + 1;
     }
 
 
@@ -172,15 +177,29 @@ public class DeleteUsersTest {
         assert (button.getText().equals("Delete Account"));
     }
 
-
-
     @org.junit.Test
-    public void testDeleteOneAccount(){
+    public void testDeleteOneAccount() {
         Main.main(null);
         addUser(1);
         assert deleteAccount(1);
 
     }
+
+    @org.junit.Test
+    public void testDeleteMultipleAccounts() {
+        Main.main(null);
+        addUser(5);
+        boolean d1 = deleteAccount(1);
+        assert d1;
+        boolean d2 = deleteAccount(2);
+        assert d2;
+        boolean d3 = deleteAccount(3);
+        assert d3;
+        assert deleteAccount(4);
+        assert deleteAccount(5);
+        assert true;
+    }
+
 
     private Timer createCloseTimer() {
         ActionListener close = new ActionListener() {
