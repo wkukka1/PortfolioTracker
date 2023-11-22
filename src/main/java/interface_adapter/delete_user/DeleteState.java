@@ -8,7 +8,7 @@ public class DeleteState {
     public DeleteState(DeleteState copy){
         this.user = copy.user;
         this.error = copy.error;
-        this.state = null;
+        this.state = new DeleteState();
     }
 
     public DeleteState(){};

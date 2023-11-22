@@ -133,7 +133,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         }if (evt.getSource() == deleteUser){
             deleteController.execute(loggedInViewModel.getLoggedInUser());
-            deleteState = deleteState.getState();
+//            deleteState = deleteState.getState();
         }else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
         }
