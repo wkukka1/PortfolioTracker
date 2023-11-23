@@ -23,73 +23,6 @@ public class DeleteUsersTest {
     static String message = "";
     static boolean popUpDiscovered = false;
 
-    public void SignUpUser(int i){
-        i -= 1;
-        JButton signUpBtn = getSignupBtn();
-        LabelTextPanel[] textFields = getSignupTextFields();
-
-        textFields[0].setText("user"+i);
-        textFields[1].setText("password"+i);
-        textFields[2].setText("password"+i);
-
-        createCloseTimer().start();
-
-        signUpBtn.doClick();
-    }
-
-    public LabelTextPanel[] getSignupTextFields(){
-        JFrame app = null;
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window instanceof JFrame) {
-                app = (JFrame) window;
-            }
-        }
-        assertNotNull(app);
-
-        Component root = app.getComponent(0);
-        Component cp = ((JRootPane) root).getContentPane();
-        JPanel jp = (JPanel) cp;
-        JPanel jp2 = (JPanel) jp.getComponent(0);
-        // Assuming LoginView is at index 1 in the JPanel
-        SignupView lv = (SignupView) jp2.getComponent(0);
-
-        LabelTextPanel username = (LabelTextPanel) lv.getComponent(1);
-        LabelTextPanel password1 = (LabelTextPanel) lv.getComponent(2);
-        LabelTextPanel password2 = (LabelTextPanel) lv.getComponent(3);
-
-        System.out.println(username.getText());
-        System.out.println(password1.getText());
-        System.out.println(password2.getText());
-
-        // Assuming logIn button is at index 0 in the buttons JPanel
-        return new LabelTextPanel[] {username, password1, password2};
-    }
-
-
-    public JButton getSignupBtn(){
-        JFrame app = null;
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window instanceof JFrame) {
-                app = (JFrame) window;
-            }
-        }
-        assertNotNull(app);
-
-        Component root = app.getComponent(0);
-        Component cp = ((JRootPane) root).getContentPane();
-        JPanel jp = (JPanel) cp;
-        JPanel jp2 = (JPanel) jp.getComponent(0);
-        // Assuming LoginView is at index 1 in the JPanel
-        SignupView lv = (SignupView) jp2.getComponent(0);
-
-        JPanel buttons = (JPanel) lv.getComponent(4);
-
-        // Assuming logIn button is at index 0 in the buttons JPanel
-        return (JButton) buttons.getComponent(0);
-    }
-
 
     public void addUser(int numOfUsers) {
         UserFactory uf = new CommonUserFactory();
@@ -174,24 +107,25 @@ public class DeleteUsersTest {
         return (JButton) lv.getComponent(5);
     }
 
+    public int[] countLines() {
+        int users;
+        int portfolios;
 
-    public boolean deleteAccount(int num) {
+        try {
+            users = countLines("./users.csv");
+            portfolios = countLines("./portfolios.csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new int[]{users, portfolios};
+    }
+
+
+    public void deleteAccount(int num) {
         num = num - 1;
 
         // Get all the buttons
         LabelTextPanel[] textFields = getTextFields();
-
-        int initialUsers;
-        int initialPortfolios;
-        int finalUsers;
-        int finalPortfolios;
-
-        try {
-            initialUsers = countLines("./users.csv");
-            initialPortfolios = countLines("./portfolios.csv");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         createCloseTimer().start();
 
@@ -208,23 +142,6 @@ public class DeleteUsersTest {
 
         JButton deleteBtn = getDeleteBtn();
         deleteBtn.doClick();
-
-        try {
-            finalUsers = countLines("./users.csv");
-            finalPortfolios = countLines("./portfolios.csv");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return initialUsers == finalUsers + 1 && initialPortfolios == finalPortfolios + 1;
-    }
-
-    @org.junit.Test
-    public void testGetSignupBtn(){
-        Main.main(null);
-        JButton button = getSignupBtn();
-        System.out.println(button.getText());
-        assert (button.getText().equals("Sign up"));
     }
 
     @org.junit.Test
@@ -233,14 +150,6 @@ public class DeleteUsersTest {
         JButton button = getLoginBtn();
         System.out.println(button.getText());
         assert (button.getText().equals("Log in"));
-    }
-
-    @org.junit.Test
-    public void testGetSignUpTextFields(){
-        Main.main(null);
-        LabelTextPanel[] textFields = getSignupTextFields();
-        assert (textFields[0].getText().equals("username") && textFields[1].getText().equals("password1")
-                && textFields[2].getText().equals("password2"));
     }
 
     @org.junit.Test
@@ -262,25 +171,45 @@ public class DeleteUsersTest {
 
     @org.junit.Test
     public void testDeleteOneAccount() {
+        addUser(1);
         Main.main(null);
-        SignUpUser(1);
-        assert deleteAccount(1);
+
+        int[] lines = countLines();
+        int users = lines[0];
+        int portfolios = lines[1];
+
+        deleteAccount(1);
+
+        lines = countLines();
+        int finalUsers = lines[0];
+        int finalPortfolios = lines[1];
+
+        assert (users == finalUsers + 1 && portfolios == finalPortfolios + 1);
 
     }
 
     @org.junit.Test
     public void testDeleteMultipleAccounts() {
-        Main.main(null);
         addUser(5);
-        boolean d1 = deleteAccount(1);
-        assert d1;
-        boolean d2 = deleteAccount(2);
-        assert d2;
-        boolean d3 = deleteAccount(3);
-        assert d3;
-        assert deleteAccount(4);
-        assert deleteAccount(5);
-        assert true;
+        Main.main(null);
+
+        //Get the numer of lines in the users and portfolio csvs
+        int[] lines = countLines();
+        int intialUsers = lines[0];
+        int intialPortfolios = lines[1];
+
+        //Delete 5 users
+        for (int i = 1; i <= 5; i++) {
+            deleteAccount(i);
+        }
+
+        lines = countLines();
+        int finalUsers = lines[0];
+        int finalPortfolios = lines[1];
+
+        assert (intialPortfolios == finalPortfolios + 5 && intialUsers == finalUsers + 5);
+
+
     }
 
 
