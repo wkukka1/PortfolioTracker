@@ -7,16 +7,20 @@ import entity.Stock;
 
 public class RemoveStockInteractor implements RemoveStockInputBoundary{
     final RemoveStockUserDataAccessInterface userDataAccessObject;
-    final PortfolioDataAccessInterface portfolioDataAccessInterface;
+    final PortfolioDataAccessInterface portfolioDataAccessObject;
     final RemoveStockOutputBoundary removeStockPresenter;
-    public RemoveStockInteractor(){
-
+    public RemoveStockInteractor(RemoveStockUserDataAccessInterface userDataAccessObject,
+                                 PortfolioDataAccessInterface portfolioDataAccessObject,
+                                 RemoveStockOutputBoundary removeStockPresenter){
+        this.userDataAccessObject = userDataAccessObject;
+        this.portfolioDataAccessObject = portfolioDataAccessObject;
+        this.removeStockPresenter = removeStockPresenter;
     }
 
     public void execute(RemoveStockInputData removeStockInputData){
         String tickerNumber = removeStockInputData.getTickerNumber();
         int userId = userDataAccessObject.getUserId();
-        Portfolio portfolio = portfolioDataAccessInterface.getPortfolioByID(userId);
+        Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId);
         List<Stock> stockList = portfolio.getStockList();
 
         stockList.remove(tickerNumber);
