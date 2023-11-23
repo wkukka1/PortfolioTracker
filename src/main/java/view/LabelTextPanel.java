@@ -7,7 +7,7 @@ import java.beans.PropertyChangeSupport;
 /**
  * A panel containing a label and a text field.
  */
-class LabelTextPanel extends JPanel {
+public class LabelTextPanel extends JPanel {
     private JLabel label;
     private JTextField textField;
     private PropertyChangeSupport pcs;
