@@ -23,6 +23,74 @@ public class DeleteUsersTest {
     static String message = "";
     static boolean popUpDiscovered = false;
 
+    public void SignUpUser(int i){
+        i -= 1;
+        JButton signUpBtn = getSignupBtn();
+        LabelTextPanel[] textFields = getSignupTextFields();
+
+        textFields[0].setText("user"+i);
+        textFields[1].setText("password"+i);
+        textFields[2].setText("password"+i);
+
+        createCloseTimer().start();
+
+        signUpBtn.doClick();
+    }
+
+    public LabelTextPanel[] getSignupTextFields(){
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame) {
+                app = (JFrame) window;
+            }
+        }
+        assertNotNull(app);
+
+        Component root = app.getComponent(0);
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+        // Assuming LoginView is at index 1 in the JPanel
+        SignupView lv = (SignupView) jp2.getComponent(0);
+
+        LabelTextPanel username = (LabelTextPanel) lv.getComponent(1);
+        LabelTextPanel password1 = (LabelTextPanel) lv.getComponent(2);
+        LabelTextPanel password2 = (LabelTextPanel) lv.getComponent(3);
+
+        System.out.println(username.getText());
+        System.out.println(password1.getText());
+        System.out.println(password2.getText());
+
+        // Assuming logIn button is at index 0 in the buttons JPanel
+        return new LabelTextPanel[] {username, password1, password2};
+    }
+
+
+    public JButton getSignupBtn(){
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame) {
+                app = (JFrame) window;
+            }
+        }
+        assertNotNull(app);
+
+        Component root = app.getComponent(0);
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+        // Assuming LoginView is at index 1 in the JPanel
+        SignupView lv = (SignupView) jp2.getComponent(0);
+
+        JPanel buttons = (JPanel) lv.getComponent(4);
+
+        // Assuming logIn button is at index 0 in the buttons JPanel
+        return (JButton) buttons.getComponent(0);
+    }
+
+
     public void addUser(int numOfUsers) {
         UserFactory uf = new CommonUserFactory();
         FileUserDataAccessObject fudao;
@@ -151,6 +219,13 @@ public class DeleteUsersTest {
         return initialUsers == finalUsers + 1 && initialPortfolios == finalPortfolios + 1;
     }
 
+    @org.junit.Test
+    public void testGetSignupBtn(){
+        Main.main(null);
+        JButton button = getSignupBtn();
+        System.out.println(button.getText());
+        assert (button.getText().equals("Sign up"));
+    }
 
     @org.junit.Test
     public void testGetLoginBtn() {
@@ -158,6 +233,14 @@ public class DeleteUsersTest {
         JButton button = getLoginBtn();
         System.out.println(button.getText());
         assert (button.getText().equals("Log in"));
+    }
+
+    @org.junit.Test
+    public void testGetSignUpTextFields(){
+        Main.main(null);
+        LabelTextPanel[] textFields = getSignupTextFields();
+        assert (textFields[0].getText().equals("username") && textFields[1].getText().equals("password1")
+                && textFields[2].getText().equals("password2"));
     }
 
     @org.junit.Test
@@ -180,7 +263,7 @@ public class DeleteUsersTest {
     @org.junit.Test
     public void testDeleteOneAccount() {
         Main.main(null);
-        addUser(1);
+        SignUpUser(1);
         assert deleteAccount(1);
 
     }
