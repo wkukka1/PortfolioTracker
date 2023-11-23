@@ -1,4 +1,7 @@
 package use_case.removeStock;
 
-public interface RemoveStockDataAccessInterface {
+import entity.User;
+
+public interface RemoveStockUserDataAccessInterface {
+    User get(String username);
 }
