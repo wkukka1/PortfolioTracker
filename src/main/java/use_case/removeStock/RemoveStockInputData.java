@@ -1,11 +1,12 @@
 package use_case.removeStock;
+import entity.Stock;
 
 public class RemoveStockInputData {
-    final private String tickerNumber;
+    final private Stock stock;
 
-    public RemoveStockInputData(String tickerNumber){
-        this.tickerNumber = tickerNumber;
+    public RemoveStockInputData(Stock stock){
+        this.stock = stock;
     }
 
-    String getTickerNumber(){return tickerNumber;}
+    Stock getStock(){return this.stock;}
 }

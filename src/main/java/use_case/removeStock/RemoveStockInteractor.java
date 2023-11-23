@@ -24,14 +24,14 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
     }
 
     public void execute(RemoveStockInputData removeStockInputData){
-        String tickerNumber = removeStockInputData.getTickerNumber();
+        Stock stock = removeStockInputData.getStock(); // Stock that needs to be removed
         String username = loggedInViewModel.getLoggedInUser();
         User user = userDataAccessObject.get(username);
         int userId = user.getUserID();
-        Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId);
+        Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId); // Current user's portfolio
         List<Stock> stockList = portfolio.getStockList();
 
-        stockList.remove(tickerNumber);
+        stockList.remove(stock);
         portfolio.setStockList(stockList);
 
         removeStockPresenter.prepareView();
