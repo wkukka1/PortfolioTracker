@@ -24,16 +24,26 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
     }
 
     public void execute(RemoveStockInputData removeStockInputData){
-        Stock stock = removeStockInputData.getStock(); // Stock that needs to be removed
-        String username = loggedInViewModel.getLoggedInUser();
-        User user = userDataAccessObject.get(username);
-        int userId = user.getUserID();
-        Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId); // Current user's portfolio
-        List<Stock> stockList = portfolio.getStockList();
+        try{
+            Stock stock = removeStockInputData.getStock(); // Stock that needs to be removed
+            String username = loggedInViewModel.getLoggedInUser();
+            User user = userDataAccessObject.get(username);
+            int userId = user.getUserID();
+            Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId); // Current user's portfolio
+            List<Stock> stockList = portfolio.getStockList();
 
-        stockList.remove(stock);
-        portfolio.setStockList(stockList);
+            stockList.remove(stock);
+            portfolio.setStockList(stockList);
 
-        removeStockPresenter.prepareView();
+            RemoveStockOutputData outputData = new RemoveStockOutputData(stockList);
+            //TODO implement prepare success view and preparefailview
+            //TODO implement preparesuccessview with the output data input
+            //TODO implement exception in here
+            removeStockPresenter.prepareSuccessView();
+        } catch (Exception e){
+            removeStockPresenter.prepareFailView(e.toString());
+            System.out.println(e.toString());
+        }
+
     }
 }
