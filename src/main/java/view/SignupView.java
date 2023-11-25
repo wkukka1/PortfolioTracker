@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
@@ -15,7 +16,6 @@ import java.beans.PropertyChangeListener;
 
 public class SignupView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "sign up";
-
     private final SignupViewModel signupViewModel;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
@@ -42,9 +42,9 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
 
-        usernameInfo.setText("username");
-        passwordInfo.setText("password1");
-        repeatPasswordInfo.setText("password2");
+        usernameInfo.setName("username");
+        passwordInfo.setName("password1");
+        repeatPasswordInfo.setName("password2");
 
         JPanel buttons = new JPanel();
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
@@ -70,12 +70,24 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        // TODO Add the body to the actionPerformed method of the action listener below
-        //      for the "clear" button. You'll need to write the controller before
-        //      you can complete this.
         SignupView signupView = this;
 
-        cancel.addActionListener(this);
+        cancel.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(e.getSource().equals(cancel)){
+                            // Clears the input fields
+                            usernameInputField.setText("");
+                            repeatPasswordInfo.setText("");
+                            passwordInputField.setText("");
+
+                            // Changes the view to the LoginView
+                            signupController.setUpLoginView();
+                        }
+                    }
+                }
+        );
 
         // This makes a new KeyListener implementing class, instantiates it, and
         // makes it listen to keystrokes in the usernameInputField.
@@ -127,7 +139,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
                         currentState.setRepeatPassword(repeatPasswordInputField.getText() + e.getKeyChar());
-                        signupViewModel.setState(currentState); // Hmm, is this necessary?
+                        signupViewModel.setState(currentState);
                     }
 
                     @Override
