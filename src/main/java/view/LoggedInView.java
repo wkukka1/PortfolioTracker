@@ -4,6 +4,7 @@ import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import interface_adapter.logout_user.LogoutController;
 import use_case.delete_user.DeleteOutputData;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private DeleteState deleteState;
     private final DeleteController deleteController;
     private final LoginView loginView;
-
+    private final LogoutController logoutController;
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
@@ -32,13 +33,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
-                        LoginView loginView) {
+                        LoginView loginView, LogoutController logoutController) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
         this.loginView = loginView;
-
+        this.logoutController = logoutController;
         this.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -131,11 +132,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
             }
 
-        }if (evt.getSource() == deleteUser){
+        }
+        if (evt.getSource() == deleteUser) {
             deleteController.execute(loggedInViewModel.getLoggedInUser());
 //            deleteState = deleteState.getState();
-        }else if (evt.getSource() == logOut) {
-            System.out.println("Click " + evt.getActionCommand()); // Handle logout button
+        } else if (evt.getSource() == logOut) {
+            logoutController.execute(loggedInViewModel.getLoggedInUser());
         }
     }
 
