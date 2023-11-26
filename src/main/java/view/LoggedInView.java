@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import view.validation.StockFieldValidator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ import java.text.SimpleDateFormat;
 
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    private final StockFieldValidator stockFieldValidator;
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
     JLabel title;
@@ -25,9 +27,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, StockFieldValidator stockFieldValidatorImpl) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
+        this.stockFieldValidator = stockFieldValidatorImpl;
 
         this.setLayout(new GridBagLayout());
 
@@ -90,7 +93,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             panel.add(tickerField);
             panel.add(new JLabel("Enter Date (dd/mm/yyyy):"));
             panel.add(dateField);
-            panel.add(new JLabel("Enter Amount:"));
+            panel.add(new JLabel("Enter Amount (USD):"));
             panel.add(amountField);
 
             int result = JOptionPane.showConfirmDialog(this, panel, "Add Stock",
@@ -101,20 +104,26 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 String date = dateField.getText();
                 String amountStr = amountField.getText();
 
-                if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
-                    try {
-                        int amount = Integer.parseInt(amountStr);
-                        // TODO: SEND THIS TO THE API
-                        System.out.println("Add Stock: Ticker - " + ticker + ", Date - " + date + ", Amount - " + amount);
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(this, "Invalid amount. Please enter a valid number.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-                }
+                validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
             }
         } else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
+        }
+    }
+
+    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr) {
+        if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
+            if (!stockFieldValidator.isDateStrValid(date)) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid date.");
+            } if (!stockFieldValidator.isTickerStrValid(ticker)) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid ticker symbol.");
+            }
+            if (!stockFieldValidator.isAmountStrValid(amountStr)) {
+                JOptionPane.showMessageDialog(this,
+                        "Please enter a valid (and non-zero) amount.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
         }
     }
 
