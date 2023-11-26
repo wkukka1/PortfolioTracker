@@ -5,6 +5,7 @@ import interface_adapter.logged_in.LoggedInViewModel;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
+import javax.validation.ValidationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -104,7 +105,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 String date = dateField.getText();
                 String amountStr = amountField.getText();
 
-                validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
+                try {
+                    validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
+                } catch (ValidationException) {
+                    return;
+                }
             }
         } else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
@@ -120,10 +125,14 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             } else if (!stockFieldValidator.isAmountStrValid(amountStr)) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid (and non-zero) amount.");
+            } else {
+                return;
             }
         } else {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
         }
+
+        throw new ValidationException();
     }
 
     @Override
