@@ -12,6 +12,7 @@ import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
+import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,7 +69,7 @@ public class Main {
                 userDataAccessObject, signupView);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
+        LoggedInView loggedInView = new LoggedInView(loggedInViewModel, new StockFieldValidatorImpl());
         views.add(loggedInView, loggedInView.viewName);
 
 
