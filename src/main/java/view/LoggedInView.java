@@ -42,7 +42,28 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.logoutController = logoutController;
         this.setLayout(new GridBagLayout());
 
+        title = new JLabel("Home");
+        JPanel netProfitPanel = new JPanel();
+        netProfitPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        netProfitLabel = new JLabel("Net Profit:");
+        netProfitValue = new JLabel(); // You can set the value later
+
+        netProfitPanel.add(netProfitLabel);
+        netProfitPanel.add(netProfitValue);
+
+        addStockButton = new JButton("Add Stock");
+        addStockButton.addActionListener(this);
+
+        logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut.addActionListener(this);
+        deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
+        deleteUser.addActionListener(this);
+
+        this.setLayout(new GridBagLayout()); // Use GridBagLayout
+
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
         title = new JLabel("Home");
         netProfitLabel = new JLabel("Net Profit:");
@@ -53,42 +74,46 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
         logOut.addActionListener(this);
+
         deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
         deleteUser.addActionListener(this);
 
+        // Title
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(10, 10, 10, 10); // Add padding
-
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.weightx = 1.0; // Allow title to expand horizontally
+        gbc.weighty = 0.0; // Allow title to expand vertically
         this.add(title, gbc);
 
+        // Net Profit Label and Value
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.NORTHWEST; // Anchor to the top-left
+        gbc.weightx = 1.0; // Allow net profit panel to expand horizontally
+        gbc.weighty = 0.0; // Fixed height
+        this.add(netProfitPanel, gbc);
 
-        this.add(netProfitLabel, gbc);
-
-        gbc.gridx = 2;
-        gbc.anchor = GridBagConstraints.WEST;
-
-        this.add(netProfitValue, gbc);
-
+        // Add Stock Button
         gbc.gridx = 3;
-        gbc.anchor = GridBagConstraints.EAST;
-
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.weightx = 0.0; // Reset weight
+        gbc.weighty = 1.0; // Reset weight
         this.add(addStockButton, gbc);
 
+        // Log Out Button
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
-
+        gbc.weightx = 1.0; // Allow log out button to expand horizontally
+        gbc.weighty = 0.0; // Reset weight
         this.add(logOut, gbc);
 
+        // Delete User Button
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.weightx = 1.0; // Allow delete user button to expand horizontally
+        gbc.weighty = 0.0; // Reset weight
         this.add(deleteUser, gbc);
     }
 
