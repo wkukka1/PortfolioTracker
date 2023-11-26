@@ -107,7 +107,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
                 try {
                     validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
-                } catch (ValidationException) {
+                } catch (ValidationException validationException) {
                     return;
                 }
             }
