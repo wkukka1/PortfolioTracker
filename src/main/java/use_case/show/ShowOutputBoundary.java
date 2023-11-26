@@ -1,4 +1,7 @@
 package use_case.show;
 
-public class ShowOutputBoundary {
+public interface ShowOutputBoundary {
+    void prepareSuccessView(ShowOutputData data);
+
+    void prepareFailView(String error);
 }

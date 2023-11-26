@@ -1,4 +1,5 @@
 package use_case.show;
 
-public class ShowInteractor {
+public class ShowInteractor implements ShowInputBoundary{
+
 }
