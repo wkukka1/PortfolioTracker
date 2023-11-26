@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.logged_in.add_stock.AddStockController;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.text.SimpleDateFormat;
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final StockFieldValidator stockFieldValidator;
+    private final AddStockController addStockController;
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
     JLabel title;
@@ -28,10 +30,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, StockFieldValidator stockFieldValidatorImpl) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, StockFieldValidator stockFieldValidatorImpl,
+                        AddStockController addStockController) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.stockFieldValidator = stockFieldValidatorImpl;
+        this.addStockController = addStockController;
 
         this.setLayout(new GridBagLayout());
 
@@ -110,6 +114,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 } catch (ValidationException validationException) {
                     return;
                 }
+
+                addStockController.execute(ticker, date, amountStr);
             }
         } else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
