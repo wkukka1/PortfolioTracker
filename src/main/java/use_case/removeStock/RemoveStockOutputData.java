@@ -5,7 +5,7 @@ import java.util.List;
 public class RemoveStockOutputData {
     private final List<Stock> stockList;
 
-    RemoveStockOutputData(List<Stock> stockList){
+    public RemoveStockOutputData(List<Stock> stockList){
         this.stockList = stockList;
     }
 
