@@ -115,7 +115,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     return;
                 }
 
-                addStockController.execute(ticker, date, amountStr);
+                addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUsername());
             }
         } else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
