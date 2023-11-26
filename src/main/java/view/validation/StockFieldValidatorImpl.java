@@ -3,6 +3,7 @@ package view.validation;
 import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class StockFieldValidatorImpl implements StockFieldValidator {
     private final Integer EARLIEST_STOCK_YEAR = 1973;
@@ -40,8 +41,8 @@ public class StockFieldValidatorImpl implements StockFieldValidator {
         } if (Integer.parseInt(dateComponents[0]) > MONTHS_TO_DAYS.get(dateComponents[1]) ||
                 Integer.parseInt(dateComponents[0]) < MIN_MONTHS_OR_DAYS) {
             return false;
-        } if (Integer.parseInt(dateComponents[1]) > Year.now().getValue() ||
-            Integer.parseInt(dateComponents[1]) < EARLIEST_STOCK_YEAR) {
+        } if (Integer.parseInt(dateComponents[2]) > Year.now().getValue() ||
+            Integer.parseInt(dateComponents[2]) < EARLIEST_STOCK_YEAR) {
             return false;
         }
         return true;
