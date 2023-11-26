@@ -10,8 +10,8 @@ public class StockFieldValidatorImpl implements StockFieldValidator {
     private final Integer NUM_MONTHS = 12;
     private final Integer MIN_MONTHS_OR_DAYS = 1;
     private Map<String, Integer> MONTHS_TO_DAYS = new HashMap<>();
-    private final String DOUBLE_REGEX_PATTERN = "^\\d*\\.?\\d+|\\d+\\.?\\d*";
-    private final String ZERO_VALUE_PATTERN = "[0]+\\.?[0]*|[0]*\\.?[0]+";
+    private final Pattern DOUBLE_REGEX_PATTERN = Pattern.compile("^\\d*\\.?\\d+|\\d+\\.?\\d*");
+    private final Pattern ZERO_VALUE_PATTERN = Pattern.compile("[0]+\\.?[0]*|[0]*\\.?[0]+");
 
     public StockFieldValidatorImpl() {
         initMonthsToDays();
@@ -57,9 +57,9 @@ public class StockFieldValidatorImpl implements StockFieldValidator {
 
     @Override
     public boolean isAmountStrValid(String amount) {
-        if (!Pattern.matches(DOUBLE_REGEX_PATTERN, amount)) {
+        if (!DOUBLE_REGEX_PATTERN.matcher(amount).matches()) {
             return false;
         }
-        return !Pattern.matches(ZERO_VALUE_PATTERN, amount);
+        return !ZERO_VALUE_PATTERN.matcher(amount).matches();
     }
 }
