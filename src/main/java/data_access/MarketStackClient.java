@@ -1,2 +1,4 @@
-package data_access;public class MarketStackClient {
+package data_access;
+
+public class MarketStackClient {
 }
