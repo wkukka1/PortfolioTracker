@@ -1,2 +1,5 @@
-package interface_adapter.removeStock;public class RemoveStockState {
+package interface_adapter.removeStock;
+
+public class RemoveStockState {
+
 }
