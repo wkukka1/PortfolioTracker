@@ -69,9 +69,8 @@ public class Main {
                 userDataAccessObject, signupView);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = new LoggedInView(loggedInViewModel, new StockFieldValidatorImpl());
+        LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel);
         views.add(loggedInView, loggedInView.viewName);
-
 
         viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();
