@@ -13,13 +13,13 @@ public class AddStockController {
         this.addStockInteractor = addStockInteractor;
     }
 
-    public void execute(String ticker, String date, String amount) {
+    public void execute(String ticker, String date, String amount, String username) {
         String[] dateComponents = date.split("/");
         LocalDateTime purchaseLocalDateTime = LocalDate.of(Integer.parseInt(dateComponents[2]),
                 Integer.parseInt(dateComponents[1]), Integer.parseInt(dateComponents[0])).atStartOfDay();
 
         AddStockInputData addStockInputData = new AddStockInputData(ticker, purchaseLocalDateTime,
-                Double.parseDouble(amount));
+                Double.parseDouble(amount), username);
 
         addStockInteractor.addStock(addStockInputData);
     }
