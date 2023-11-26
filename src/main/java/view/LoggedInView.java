@@ -3,7 +3,6 @@ package view;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.removeStock.RemoveStockViewModel;
-import interface_adapter.removeStock.RemoveStockState;
 
 import javax.swing.*;
 import java.awt.*;
