@@ -56,6 +56,15 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
         return this.portfolios.get(userID);
     }
 
+    @Override
+    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) {
+        Portfolio currPortfolio = portfolios.get(userID);
+        currPortfolio.addStockToStockList(newStock);
+        currPortfolio.setNetProfit(currPortfolio.getNetProfit() + stockProfitToDate);
+
+        this.save();
+    }
+
     private void save() {
         BufferedWriter writer;
         try {
@@ -67,7 +76,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                 String encodedStocks = encodeStockListIntoStockStr((ArrayList<Stock>) portfolio.getStockList());
 
                 String line = String.format("%s,%s,%s",
-                        portfolio.getUserID(), portfolio.getNetWorth(), encodedStocks);
+                        portfolio.getUserID(), portfolio.getNetProfit(), encodedStocks);
 
                 writer.write(line);
                 writer.newLine();
