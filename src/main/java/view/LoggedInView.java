@@ -112,7 +112,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 try {
                     validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
                 } catch (ValidationException validationException) {
-                    return;
+                    System.out.println("Stock Field Validation Exception Occurred");;
                 }
 
                 addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
@@ -122,7 +122,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         }
     }
 
-    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr) {
+    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr)
+            throws ValidationException {
         if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
             if (!stockFieldValidator.isDateStrValid(date)) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid date.");
