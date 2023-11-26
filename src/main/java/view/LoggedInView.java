@@ -9,12 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
-
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
@@ -78,14 +79,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         if (evt.getSource() == addStockButton) {
             // Handle the "Add Stock" button click
             JTextField tickerField = new JTextField(10);
-            JTextField dateField = new JTextField(10);
             JTextField amountField = new JTextField(10);
+
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            JFormattedTextField dateField = new JFormattedTextField(df);
 
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             panel.add(new JLabel("Enter Ticker Symbol:"));
             panel.add(tickerField);
-            panel.add(new JLabel("Enter Date:"));
+            panel.add(new JLabel("Enter Date (dd/mm/yyyy):"));
             panel.add(dateField);
             panel.add(new JLabel("Enter Amount:"));
             panel.add(amountField);
