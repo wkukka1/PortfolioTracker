@@ -52,4 +52,12 @@ public class StockFieldValidatorImpl implements StockFieldValidator {
     public boolean isTickerStrValid(String ticker) {
         return Pattern.matches("[a-zA-Z]+", ticker);
     }
+
+    @Override
+    public boolean isAmountStrValid(String amount) {
+        if (!Pattern.matches("^\\d*\\.?\\d+|\\d+\\.?\\d*", amount)) {
+            return false;
+        }
+        return !Pattern.matches("[0]+\\.?[0]*|[0]*\\.?[0]+", amount);
+    }
 }
