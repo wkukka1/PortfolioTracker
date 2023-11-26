@@ -4,12 +4,12 @@ import java.util.List;
 
 public class Portfolio {
     private List<Stock> stockList;
-    private long netWorth;
+    private double netProfit;
     private int userID;
 
-    public Portfolio(List<Stock> stockList, long netWorth, int userID) {
+    public Portfolio(List<Stock> stockList, double netProfit, int userID) {
         this.stockList = stockList;
-        this.netWorth = netWorth;
+        this.netProfit = netProfit;
         this.userID = userID;
     }
 
@@ -21,12 +21,16 @@ public class Portfolio {
         this.stockList = stockList;
     }
 
-    public long getNetWorth() {
-        return netWorth;
+    public void addStockToStockList(Stock newStock) {
+        stockList.add(newStock);
     }
 
-    public void setNetWorth(long netWorth) {
-        this.netWorth = netWorth;
+    public double getNetProfit() {
+        return netProfit;
+    }
+
+    public void setNetProfit(double netProfit) {
+        this.netProfit = netProfit;
     }
 
     public int getUserID() {
