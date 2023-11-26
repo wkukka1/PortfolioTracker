@@ -7,6 +7,12 @@ public class AddStockInputData {
     private LocalDateTime purchaseLocalDateTime;
     private double totalValueAtPurchase;
 
+    public AddStockInputData(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double totalValueAtPurchase) {
+        this.tickerSymbol = tickerSymbol;
+        this.purchaseLocalDateTime = purchaseLocalDateTime;
+        this.totalValueAtPurchase = totalValueAtPurchase;
+    }
+
     public String getTickerSymbol() {
         return tickerSymbol;
     }
