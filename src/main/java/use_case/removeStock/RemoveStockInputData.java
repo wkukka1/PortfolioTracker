@@ -8,5 +8,5 @@ public class RemoveStockInputData {
         this.stock = stock;
     }
 
-    Stock getStock(){return this.stock;}
+    public Stock getStock(){return this.stock;}
 }
