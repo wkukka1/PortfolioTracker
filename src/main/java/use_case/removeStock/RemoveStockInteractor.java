@@ -23,6 +23,10 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
         this.loggedInViewModel = loggedInViewModel;
     }
 
+    /**
+     * Removes the stock that's in the InputData from the user's list of stocks in their portfolio
+     * @param removeStockInputData has the stock that the user want's to remove
+     */
     public void execute(RemoveStockInputData removeStockInputData){
         try{
             Stock stock = removeStockInputData.getStock(); // Stock that needs to be removed
@@ -36,10 +40,7 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
             portfolio.setStockList(stockList);
 
             RemoveStockOutputData outputData = new RemoveStockOutputData(stockList);
-            //TODO implement prepare success view and preparefailview
-            //TODO implement preparesuccessview with the output data input
-            //TODO implement exception in here
-            removeStockPresenter.prepareSuccessView();
+            removeStockPresenter.prepareSuccessView(outputData);
         } catch (Exception e){
             removeStockPresenter.prepareFailView(e.toString());
             System.out.println(e.toString());
