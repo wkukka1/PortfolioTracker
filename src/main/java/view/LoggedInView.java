@@ -115,10 +115,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
             if (!stockFieldValidator.isDateStrValid(date)) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid date.");
-            } if (!stockFieldValidator.isTickerStrValid(ticker)) {
+            } else if (!stockFieldValidator.isTickerStrValid(ticker)) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid ticker symbol.");
-            }
-            if (!stockFieldValidator.isAmountStrValid(amountStr)) {
+            } else if (!stockFieldValidator.isAmountStrValid(amountStr)) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid (and non-zero) amount.");
             }
