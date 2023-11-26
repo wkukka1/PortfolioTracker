@@ -47,4 +47,9 @@ public class StockFieldValidatorImpl implements StockFieldValidator {
         }
         return true;
     }
+
+    @Override
+    public boolean isTickerStrValid(String ticker) {
+        return Pattern.matches("[a-zA-Z]+", ticker);
+    }
 }
