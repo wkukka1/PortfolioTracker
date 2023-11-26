@@ -22,6 +22,11 @@ public class RemoveStockPresenter implements RemoveStockOutputBoundary {
         this.removeStockViewModel = removeStockViewModel;
         this.loggedInViewModel = loggedInViewModel;
     }
+
+    /**
+     * Loads the user back to the Logged In screen, after the program successfully removed the stock
+     * @param response The output data after executing the interactor. Includes the updated list of stocks.
+     */
     @Override
     public void prepareSuccessView(RemoveStockOutputData response){
         LoggedInState loggedInState = loggedInViewModel.getState();
@@ -31,9 +36,14 @@ public class RemoveStockPresenter implements RemoveStockOutputBoundary {
         viewManagerModel.setActiveView(loggedInViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
+
+    /**
+     * Loads a fail message if something went wrong during in the interactor.
+     * @param error The error message that will be displayed for the user
+     */
     @Override
     public void prepareFailView(String error){
-        JOptionPane.showMessageDialog(null, "There was an error in deleting your account",
+        JOptionPane.showMessageDialog(null, "There was an error in removing the stock. " + error,
                 "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
