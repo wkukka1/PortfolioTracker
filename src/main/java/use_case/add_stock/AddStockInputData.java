@@ -6,14 +6,14 @@ public class AddStockInputData {
     private String tickerSymbol;
     private LocalDateTime purchaseLocalDateTime;
     private double totalValueAtPurchase;
-    private String username;
+    private int userID;
 
     public AddStockInputData(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double totalValueAtPurchase,
-                             String username) {
+                             int userID) {
         this.tickerSymbol = tickerSymbol;
         this.purchaseLocalDateTime = purchaseLocalDateTime;
         this.totalValueAtPurchase = totalValueAtPurchase;
-        this.username = username;
+        this.userID = userID;
     }
 
     public String getTickerSymbol() {
@@ -40,11 +40,11 @@ public class AddStockInputData {
         this.totalValueAtPurchase = totalValueAtPurchase;
     }
 
-    public String getUsername() {
-        return username;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 }
