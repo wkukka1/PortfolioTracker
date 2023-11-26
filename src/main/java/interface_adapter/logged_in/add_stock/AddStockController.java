@@ -1,5 +1,7 @@
 package interface_adapter.logged_in.add_stock;
 
+import use_case.add_stock.AddStockInputBoundary;
+
 public class AddStockController {
     private final AddStockInputBoundary addStockInteractor;
 
