@@ -2,6 +2,8 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.removeStock.RemoveStockViewModel;
+import interface_adapter.removeStock.RemoveStockState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +72,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         this.add(logOut, gbc);
     }
-
+    //TODO: Implement the Remove Stock button next to the stocks that have been added
     /**
      * React to a button click that results in evt.
      */
