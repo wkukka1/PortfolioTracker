@@ -2,6 +2,8 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.delete_user.DeleteController;
+import interface_adapter.delete_user.DeleteState;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -19,19 +21,29 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final StockFieldValidator stockFieldValidator;
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
+    private DeleteState deleteState;
+    private final DeleteController deleteController;
+    private final LoginView loginView;
+
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
     JButton addStockButton;
     JButton logOut;
+    JButton deleteUser;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, StockFieldValidator stockFieldValidatorImpl) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
+                        LoginView loginView, StockFieldValidator stockFieldValidator) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
-        this.stockFieldValidator = stockFieldValidatorImpl;
+        this.deleteState = deleteState;
+        this.deleteController = deleteController;
+        this.loginView = loginView;
+        this.stockFieldValidator = stockFieldValidator;
+
 
         this.setLayout(new GridBagLayout());
 
@@ -44,7 +56,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         addStockButton = new JButton("Add Stock");
         addStockButton.addActionListener(this);
 
-        logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut.addActionListener(this);
+        deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
+        deleteUser.addActionListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -74,6 +89,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.anchor = GridBagConstraints.EAST;
 
         this.add(logOut, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(deleteUser, gbc);
     }
 
     /**
@@ -111,7 +132,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     System.out.println("Stock Field Validation Exception Occurred");;
                 }
             }
-        } else if (evt.getSource() == logOut) {
+
+        }if (evt.getSource() == deleteUser){
+            deleteController.execute(loggedInViewModel.getLoggedInUser());
+//            deleteState = deleteState.getState();
+        }else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
         }
     }
@@ -119,11 +144,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr)
             throws ValidationException {
         if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
-            if (!stockFieldValidator.isDateStrValid(date)) {
+            if (!this.stockFieldValidator.isDateStrValid(date)) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid date.");
-            } else if (!stockFieldValidator.isTickerStrValid(ticker)) {
+            } else if (!this.stockFieldValidator.isTickerStrValid(ticker)) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid ticker symbol.");
-            } else if (!stockFieldValidator.isAmountStrValid(amountStr)) {
+            } else if (!this.stockFieldValidator.isAmountStrValid(amountStr)) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid (and non-zero) amount.");
             } else {

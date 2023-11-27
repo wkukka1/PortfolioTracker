@@ -116,6 +116,23 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 });
 
+        // Add property change listeners to update the username and password fields
+        usernameInfo.addPropertyChangeListener(evt -> {
+            if ("text".equals(evt.getPropertyName())) {
+                LoginState currentState = loginViewModel.getState();
+                currentState.setUsername(evt.getNewValue().toString());
+                loginViewModel.setState(currentState);
+            }
+        });
+
+        passwordInfo.addPropertyChangeListener(evt -> {
+            if ("text".equals(evt.getPropertyName())) {
+                LoginState currentState = loginViewModel.getState();
+                currentState.setPassword(evt.getNewValue().toString());
+                loginViewModel.setState(currentState);
+            }
+        });
+
         this.add(title);
         this.add(usernameInfo);
         this.add(usernameErrorField);
