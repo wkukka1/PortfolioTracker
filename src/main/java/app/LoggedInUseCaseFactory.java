@@ -20,6 +20,7 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
+import view.validation.StockFieldValidator;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -33,14 +34,15 @@ public class LoggedInUseCaseFactory {
                                       ViewManagerModel viewManagerModel
             , SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
-                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView) {
+                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView, StockFieldValidator stockFieldValidator) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
-            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, logoutController);
-        }catch(IOException e){
+            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, logoutController, stockFieldValidator);
+
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
         return null;
