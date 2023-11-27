@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Portfolio {
     private List<Stock> stockList;
-    private long netWorth;
+    private double netWorth;
     private int userID;
 
     public Portfolio(List<Stock> stockList, long netWorth, int userID) {
@@ -21,11 +21,11 @@ public class Portfolio {
         this.stockList = stockList;
     }
 
-    public long getNetWorth() {
+    public double getNetWorth() {
         return netWorth;
     }
 
-    public void setNetWorth(long netWorth) {
+    public void setNetWorth(double netWorth) {
         this.netWorth = netWorth;
     }
 
