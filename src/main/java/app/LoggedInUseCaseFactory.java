@@ -15,6 +15,7 @@ import use_case.delete_user.DeleteUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
+import view.validation.StockFieldValidator;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -28,12 +29,12 @@ public class LoggedInUseCaseFactory {
                                       ViewManagerModel viewManagerModel
             , SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
-                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView) {
+                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView, StockFieldValidator stockFieldValidator) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
-            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView);
+            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
