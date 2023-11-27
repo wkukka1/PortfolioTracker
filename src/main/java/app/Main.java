@@ -5,6 +5,7 @@ import data_access.FileUserDataAccessObject;
 import data_access.MarketStackClient;
 import entity.CommonUserFactory;
 
+import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
@@ -14,6 +15,7 @@ import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
+import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,6 +49,7 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+        DeleteViewModel deleteViewModel = new DeleteViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -70,7 +73,8 @@ public class Main {
                 userDataAccessObject, signupView);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
+        LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
+                userDataAccessObject, deleteViewModel, portfolioDataAccessObject, loginView, new StockFieldValidatorImpl());
         views.add(loggedInView, loggedInView.viewName);
 
 

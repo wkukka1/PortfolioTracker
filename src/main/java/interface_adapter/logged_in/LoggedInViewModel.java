@@ -12,6 +12,7 @@ public class LoggedInViewModel extends ViewModel {
 
     public static final String LOGOUT_BUTTON_LABEL = "Log out";
     private String loggedInUser;
+    public static final String DELETE_USER_LABEL = "Delete Account";
 
     public LoggedInViewModel() {
         super("logged in");
