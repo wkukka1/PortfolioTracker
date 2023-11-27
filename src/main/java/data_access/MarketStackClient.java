@@ -10,7 +10,7 @@ import use_case.show.StockPriceDataAccessInterface;
 import java.io.IOException;
 
 
-public class MarketStackClient implements StockPriceDataAccessInterface{
+public class MarketStackClient implements StockPriceDataAccessInterface {
     private static final String BASE_URL = "http://api.marketstack.com/v1/eod";
     // Note: API key needs to be stored as environment variable in IDE; set this up locally
 
@@ -26,7 +26,7 @@ public class MarketStackClient implements StockPriceDataAccessInterface{
         // todo: make method accept LocalDateTime objects
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
-                .url(String.format(BASE_URL + "/?access_key=%s&symbols=%s&date_from=%s&date_to=%s",
+                .url(String.format(BASE_URL + "?access_key=%s&symbols=%s&date_from=%s&date_to=%s",
                         System.getenv("API_KEY"), symbol, date_from, date_to))
                 .build();
 

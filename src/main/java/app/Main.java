@@ -2,12 +2,14 @@ package app;
 
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
+import data_access.MarketStackClient;
 import entity.CommonUserFactory;
 
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
+import org.json.JSONObject;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
@@ -77,5 +79,13 @@ public class Main {
 
         application.pack();
         application.setVisible(true);
+
+        // todo: Test runner code for MarketStackClient (delete code below later)
+        MarketStackClient client = new MarketStackClient();
+        JSONObject result = client.getStockInfo("SNOW", "2023-01-01", "2023-05-05");
+        System.out.println(result);
+        String BASE_URL = "http://api.marketstack.com/v1/eod";
+        System.out.println(String.format(BASE_URL + "?access_key=%s&symbols=%s&date_from=%s&date_to=%s",
+                System.getenv("API_KEY"), "SNOW", "YYYY-MM-DD", "YYYY-MM-DD"));
     }
 }
