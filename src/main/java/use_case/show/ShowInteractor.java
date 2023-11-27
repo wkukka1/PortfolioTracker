@@ -39,9 +39,8 @@ public class ShowInteractor implements ShowInputBoundary{
         Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(showInputData.getUserID());
         List<Stock> stockList = portfolio.getStockList();
 
-        // Below is for net worth plot
-        TimeSeriesCollection dataset = new TimeSeriesCollection();
-        TimeSeries series = new TimeSeries("Series1");
+        TimeSeriesCollection dataset = new TimeSeriesCollection(); // For net worth plot
+        TimeSeries series = new TimeSeries("Series1"); // For net worth plot
         // Key in YYYY-MM-DD format, value is total net worth of portfolio on that day
         HashMap<String, Float> dateToNetWorth = new HashMap<>();
         for (Stock stock : stockList) {
@@ -57,6 +56,7 @@ public class ShowInteractor implements ShowInputBoundary{
         dataset.addSeries(series);
         ChartPanel panel = getPlot(dataset);
 
+        portfolio.setNetWorth();
     }
 
     private Day yyyymmddToDay(String key) {
