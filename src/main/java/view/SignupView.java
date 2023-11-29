@@ -42,6 +42,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
 
+        usernameInfo.setText("username");
+        passwordInfo.setText("password1");
+        repeatPasswordInfo.setText("password2");
+
         JPanel buttons = new JPanel();
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
         buttons.add(signUp);
