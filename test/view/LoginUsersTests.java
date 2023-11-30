@@ -16,10 +16,6 @@ import interface_adapter.signup.SignupViewModel;
 import use_case.login.*;
 import use_case.signup.*;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -80,43 +76,5 @@ public class LoginUsersTests {
         assert loginUser("user2", "password2");
         assert loginUser("user3", "password3");
         assert loginUser("user4", "password4");
-    }
-
-
-
-    private Timer createCloseTimer() {
-        ActionListener close = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Window[] windows = Window.getWindows();
-                for (Window window : windows) {
-
-                    if (window instanceof JDialog) {
-
-                        JDialog dialog = (JDialog) window;
-
-                        // this ignores old dialogs
-                        if (dialog.isVisible()) {
-                            String s = ((JOptionPane) ((BorderLayout) dialog.getRootPane()
-                                    .getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER)).getMessage().toString();
-                            System.out.println("message = " + s);
-
-                            // store the information we got from the JDialog
-                            DeleteUsersTest.message = s;
-                            DeleteUsersTest.popUpDiscovered = true;
-
-                            System.out.println("disposing of..." + window.getClass());
-                            window.dispose();
-                        }
-                    }
-                }
-            }
-
-        };
-        Timer t = new Timer(1000, close);
-        t.setRepeats(false);
-        return t;
     }
 }
