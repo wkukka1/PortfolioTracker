@@ -1,15 +1,31 @@
 package view;
 
 import app.Main;
+import data_access.FilePortfolioDataAccessObject;
+import data_access.FileUserDataAccessObject;
+import entity.CommonUserFactory;
+import entity.Portfolio;
+import entity.UserFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import static org.junit.Assert.assertNotNull;
 
 public class SignupUsersTests {
+
+    private String userPath = "./users.csv";
+    private String portfolioPath = "./portfolios.csv";
+
     public void SignUpUser(int i) {
         i -= 1;
         JButton signUpBtn = getSignupBtn();
@@ -72,6 +88,42 @@ public class SignupUsersTests {
         return (JButton) buttons.getComponent(0);
     }
 
+    private boolean userExists(String user) {
+        try {
+            BufferedReader userReader = new BufferedReader(new FileReader(userPath));
+            BufferedReader portfoliosReader = new BufferedReader(new FileReader(portfolioPath));
+
+            int index = 0;
+
+            String userLine = userReader.readLine();
+            String portfolioLine = portfoliosReader.readLine();
+            int userId = -1;
+            while (userLine != null && userId == -1) {
+                String[] line = userLine.split(",");
+                if (Objects.equals(line[index], user)) {
+                    userId = Integer.parseInt(line[3]);
+                }
+                userLine = userReader.readLine();
+            }
+
+            if (userId == -1) {
+                return false;
+            }
+
+            while (portfolioLine != null) {
+                String[] line = portfolioLine.split(",");
+                if (Objects.equals(line[index], userId)) {
+                    return true;
+                }
+                portfolioLine = portfoliosReader.readLine();
+            }
+            return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     @org.junit.Test
     public void testGetSignUpTextFields() {
         Main.main(null);
@@ -86,6 +138,11 @@ public class SignupUsersTests {
         JButton button = getSignupBtn();
         System.out.println(button.getText());
         assert (button.getText().equals("Sign up"));
+    }
+
+    @org.junit.Test
+    public void testSignupOneUser() {
+
     }
 
     private Timer createCloseTimer() {
