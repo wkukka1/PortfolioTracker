@@ -60,5 +60,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         this.viewManagerModel.firePropertyChanged();
     }
 
+    public LoginState getLoginState(){return loginViewModel.getState();}
+
 
 }
