@@ -112,7 +112,7 @@ public class SignupUsersTests {
 
             while (portfolioLine != null) {
                 String[] line = portfolioLine.split(",");
-                if (Objects.equals(line[index], userId)) {
+                if (Objects.equals(line[index], String.valueOf(userId))) {
                     return true;
                 }
                 portfolioLine = portfoliosReader.readLine();
@@ -123,6 +123,46 @@ public class SignupUsersTests {
         }
 
     }
+
+    public void addUser(int numOfUsers) {
+        UserFactory uf = new CommonUserFactory();
+        FileUserDataAccessObject fudao;
+        FilePortfolioDataAccessObject fpdao;
+        try {
+            fudao = new FileUserDataAccessObject("./users.csv", uf);
+            fpdao = new FilePortfolioDataAccessObject("./portfolios.csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 0; i < numOfUsers; i++) {
+            fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
+            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
+        }
+    }
+
+    private JButton getSwitchButton(){
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame) {
+                app = (JFrame) window;
+            }
+        }
+        assertNotNull(app);
+
+        Component root = app.getComponent(0);
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+        // Assuming LoginView is at index 1 in the JPanel
+        LoginView lv = (LoginView) jp2.getComponent(1);
+
+        JPanel buttons = (JPanel) lv.getComponent(5);
+
+        // Assuming logIn button is at index 0 in the buttons JPanel
+        return (JButton) buttons.getComponent(1);
+    }
+
 
     @org.junit.Test
     public void testGetSignUpTextFields() {
@@ -141,8 +181,37 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testSignupOneUser() {
+    public void testGetSwitchButton(){
+        Main.main(null);
+        JButton button = getSwitchButton();
+        System.out.println(button.getText());
+        assert (button.getText().equals("Sign Up"));
+    }
 
+    @org.junit.Test
+    public void testSignupOneUser() {
+        Main.main(null);
+
+        JButton signupBtn = getSignupBtn();
+        LabelTextPanel[] textPanels = getSignupTextFields();
+
+        JButton switchButton = getSwitchButton();
+
+        switchButton.doClick();
+
+        createCloseTimer().start();
+
+        textPanels[0].setText("user");
+        textPanels[1].setText("password");
+        textPanels[2].setText("password");
+
+        createCloseTimer().start();
+
+        signupBtn.doClick();
+
+        createCloseTimer().start();
+
+        assert userExists("user");
     }
 
     private Timer createCloseTimer() {
