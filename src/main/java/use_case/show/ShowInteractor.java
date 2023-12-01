@@ -5,7 +5,6 @@ import entity.Portfolio;
 import entity.Stock;
 
 import java.awt.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -43,29 +42,31 @@ public class ShowInteractor implements ShowInputBoundary{
         TimeSeriesCollection dataset = new TimeSeriesCollection(); // For net worth plot
         TimeSeries series = new TimeSeries("Net Worth"); // For net worth plot
         // Key in YYYY-MM-DD format, value is total net worth of portfolio on that day
-        HashMap<String, Float> dateToNetWorth = new HashMap<>();
-        LocalDate portfolioCreationDate = ...;
-        LocalDate today = LocalDate.now();
+        HashMap<String, Double> dateToNetWorth = new HashMap<>();
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime startDate = today.minusDays(100);
 
-        populateHashMap(dateToNetWorth, portfolioCreationDate, today);
+        populateHashMap(dateToNetWorth, startDate, today);
 
         for (Stock stock : stockList) {
             // Going through each stock in the list of stocks, making an API call for each one
-            JSONObject stockInfo = stockDataAccessObject.getStockInfo(stock.getTickerSymbol(), );
-            updateDateToNetWorth(dateToNetWorth, stockInfo);
+            JSONObject rawStockInfo = stockDataAccessObject.getStockInfo(stock.getTickerSymbol());
+            HashMap<String, Double> processedStockInfo = whateverTheMethodIsCalled(rawStockInfo);
+            updateDateToNetWorth(dateToNetWorth, processedStockInfo, stock.getQuantity());
         }
 
-        for (Map.Entry<String, Float> entry : dateToNetWorth.entrySet()) {
-            Day dayObject = yyyymmddToDay(entry.getKey());
+        for (Map.Entry<String, Double> entry : dateToNetWorth.entrySet()) {
+            Day dayObject = stringToDay(entry.getKey());
             series.add(dayObject, entry.getValue());
         }
 
         dataset.addSeries(series);
         ChartPanel panel = getPlot(dataset);
-        double newNetWorth = ...;
+        double newNetWorth = 0.0;
+        double netProfit = 0.0;
 
         portfolio.setNetWorth(newNetWorth); // Updating the portfolio's net worth
-        ShowOutputData showOutputData = new ShowOutputData(panel, newNetWorth);
+        ShowOutputData showOutputData = new ShowOutputData(panel, netProfit);
         showPresenter.prepareSuccessView(showOutputData);
     }
 
@@ -74,31 +75,39 @@ public class ShowInteractor implements ShowInputBoundary{
      * in the range from portfolioCreationDate to today.
      *
      * @param dateToNetWorth the hashmap
-     * @param portfolioCreationDate start date (when portfolio was created)
+     * @param startDate start date (when portfolio was created)
      * @param today end date (today)
      */
-    private void populateHashMap(HashMap<String, Float> dateToNetWorth, LocalDate portfolioCreationDate, LocalDate today) {
-        // todo: implement
+    private void populateHashMap(HashMap<String, Double> dateToNetWorth, LocalDateTime startDate, LocalDateTime today) {
+        for (LocalDateTime date = startDate; date.isBefore(today); date = date.plusDays(1)) {
+            dateToNetWorth.put(date.toString(), 0.0);
+        }
     }
 
     /**
      * Converts a string in the format YYYY-MM-DD to a Day object
+     * Reference: https://www.jfree.org/jfreechart/api/javadoc/org/jfree/data/time/Day.html
      *
      * @param stringDate a string in the format YYYY-MM-DD
      * @return the corresponding Day object
      */
-    private Day yyyymmddToDay(String stringDate) {
-        // todo: implement
+    private Day stringToDay(String stringDate) {
+        String[] tokens = stringDate.split("-");
+        return new Day(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[0]));
     }
 
     /**
-     * Updates the hashmap mapping dates to networth with information from the API call.
+     * Updates the hashmap mapping dates to net worth with information from the API call.
      *
      * @param dateToNetWorth the hashmap to be updated
-     * @param stockInfo the JSON object containing information from the API call
+     * @param stockInfo      the hashmap containing information from the API call
+     * @param stockQuantity  the quantity of the stock held
      */
-    private void updateDateToNetWorth(HashMap<String, Float> dateToNetWorth, JSONObject stockInfo) {
-        // todo: implement
+    private void updateDateToNetWorth(HashMap<String, Double> dateToNetWorth, HashMap<String, Double> stockInfo, double stockQuantity) {
+        for (Map.Entry<String, Double> entry : stockInfo.entrySet()) {
+            String date = entry.getKey();
+            dateToNetWorth.put(date, dateToNetWorth.get(date) + entry.getValue() * stockQuantity);
+        }
     }
 
 

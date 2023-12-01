@@ -8,10 +8,14 @@ import interface_adapter.delete_user.DeleteState;
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.show.ShowController;
+import interface_adapter.show.ShowPresenter;
+import interface_adapter.show.ShowState;
+import interface_adapter.show.ShowViewModel;
 import use_case.delete_user.DeleteInputBoundary;
 import use_case.delete_user.DeleteInteractor;
 import use_case.delete_user.DeleteOutputBoundary;
-import use_case.delete_user.DeleteUserDataAccessInterface;
+import use_case.show.*;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
@@ -26,15 +30,25 @@ public class LoggedInUseCaseFactory {
 
     public static LoggedInView create(LoggedInViewModel loggedInViewModel,
                                       LoginViewModel loginViewModel,
-                                      ViewManagerModel viewManagerModel
-            , SignupUserDataAccessInterface userDataAccessInterface,
+                                      ViewManagerModel viewManagerModel,
+                                      SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
-                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView, StockFieldValidator stockFieldValidator) {
+                                      FilePortfolioDataAccessObject portfolioDataAccessObject,
+                                      LoginView loginView,
+                                      StockFieldValidator stockFieldValidator,
+                                      ShowViewModel showViewModel,
+                                      PortfolioDataAccessInterface portfolioDataAccessObject2,
+                                      StockPriceDataAccessInterface stockDataAccessObject
+                                      ) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
+
+            ShowController showController = createShowController(showViewModel, viewManagerModel, portfolioDataAccessObject2, stockDataAccessObject);
+
             DeleteState deleteState = new DeleteState();
-            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator);
+            ShowState showState = new ShowState();
+            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, showState, showController);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
@@ -51,5 +65,15 @@ public class LoggedInUseCaseFactory {
                 loggedInViewModel, loginViewModel);
         DeleteInputBoundary deleteInteractor = new DeleteInteractor(userDataAccessInterface, deleteOutputBoundary, portfolioDataAccessObject);
         return new DeleteController(deleteInteractor);
+    }
+
+    private static ShowController createShowController(ShowViewModel showViewModel,
+                                                       ViewManagerModel viewManagerModel,
+                                                       PortfolioDataAccessInterface portfolioDataAccessObject,
+                                                       StockPriceDataAccessInterface stockDataAccessObject) throws IOException {
+        ShowOutputBoundary showPresenter = new ShowPresenter(showViewModel, viewManagerModel);
+        ShowInputBoundary showInteractor = new ShowInteractor(portfolioDataAccessObject, stockDataAccessObject, showPresenter);
+        return new ShowController(showInteractor);
+
     }
 }

@@ -4,6 +4,9 @@ import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import interface_adapter.show.ShowController;
+import interface_adapter.show.ShowState;
+import interface_adapter.show.ShowViewModel;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -22,7 +25,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
     private DeleteState deleteState;
+    private ShowState showState;
     private final DeleteController deleteController;
+    private final ShowController showController;
     private final LoginView loginView;
 
     JLabel title;
@@ -31,16 +36,19 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JButton addStockButton;
     JButton logOut;
     JButton deleteUser;
+    JButton showButton;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
-                        LoginView loginView, StockFieldValidator stockFieldValidator) {
+                        LoginView loginView, StockFieldValidator stockFieldValidator, ShowState showState, ShowController showController) {
         this.loggedInViewModel = loggedInViewModel;
+        this.showState = showState;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
+        this.showController = showController;
         this.loginView = loginView;
         this.stockFieldValidator = stockFieldValidator;
 
@@ -58,8 +66,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
         logOut.addActionListener(this);
+
         deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
         deleteUser.addActionListener(this);
+
+        showButton = new JButton("Update Plot and Net Profit");
+        showButton.addActionListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -95,6 +107,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(deleteUser, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(showButton, gbc);
     }
 
     /**
@@ -133,11 +151,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
             }
 
-        }if (evt.getSource() == deleteUser){
+        } if (evt.getSource() == deleteUser){
             deleteController.execute(loggedInViewModel.getLoggedInUser());
 //            deleteState = deleteState.getState();
-        }else if (evt.getSource() == logOut) {
+        } if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
+        } if (evt.getSource() == showButton) {
+            showController.execute(loggedInViewModel.getState().getUserID());
         }
     }
 
