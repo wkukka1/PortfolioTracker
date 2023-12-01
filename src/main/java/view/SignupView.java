@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 public class SignupView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "sign up";
@@ -60,11 +61,22 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         if (evt.getSource().equals(signUp)) {
                             SignupState currentState = signupViewModel.getState();
 
-                            signupController.execute(
-                                    currentState.getUsername(),
-                                    currentState.getPassword(),
-                                    currentState.getRepeatPassword()
-                            );
+                            String username = currentState.getUsername();
+                            String password = currentState.getPassword();
+                            String repeatPassword = currentState.getRepeatPassword();
+
+                            //Checks if the username, password, repeatpassword is not ""
+                            if(!Objects.equals(username, "") && !Objects.equals(password, "") && !Objects.equals(repeatPassword, "")) {
+                                signupController.execute(
+                                        username,
+                                        password,
+                                        repeatPassword
+                                );
+                            }else{
+                                JOptionPane.showMessageDialog(SignupView.this,
+                                        "Please enter a valid username and password",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                            }
                             usernameInputField.setText("");
                             passwordInputField.setText("");
                             repeatPasswordInfo.setText("");
