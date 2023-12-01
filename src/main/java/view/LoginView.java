@@ -71,9 +71,38 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                                     currentState.getPassword()
                             );
 
+                            //If there was an error in logging in the user then it presents the user with a error popup
+                            if (loginViewModel.getState().getUsernameError() != null){
+                                JOptionPane.showMessageDialog(LoginView.this,
+                                        "Username or Password is incorrect!", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+
+                            //Resets the text-fields of the login screen
                             usernameInputField.setText("");
                             passwordInputField.setText("");
                         }
+                    }
+                }
+        );
+
+        usernameInputField.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        LoginState currentState = loginViewModel.getState();
+                        currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+                        loginViewModel.setState(currentState);
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+
+                    }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+
                     }
                 }
         );
@@ -114,6 +143,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 loginViewModel.setState(currentState);
             }
         });
+
 
         this.add(title);
         this.add(usernameInfo);

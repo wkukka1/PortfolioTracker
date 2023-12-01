@@ -83,7 +83,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                         if(e.getSource().equals(cancel)){
                             // Clears the input fields
                             usernameInputField.setText("");
-                            repeatPasswordInfo.setText("");
+                            repeatPasswordInputField.setText("");
                             passwordInputField.setText("");
 
                             // Changes the view to the LoginView
@@ -190,18 +190,16 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.add(buttons);
     }
 
-    /**
-     * React to a button click that results in evt.
-     */
-    public void actionPerformed(ActionEvent evt) {
-        JOptionPane.showConfirmDialog(this, "Cancel not implemented yet.");
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         SignupState state = (SignupState) evt.getNewValue();
         if (state.getUsernameError() != null) {
             JOptionPane.showMessageDialog(this, state.getUsernameError());
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("test");
     }
 }

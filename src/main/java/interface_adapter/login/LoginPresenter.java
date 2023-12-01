@@ -7,6 +7,8 @@ import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 import view.SignupView;
 
+import javax.swing.*;
+
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
@@ -25,10 +27,8 @@ public class LoginPresenter implements LoginOutputBoundary {
     }
 
     /**
-     *
-     * @param response
-     * Takes in the response and switches the users screens from the login page to the home screen where they can look
-     * at their portfolio
+     * @param response Takes in the response and switches the users screens from the login page to the home screen where they can look
+     *                 at their portfolio
      */
     @Override
     public void prepareSuccessView(LoginOutputData response) {
@@ -60,7 +60,9 @@ public class LoginPresenter implements LoginOutputBoundary {
         this.viewManagerModel.firePropertyChanged();
     }
 
-    public LoginState getLoginState(){return loginViewModel.getState();}
+    public LoginState getLoginState() {
+        return loginViewModel.getState();
+    }
 
 
 }
