@@ -5,6 +5,8 @@ import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.editStock.EditStockOutputBoundary;
 
+import javax.swing.*;
+
 public class EditStockPresenter implements EditStockOutputBoundary {
     private final EditStockViewModel editStockViewModel;
     private final LoggedInViewModel loggedInViewModel;
@@ -25,5 +27,11 @@ public class EditStockPresenter implements EditStockOutputBoundary {
 
         viewManagerModel.setActiveView(loggedInViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void prepareFailView(String error){
+        JOptionPane.showMessageDialog(null, "There was an error in editing the stock. " + error,
+                "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
