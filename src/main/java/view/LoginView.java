@@ -66,10 +66,19 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                         if (evt.getSource().equals(logIn)) {
                             LoginState currentState = loginViewModel.getState();
 
-                            loginController.execute(
-                                    currentState.getUsername(),
-                                    currentState.getPassword()
-                            );
+                            String username = currentState.getUsername();
+                            String password = currentState.getPassword();
+
+                            if(username != "" && password != "") {
+                                loginController.execute(
+                                        username,
+                                        password
+                                );
+                            }else{
+                                JOptionPane.showMessageDialog(LoginView.this,
+                                        "Please enter a valid username and password",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                            }
 
                             //If there was an error in logging in the user then it presents the user with a error popup
                             if (loginViewModel.getState().getUsernameError() != null){
