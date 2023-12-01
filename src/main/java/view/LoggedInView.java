@@ -147,6 +147,27 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 //            deleteState = deleteState.getState();
         }else if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
+        } if (evt.getSource() == editStock){
+            JTextField tickerField = new JTextField(10);
+            JTextField amountField = new JTextField(10);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(new JLabel("Enter Ticker Symbol:"));
+            panel.add(tickerField);
+            panel.add(new JLabel("Enter Amount of Shares:"));
+            panel.add(amountField);
+
+            int result = JOptionPane.showConfirmDialog(this, panel, "Add Stock",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String ticker = tickerField.getText();
+                double newQuantity = Double.parseDouble(amountField.getText());
+
+                editStockController.execute(ticker, newQuantity);
+            }
+
         }
     }
 
