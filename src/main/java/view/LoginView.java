@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -69,7 +70,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                             String username = currentState.getUsername();
                             String password = currentState.getPassword();
 
-                            if(username != "" && password != "") {
+                            if(!Objects.equals(username, "") && !Objects.equals(password, "")) {
                                 loginController.execute(
                                         username,
                                         password
