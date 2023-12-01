@@ -2,7 +2,8 @@ package app;
 
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import data_access.MarketStackClient;
+import data_access.StockInfoClient;
+import data_access.StockInfoClient;
 import entity.CommonUserFactory;
 
 import interface_adapter.delete_user.DeleteViewModel;
@@ -84,9 +85,9 @@ public class Main {
         application.pack();
         application.setVisible(true);
 
-        // todo: Test runner code for MarketStackClient (delete code below later)
-        MarketStackClient client = new MarketStackClient();
-        JSONObject result = client.getStockInfo("SNOW", "2023-01-01", "2023-05-05");
+        // todo: Test runner code for StockInfoClient (delete code below later)
+        StockInfoClient client = new StockInfoClient();
+        JSONObject result = client.getStockInfo("AAPL");
         System.out.println(result);
     }
 }

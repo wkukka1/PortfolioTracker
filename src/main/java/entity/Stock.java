@@ -1,19 +1,17 @@
 package entity;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 public class Stock {
     private String tickerSymbol;
     private LocalDateTime purchaseLocalDateTime;
-    private HashMap<String, Double> quantities;
+    private double quantity;
     private double totalValueAtPurchase;
 
     public Stock(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double quantity, double totalValueAtPurchase) {
         this.tickerSymbol = tickerSymbol;
         this.purchaseLocalDateTime = purchaseLocalDateTime;
-        this.quantities = new HashMap<>();
-        addQuantity(quantity);
+        this.quantity = quantity;
         this.totalValueAtPurchase = totalValueAtPurchase;
     }
 
@@ -33,16 +31,12 @@ public class Stock {
         this.purchaseLocalDateTime = purchaseLocalDateTime;
     }
 
-    public double getQuantity(String date) {
-        return quantities.get(date);
+    public double getQuantity() {
+        return quantity;
     }
 
-    public void addQuantity(double quantity) {
-        quantities.put(localDateTimeToyyyymmdd(LocalDateTime.now()), quantity);
-    }
-
-    private String localDateTimeToyyyymmdd(LocalDateTime now) {
-        //todo: implement
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
     }
 
     public double getTotalValueAtPurchase() {
