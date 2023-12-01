@@ -3,6 +3,7 @@ package use_case.signup;
 import entity.Portfolio;
 import entity.User;
 import entity.UserFactory;
+import use_case.portfolioDataAccessInterface.PortfolioDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
