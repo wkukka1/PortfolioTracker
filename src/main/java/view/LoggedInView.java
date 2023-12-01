@@ -4,6 +4,7 @@ import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import interface_adapter.editStock.EditStockController;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private DeleteState deleteState;
     private final DeleteController deleteController;
     private final LoginView loginView;
+    private final EditStockController editStockController;
 
     JLabel title;
     JLabel netProfitLabel;
@@ -31,18 +33,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JButton addStockButton;
     JButton logOut;
     JButton deleteUser;
+    JButton editStock;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
-                        LoginView loginView, StockFieldValidator stockFieldValidator) {
+                        LoginView loginView, StockFieldValidator stockFieldValidator, EditStockController editStockController) {
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
         this.loginView = loginView;
         this.stockFieldValidator = stockFieldValidator;
+        this.editStockController = editStockController;
 
 
         this.setLayout(new GridBagLayout());
@@ -60,6 +64,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         logOut.addActionListener(this);
         deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
         deleteUser.addActionListener(this);
+
+        editStock = new JButton(LoggedInViewModel.EDIT_STOCK_LABEL);
+        editStock.addActionListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -95,6 +102,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(deleteUser, gbc);
+
+        this.add(editStock, gbc);
     }
 
     /**
