@@ -44,5 +44,7 @@ public class Portfolio {
                 return s;
             }
         }
+        System.out.println("No stock found");
+        return null;
     }
 }
