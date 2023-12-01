@@ -162,12 +162,56 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         }
         if (evt.getSource() == deleteUser) {
-            deleteController.execute(loggedInViewModel.getLoggedInUser());
-//            deleteState = deleteState.getState();
+            deleteConfirmation();
         } else if (evt.getSource() == logOut) {
             logoutController.execute(loggedInViewModel.getLoggedInUser());
         }
     }
+
+    private void deleteConfirmation(){
+        JFrame popup = new JFrame("Confirmation");
+        popup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel text = new JLabel("Are you sure you want to delete your account?");
+
+        JButton yesButton = new JButton("Yes");
+        yesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteController.execute(loggedInViewModel.getLoggedInUser());
+                popup.dispose();
+            }
+        });
+
+        JButton noButton = new JButton("No");
+        noButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popup.dispose();
+            }
+        });
+
+        // Set layout manager to null for manual positioning
+        popup.setLayout(null);
+
+        // Set position and size of the label
+        text.setBounds(50, 20, 300, 30); // Adjust the values as needed
+
+        // Set position and size of the buttons
+        yesButton.setBounds(100, 70, 80, 30); // Adjust the values as needed
+        noButton.setBounds(200, 70, 80, 30); // Adjust the values as needed
+
+        // Add components to the frame
+        popup.add(text);
+        popup.add(yesButton);
+        popup.add(noButton);
+
+        // Set frame properties
+        popup.setSize(400, 150);
+        popup.setLocationRelativeTo(this);
+        popup.setVisible(true);
+    }
+
 
     private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr)
             throws ValidationException {
