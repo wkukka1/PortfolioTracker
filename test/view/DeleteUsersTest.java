@@ -104,7 +104,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(5);
+        return (JButton) lv.getComponent(4);
     }
 
     public int[] countLines() {
