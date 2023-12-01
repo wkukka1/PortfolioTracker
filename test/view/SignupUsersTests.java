@@ -1,22 +1,14 @@
 package view;
 
 import app.Main;
-import data_access.FilePortfolioDataAccessObject;
-import data_access.FileUserDataAccessObject;
-import entity.CommonUserFactory;
-import entity.Portfolio;
-import entity.UserFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.junit.Assert.assertNotNull;
@@ -122,22 +114,6 @@ public class SignupUsersTests {
             throw new RuntimeException(e);
         }
 
-    }
-
-    public void addUser(int numOfUsers) {
-        UserFactory uf = new CommonUserFactory();
-        FileUserDataAccessObject fudao;
-        FilePortfolioDataAccessObject fpdao;
-        try {
-            fudao = new FileUserDataAccessObject("./users.csv", uf);
-            fpdao = new FilePortfolioDataAccessObject("./portfolios.csv");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (int i = 0; i < numOfUsers; i++) {
-            fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
-            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
-        }
     }
 
     private JButton getSwitchButton(){
