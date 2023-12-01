@@ -36,4 +36,13 @@ public class Portfolio {
     public void setUserID(int userID) {
         this.userID = userID;
     }
+
+    public Stock getStockByTicker(String tickerSymbol){
+        for (Stock s: stockList){
+            String ticker = s.getTickerSymbol();
+            if (ticker.equals(tickerSymbol)){
+                return s;
+            }
+        }
+    }
 }
