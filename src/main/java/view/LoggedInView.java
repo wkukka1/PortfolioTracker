@@ -193,7 +193,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         if (!StringUtils.isEmpty(state.getAddStockError())) {
             JOptionPane.showMessageDialog(this, state.getAddStockError());
         }
-        if (!StringUtils.isEmpty(state.getUsername())) {
+        if (!StringUtils.isEmpty(state.getUsername()) &&
+                StringUtils.isEmpty(loggedInViewModel.getState().getAddStockError())) {
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
