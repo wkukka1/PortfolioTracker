@@ -38,7 +38,7 @@ public class StockPriceClientImpl implements StockPriceDataAccessInterface {
 
             AVTimeSeriesDailyResponse res = avTimeSeriesDailyDeserializer.deserialize(responseBody, date);
             return res;
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException | NoSuchElementException e) {
             throw new RuntimeException(e);
         }
     }
