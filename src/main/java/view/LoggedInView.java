@@ -6,6 +6,7 @@ import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
 import org.apache.commons.lang3.StringUtils;
+import view.components.ScrollableStockList;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -31,9 +33,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
+    JLabel stocksScrollableListLabel;
     JButton addStockButton;
     JButton logOut;
     JButton deleteUser;
+    JPanel stocksScrollableList;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
@@ -65,6 +69,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
         deleteUser.addActionListener(this);
 
+        stocksScrollableList = new ScrollableStockList(new HashMap<>());
+        stocksScrollableListLabel = new JLabel("Currently Held Assets:");
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -90,12 +97,22 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-
-        this.add(logOut, gbc);
+        this.add(stocksScrollableListLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(stocksScrollableList, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(logOut, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(deleteUser, gbc);
@@ -175,6 +192,19 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         netProfitValue.setText(state.getNetProfit());
         if (!StringUtils.isEmpty(state.getAddStockError())) {
             JOptionPane.showMessageDialog(this, state.getAddStockError());
+        }
+        if (!StringUtils.isEmpty(state.getUsername())) {
+            this.remove(stocksScrollableList);
+            stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 2;
+            gbc.gridwidth = 4;
+            gbc.anchor = GridBagConstraints.EAST;
+
+            stocksScrollableList.revalidate();
+            this.add(stocksScrollableList, gbc);
         }
     }
 }
