@@ -2,8 +2,12 @@ package app;
 
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
+import interface_adapter.logged_in.add_stock.AddStockPresenter;
 import use_case.add_stock.AddStockInputBoundary;
 import use_case.add_stock.AddStockInteractor;
+import use_case.add_stock.AddStockOutputBoundary;
+import use_case.show.StockPriceDataAccessInterface;
+import use_case.signup.PortfolioDataAccessInterface;
 import view.LoggedInView;
 import view.validation.StockFieldValidator;
 import view.validation.StockFieldValidatorImpl;
@@ -29,16 +33,19 @@ public class LoggedInUseCaseFactory {
 
     public static LoggedInView create(LoggedInViewModel loggedInViewModel,
                                       LoginViewModel loginViewModel,
-                                      ViewManagerModel viewManagerModel
-            , SignupUserDataAccessInterface userDataAccessInterface,
+                                      ViewManagerModel viewManagerModel,
+                                      SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
-                                      FilePortfolioDataAccessObject portfolioDataAccessObject, LoginView loginView) {
+                                      FilePortfolioDataAccessObject portfolioDataAccessObject,
+                                      StockPriceDataAccessInterface stockPriceClientImpl,
+                                      LoginView loginView) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
 
-            AddStockController addStockController = createAddStockUseCase();
+            AddStockController addStockController = createAddStockUseCase(stockPriceClientImpl,
+                    portfolioDataAccessObject, loggedInViewModel);
             StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
 
             return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator,
@@ -61,8 +68,12 @@ public class LoggedInUseCaseFactory {
         return new DeleteController(deleteInteractor);
     }
 
-    private static AddStockController createAddStockUseCase() {
-        AddStockInputBoundary addStockInteractor = new AddStockInteractor();
+    private static AddStockController createAddStockUseCase(StockPriceDataAccessInterface stockPriceClientImpl,
+                                                            PortfolioDataAccessInterface portfolioDataAccessInterface,
+                                                            LoggedInViewModel loggedInViewModel) {
+        AddStockOutputBoundary addStockPresenter = new AddStockPresenter(loggedInViewModel);
+        AddStockInputBoundary addStockInteractor = new AddStockInteractor(stockPriceClientImpl,
+                portfolioDataAccessInterface, addStockPresenter);
         return new AddStockController(addStockInteractor);
     }
 }
