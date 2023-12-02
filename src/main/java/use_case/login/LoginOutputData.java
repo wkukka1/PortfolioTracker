@@ -5,11 +5,13 @@ public class LoginOutputData {
     private final String username;
     private final int userID;
     private boolean useCaseFailed;
+    private double netProfit;
 
-    public LoginOutputData(String username, int userID, boolean useCaseFailed) {
+    public LoginOutputData(String username, int userID, boolean useCaseFailed, double netProfit) {
         this.username = username;
         this.userID = userID;
         this.useCaseFailed = useCaseFailed;
+        this.netProfit = netProfit;
     }
 
     public String getUsername() {
@@ -18,5 +20,13 @@ public class LoginOutputData {
 
     public int getUserID() {
         return userID;
+    }
+
+    public double getNetProfit() {
+        return netProfit;
+    }
+
+    public void setNetProfit(double netProfit) {
+        this.netProfit = netProfit;
     }
 }
