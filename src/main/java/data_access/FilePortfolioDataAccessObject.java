@@ -34,12 +34,12 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                     String[] col = row.split(",", headers.size());
 
                     int userID = Integer.parseInt(String.valueOf(col[headers.get("userID")]));
-                    long netWorth = Long.parseLong(String.valueOf(col[headers.get("netWorth")]));
+                    double netProfit = Double.parseDouble(String.valueOf(col[headers.get("netWorth")]));
 
                     String encodedStocks = String.valueOf(col[headers.get("stockList")]);
                     ArrayList<Stock> decodedStockList = decodeStockStrIntoStockList(encodedStocks);
 
-                    Portfolio currPortfolio = new Portfolio(decodedStockList, netWorth, userID);
+                    Portfolio currPortfolio = new Portfolio(decodedStockList, netProfit, userID);
                     portfolios.put(userID, currPortfolio);
                 }
             }
