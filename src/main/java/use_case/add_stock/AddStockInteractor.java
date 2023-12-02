@@ -10,12 +10,15 @@ import java.time.format.DateTimeFormatter;
 public class AddStockInteractor implements AddStockInputBoundary {
     private final StockPriceDataAccessInterface stockPriceClientImpl;
     private final PortfolioDataAccessInterface portfolioDataAccessImpl;
+    private final AddStockOutputBoundary addStockPresenter;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,
-                              PortfolioDataAccessInterface portfolioDataAccessImpl) {
+                              PortfolioDataAccessInterface portfolioDataAccessImpl,
+                              AddStockOutputBoundary addStockPresenter) {
         this.stockPriceClientImpl = stockPriceClientImpl;
         this.portfolioDataAccessImpl = portfolioDataAccessImpl;
+        this.addStockPresenter = addStockPresenter;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
     private Stock createNewStock(AddStockInputData addStockData) throws RuntimeException {
         String purchaseDate = addStockData.getPurchaseLocalDateTime().format(formatter);
 
-        double pastStockClosePrice = stockPriceClientImpl.getStockInfo(
+        double pastStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
                 addStockData.getTickerSymbol(), purchaseDate).getClose();
 
         double newStockQuantity = addStockData.getTotalValueAtPurchase() / pastStockClosePrice;
@@ -48,7 +51,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
     private double calculateNewStockProfitToDate(Stock newStock) throws RuntimeException {
         String currDate = LocalDateTime.now().format(formatter);
 
-        double currStockClosePrice = stockPriceClientImpl.getStockInfo(
+        double currStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
                 newStock.getTickerSymbol(), currDate).getClose();
 
         double pastStockClosePrice = newStock.getTotalValueAtPurchase() / newStock.getQuantity();
