@@ -17,7 +17,7 @@ public class AVTimeSeriesDailyDeserializerImpl implements AVTimeSeriesDailyDeser
     private static String VOLUME_FIELD_NAME = "5. volume";
 
     public AVTimeSeriesDailyResponse deserialize(String AVTimeSeriesDailyResStr, String date)
-            throws IOException, IllegalArgumentException {
+            throws IOException, IllegalArgumentException, NoSuchElementException {
         if (StringUtils.isEmpty(date)) {
             throw new IllegalArgumentException();
         }
