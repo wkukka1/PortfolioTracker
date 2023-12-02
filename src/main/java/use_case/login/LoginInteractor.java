@@ -1,11 +1,14 @@
 package use_case.login;
 
+import entity.Portfolio;
+import entity.Stock;
 import entity.User;
 import use_case.signup.PortfolioDataAccessInterface;
-import view.SignupView;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginInteractor implements LoginInputBoundary {
     final LoginUserDataAccessInterface userDataAccessObject;
@@ -40,10 +43,12 @@ public class LoginInteractor implements LoginInputBoundary {
             } else {
 
                 User user = userDataAccessObject.get(loginInputData.getUsername());
-                double overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(user.getUserID()).getNetProfit();
+                Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(user.getUserID());
+                double overallNetProfit = currPortfolio.getNetProfit();
 
                 LoginOutputData loginOutputData = new LoginOutputData(user.getName(), user.getUserID(),
-                        false, round(overallNetProfit, 2));
+                        false, round(overallNetProfit, 2),
+                        generateTickersToQuantities(currPortfolio));
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
@@ -57,5 +62,15 @@ public class LoginInteractor implements LoginInputBoundary {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    private Map<String, Double> generateTickersToQuantities(Portfolio currPortfolio) {
+        Map<String, Double> tickersToQuantities = new HashMap<>();
+        for (Stock stock : currPortfolio.getStockList()) {
+            tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
+                    0.0) + stock.getQuantity());
+        }
+        tickersToQuantities.replaceAll((ticker, quantity) -> round(quantity, 2));
+        return tickersToQuantities;
     }
 }

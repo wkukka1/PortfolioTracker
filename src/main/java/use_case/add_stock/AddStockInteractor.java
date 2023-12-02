@@ -1,5 +1,6 @@
 package use_case.add_stock;
 
+import entity.Portfolio;
 import entity.Stock;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
@@ -8,6 +9,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddStockInteractor implements AddStockInputBoundary {
     private final StockPriceDataAccessInterface stockPriceClientImpl;
@@ -41,7 +44,12 @@ public class AddStockInteractor implements AddStockInputBoundary {
         }
 
         portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
-        addStockPresenter.prepareSuccessView(round(overallNetProfit, 2));
+        Map<String, Double> tickersToQuantities = generateTickersToQuantities(
+                portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()));
+
+        AddStockOutputData addStockOutputData = new AddStockOutputData(round(overallNetProfit, 2),
+                tickersToQuantities);
+        addStockPresenter.prepareSuccessView(addStockOutputData);
     }
 
     private Stock createNewStock(AddStockInputData addStockData) throws RuntimeException {
@@ -73,5 +81,15 @@ public class AddStockInteractor implements AddStockInputBoundary {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    private Map<String, Double> generateTickersToQuantities(Portfolio currPortfolio) {
+        Map<String, Double> tickersToQuantities = new HashMap<>();
+        for (Stock stock : currPortfolio.getStockList()) {
+            tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
+                    0.0) + stock.getQuantity());
+        }
+        tickersToQuantities.replaceAll((ticker, quantity) -> round(quantity, 2));
+        return tickersToQuantities;
     }
 }
