@@ -18,6 +18,7 @@ public class AddStockPresenter implements AddStockOutputBoundary {
         LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setNetProfit(addStockOutputData.getNewStockProfitToDate());
         loggedInState.setTickersToAggregatedQuantities(addStockOutputData.getTickersToQuantities());
+        loggedInState.setAddStockError(null);
         loggedInViewModel.firePropertyChanged();
     }
 
