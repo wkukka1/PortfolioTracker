@@ -10,6 +10,7 @@ import org.json.JSONException;
 import use_case.show.StockPriceDataAccessInterface;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 
 public class StockPriceClientImpl implements StockPriceDataAccessInterface {
@@ -31,6 +32,8 @@ public class StockPriceClientImpl implements StockPriceDataAccessInterface {
 
             if (!responseBody.contains(META_DATA_MARKER)) {
                 throw new IOException();
+            } else if (!responseBody.contains(date)) {
+                throw new NoSuchElementException();
             }
 
             AVTimeSeriesDailyResponse res = avTimeSeriesDailyDeserializer.deserialize(responseBody, date);
