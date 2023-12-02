@@ -4,6 +4,8 @@ import entity.Stock;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -12,6 +14,8 @@ public class AddStockInteractor implements AddStockInputBoundary {
     private final PortfolioDataAccessInterface portfolioDataAccessImpl;
     private final AddStockOutputBoundary addStockPresenter;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final String ADD_STOCK_DEFAULT_ERROR = "There was an issue adding this stock. Please check the input " +
+            "fields and try again.";
 
     public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,
                               PortfolioDataAccessInterface portfolioDataAccessImpl,
@@ -25,16 +29,19 @@ public class AddStockInteractor implements AddStockInputBoundary {
     public void addStock(AddStockInputData addStockData) {
         Stock newStock;
         double newStockProfitToDate;
+        double overallNetProfit;
         try {
             newStock = createNewStock(addStockData);
             newStockProfitToDate = calculateNewStockProfitToDate(newStock);
+            overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()).getNetProfit() +
+                    newStockProfitToDate;
         } catch (RuntimeException re) {
-            addStockPresenter.prepareNonSuccessView();
+            addStockPresenter.prepareNonSuccessView(ADD_STOCK_DEFAULT_ERROR);
+            return;
         }
 
         portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
-
-        addStockPresenter.prepareSuccessView();
+        addStockPresenter.prepareSuccessView(round(overallNetProfit, 2));
     }
 
     private Stock createNewStock(AddStockInputData addStockData) throws RuntimeException {
@@ -49,12 +56,22 @@ public class AddStockInteractor implements AddStockInputBoundary {
     }
 
     private double calculateNewStockProfitToDate(Stock newStock) throws RuntimeException {
-        String currDate = LocalDateTime.now().format(formatter);
+        String currDate = LocalDateTime.now().minusDays(1).format(formatter);
 
         double currStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
                 newStock.getTickerSymbol(), currDate).getClose();
 
         double pastStockClosePrice = newStock.getTotalValueAtPurchase() / newStock.getQuantity();
         return newStock.getQuantity() * (currStockClosePrice - pastStockClosePrice);
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
