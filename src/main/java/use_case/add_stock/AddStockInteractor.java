@@ -44,4 +44,14 @@ public class AddStockInteractor implements AddStockInputBoundary {
         return new Stock(addStockData.getTickerSymbol(), addStockData.getPurchaseLocalDateTime(), newStockQuantity,
                 addStockData.getTotalValueAtPurchase());
     }
+
+    private double calculateNewStockProfitToDate(Stock newStock) throws RuntimeException {
+        String currDate = LocalDateTime.now().format(formatter);
+
+        double currStockClosePrice = stockPriceClientImpl.getStockInfo(
+                newStock.getTickerSymbol(), currDate).getClose();
+
+        double pastStockClosePrice = newStock.getTotalValueAtPurchase() / newStock.getQuantity();
+        return newStock.getQuantity() * (currStockClosePrice - pastStockClosePrice);
+    }
 }
