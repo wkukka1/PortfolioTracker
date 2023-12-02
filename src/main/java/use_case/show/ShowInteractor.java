@@ -88,20 +88,6 @@ public class ShowInteractor implements ShowInputBoundary{
     }
 
     /**
-     * Populates the hashmap mapping dates to prices with, with all values being 0.0 and keys being
-     * in the range from portfolioCreationDate to today.
-     *
-     * @param dateToNetWorth the hashmap
-     * @param startDate start date (when portfolio was created)
-     * @param today end date (today)
-     */
-    private void populateHashMap(HashMap<String, Double> dateToNetWorth, LocalDateTime startDate, LocalDateTime today) {
-        for (LocalDateTime date = startDate; date.isBefore(today); date = date.plusDays(1)) {
-            dateToNetWorth.put(date.toString(), 0.0);
-        }
-    }
-
-    /**
      * Converts a string in the format YYYY-MM-DD to a Day object
      * Reference: https://www.jfree.org/jfreechart/api/javadoc/org/jfree/data/time/Day.html
      *
