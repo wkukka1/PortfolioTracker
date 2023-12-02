@@ -3,13 +3,14 @@ package data_access;
 import entity.Portfolio;
 import entity.Stock;
 import org.apache.commons.lang3.StringUtils;
+import use_case.delete_user.DeletePortfolioAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterface {
+public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterface, DeletePortfolioAccessInterface {
     private final File csvFile;
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<Integer, Portfolio> portfolios = new HashMap<>();
@@ -176,5 +177,11 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                     STOCK_ATTRIBUTE_DELIMITER + currStock.getPurchaseLocalDateTime();
         }
         return encodedStocks;
+    }
+
+    @Override
+    public void deletePortfolio(int id) {
+        portfolios.remove(id);
+        this.save();
     }
 }
