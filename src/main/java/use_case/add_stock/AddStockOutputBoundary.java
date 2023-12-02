@@ -1,6 +1,8 @@
 package use_case.add_stock;
 
+import java.util.Map;
+
 public interface AddStockOutputBoundary {
-    void prepareSuccessView(double newStockProfitToDate);
+    void prepareSuccessView(AddStockOutputData addStockOutputData);
     void prepareNonSuccessView(String addStockErrorMsg);
 }

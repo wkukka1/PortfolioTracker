@@ -3,6 +3,8 @@ package interface_adapter.logged_in.add_stock;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.add_stock.AddStockOutputBoundary;
+import use_case.add_stock.AddStockOutputData;
+
 
 public class AddStockPresenter implements AddStockOutputBoundary {
     private final LoggedInViewModel loggedInViewModel;
@@ -12,9 +14,10 @@ public class AddStockPresenter implements AddStockOutputBoundary {
     }
 
     @Override
-    public void prepareSuccessView(double newStockProfitToDate) {
+    public void prepareSuccessView(AddStockOutputData addStockOutputData) {
         LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setNetProfit(newStockProfitToDate);
+        loggedInState.setNetProfit(addStockOutputData.getNewStockProfitToDate());
+        loggedInState.setTickersToAggregatedQuantities(addStockOutputData.getTickersToQuantities());
         loggedInViewModel.firePropertyChanged();
     }
 
