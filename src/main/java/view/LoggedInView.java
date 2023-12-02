@@ -5,6 +5,7 @@ import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import org.apache.commons.lang3.StringUtils;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -133,6 +134,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
                 } catch (ValidationException validationException) {
                     System.out.println("Stock Field Validation Exception Occurred");;
+                    return;
                 }
 
                 addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
@@ -171,5 +173,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // Update the net profit value using state data
         netProfitValue.setText(state.getNetProfit());
+        if (!StringUtils.isEmpty(state.getAddStockError())) {
+            JOptionPane.showMessageDialog(this, state.getAddStockError());
+        }
     }
 }
