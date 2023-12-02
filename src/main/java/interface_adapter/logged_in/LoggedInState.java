@@ -3,12 +3,13 @@ package interface_adapter.logged_in;
 public class LoggedInState {
     private String username = "";
     private int userID;
-    private float netProfit = 0;
+    private double netProfit = 0;
+    private String addStockError;
 
     public LoggedInState(LoggedInState copy) {
         username = copy.username;
         userID = copy.userID;
-        //TODO Update the netprofit
+        addStockError = copy.addStockError;
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
@@ -32,6 +33,14 @@ public class LoggedInState {
     }
 
     public String getNetProfit() {
-        return Float.toString(netProfit);
+        return Double.toString(netProfit);
+    }
+
+    public String getAddStockError() {
+        return addStockError;
+    }
+
+    public void setAddStockError(String addStockError) {
+        this.addStockError = addStockError;
     }
 }
