@@ -11,6 +11,7 @@ import use_case.login.LoginInputBoundary;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginUserDataAccessInterface;
+import use_case.signup.PortfolioDataAccessInterface;
 import view.LoginView;
 import view.SignupView;
 
@@ -29,10 +30,12 @@ public class LoginUseCaseFactory {
             ViewManagerModel viewManagerModel,
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
-            LoginUserDataAccessInterface userDataAccessObject, SignupView signupView) {
+            LoginUserDataAccessInterface userDataAccessObject, SignupView signupView,
+            PortfolioDataAccessInterface portfolioDataAccessImpl) {
 
         try {
-            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject, signupView);
+            LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel,
+                    userDataAccessObject, signupView, portfolioDataAccessImpl);
             return new LoginView(loginViewModel, loginController, viewManagerModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -46,7 +49,8 @@ public class LoginUseCaseFactory {
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
             LoginUserDataAccessInterface userDataAccessObject,
-            SignupView signupView) throws IOException {
+            SignupView signupView,
+            PortfolioDataAccessInterface portfolioDataAccessImpl) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
         LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, loggedInViewModel, loginViewModel, signupView);
@@ -54,7 +58,7 @@ public class LoginUseCaseFactory {
         UserFactory userFactory = new CommonUserFactory();
 
         LoginInputBoundary loginInteractor = new LoginInteractor(
-                userDataAccessObject, loginOutputBoundary);
+                userDataAccessObject, loginOutputBoundary, portfolioDataAccessImpl);
 
         return new LoginController(loginInteractor);
     }

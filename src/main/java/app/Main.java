@@ -2,6 +2,7 @@ package app;
 
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
+import data_access.MarketStackClient;
 import entity.CommonUserFactory;
 
 import interface_adapter.delete_user.DeleteViewModel;
@@ -9,11 +10,11 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
+import use_case.show.StockPriceDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
-import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,11 +69,13 @@ public class Main {
         views.add(signupView, signupView.viewName);
 
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
-                userDataAccessObject, signupView);
+                userDataAccessObject, signupView, portfolioDataAccessObject);
         views.add(loginView, loginView.viewName);
 
+        StockPriceDataAccessInterface stockPriceClientImpl = new MarketStackClient();
+
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
-                userDataAccessObject, deleteViewModel, portfolioDataAccessObject, loginView);
+                userDataAccessObject, deleteViewModel, portfolioDataAccessObject, stockPriceClientImpl, loginView);
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);
