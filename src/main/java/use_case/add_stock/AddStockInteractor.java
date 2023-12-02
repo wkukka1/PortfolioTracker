@@ -14,7 +14,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
     private final PortfolioDataAccessInterface portfolioDataAccessImpl;
     private final AddStockOutputBoundary addStockPresenter;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final String ADD_STOCK_DEFAULT_ERROR = "There was an issue adding this stock. Please check the input " +
+    private final String ADD_STOCK_DEFAULT_ERROR = "There was an issue adding this stock.\n Please check the input " +
             "fields and try again.";
 
     public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,

@@ -18,8 +18,8 @@ public class AddStockController {
         LocalDateTime purchaseLocalDateTime = LocalDate.of(Integer.parseInt(dateComponents[2]),
                 Integer.parseInt(dateComponents[1]), Integer.parseInt(dateComponents[0])).atStartOfDay();
 
-        AddStockInputData addStockInputData = new AddStockInputData(ticker, purchaseLocalDateTime,
-                Double.parseDouble(amount), userID);
+        AddStockInputData addStockInputData = new AddStockInputData(ticker.toUpperCase(),
+                purchaseLocalDateTime, Double.parseDouble(amount), userID);
 
         addStockInteractor.addStock(addStockInputData);
     }
