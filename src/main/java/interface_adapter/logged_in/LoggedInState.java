@@ -36,6 +36,10 @@ public class LoggedInState {
         return Double.toString(netProfit);
     }
 
+    public void setNetProfit(double netProfit) {
+        this.netProfit = netProfit;
+    }
+
     public String getAddStockError() {
         return addStockError;
     }
