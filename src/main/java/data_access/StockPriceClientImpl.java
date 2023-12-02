@@ -21,7 +21,7 @@ public class StockPriceClientImpl implements StockPriceDataAccessInterface {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
 
         Request request = new Request.Builder()
-                .url(String.format(BASE_URL + "?function=TIME_SERIES_DAILY&symbol=%s&outputsize=full&apikey=demo",
+                .url(String.format(BASE_URL + "?function=TIME_SERIES_DAILY&symbol=%s&outputsize=full&apikey=%s",
                         symbol, System.getenv("API_KEY")))
                 .build();
 
