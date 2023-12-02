@@ -1,16 +1,23 @@
 package use_case.login;
 
 import entity.User;
+import use_case.signup.PortfolioDataAccessInterface;
 import view.SignupView;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class LoginInteractor implements LoginInputBoundary {
     final LoginUserDataAccessInterface userDataAccessObject;
+    private final PortfolioDataAccessInterface portfolioDataAccessImpl;
     final LoginOutputBoundary loginPresenter;
 
     public LoginInteractor(LoginUserDataAccessInterface userDataAccessInterface,
-                           LoginOutputBoundary loginOutputBoundary) {
+                           LoginOutputBoundary loginOutputBoundary,
+                           PortfolioDataAccessInterface portfolioDataAccessImpl) {
         this.userDataAccessObject = userDataAccessInterface;
         this.loginPresenter = loginOutputBoundary;
+        this.portfolioDataAccessImpl = portfolioDataAccessImpl;
     }
 
     public void signup() {
@@ -33,11 +40,22 @@ public class LoginInteractor implements LoginInputBoundary {
             } else {
 
                 User user = userDataAccessObject.get(loginInputData.getUsername());
+                double overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(user.getUserID()).getNetProfit();
 
                 LoginOutputData loginOutputData = new LoginOutputData(user.getName(), user.getUserID(),
-                        false);
+                        false, round(overallNetProfit, 2));
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
