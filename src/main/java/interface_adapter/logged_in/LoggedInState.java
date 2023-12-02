@@ -1,15 +1,19 @@
 package interface_adapter.logged_in;
 
+import java.util.Map;
+
 public class LoggedInState {
     private String username = "";
     private int userID;
     private double netProfit = 0;
     private String addStockError;
+    private Map<String, Double> tickersToAggregatedQuantities;
 
     public LoggedInState(LoggedInState copy) {
         username = copy.username;
         userID = copy.userID;
         addStockError = copy.addStockError;
+        tickersToAggregatedQuantities = copy.getTickersToAggregatedQuantities();
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
@@ -46,5 +50,13 @@ public class LoggedInState {
 
     public void setAddStockError(String addStockError) {
         this.addStockError = addStockError;
+    }
+
+    public Map<String, Double> getTickersToAggregatedQuantities() {
+        return tickersToAggregatedQuantities;
+    }
+
+    public void setTickersToAggregatedQuantities(Map<String, Double> tickersToAggregatedQuantities) {
+        this.tickersToAggregatedQuantities = tickersToAggregatedQuantities;
     }
 }

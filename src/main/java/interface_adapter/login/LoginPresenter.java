@@ -38,6 +38,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         loggedInState.setUsername(response.getUsername());
         loggedInState.setUserID(response.getUserID());
         loggedInState.setNetProfit(response.getNetProfit());
+        loggedInState.setTickersToAggregatedQuantities(response.getTickersToQuantities());
 
         this.loggedInViewModel.setState(loggedInState);
         this.loggedInViewModel.setLoggedInUser(response.getUsername());
