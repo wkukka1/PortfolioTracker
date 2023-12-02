@@ -1,12 +1,20 @@
 package use_case.add_stock;
 
 import entity.Stock;
+import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 
-public class AddStockInteractor implements AddStockInputBoundary {
-    private final PortfolioDataAccessInterface portfolioDataAccessImpl;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public AddStockInteractor(PortfolioDataAccessInterface portfolioDataAccessImpl) {
+public class AddStockInteractor implements AddStockInputBoundary {
+    private final StockPriceDataAccessInterface stockPriceClientImpl;
+    private final PortfolioDataAccessInterface portfolioDataAccessImpl;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,
+                              PortfolioDataAccessInterface portfolioDataAccessImpl) {
+        this.stockPriceClientImpl = stockPriceClientImpl;
         this.portfolioDataAccessImpl = portfolioDataAccessImpl;
     }
 
@@ -24,5 +32,16 @@ public class AddStockInteractor implements AddStockInputBoundary {
         portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
 
         addStockPresenter.prepareSuccessView();
+    }
+
+    private Stock createNewStock(AddStockInputData addStockData) throws RuntimeException {
+        String purchaseDate = addStockData.getPurchaseLocalDateTime().format(formatter);
+
+        double pastStockClosePrice = stockPriceClientImpl.getStockInfo(
+                addStockData.getTickerSymbol(), purchaseDate).getClose();
+
+        double newStockQuantity = addStockData.getTotalValueAtPurchase() / pastStockClosePrice;
+        return new Stock(addStockData.getTickerSymbol(), addStockData.getPurchaseLocalDateTime(), newStockQuantity,
+                addStockData.getTotalValueAtPurchase());
     }
 }
