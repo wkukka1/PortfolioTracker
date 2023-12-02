@@ -1,5 +1,6 @@
 package interface_adapter.show;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import use_case.show.ShowInputBoundary;
 import use_case.show.ShowInputData;
 
@@ -11,7 +12,7 @@ public class ShowController {
         this.showUseCaseInteractor = showUseCaseInteractor;
     }
 
-    public void execute(int userID) {
+    public void execute(int userID) throws JsonProcessingException {
         ShowInputData showInputData = new ShowInputData(userID);
         showUseCaseInteractor.execute(showInputData);
     }

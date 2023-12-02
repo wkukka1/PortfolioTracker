@@ -1,5 +1,6 @@
 package view;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.delete_user.DeleteController;
@@ -157,7 +158,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         } if (evt.getSource() == logOut) {
             System.out.println("Click " + evt.getActionCommand()); // Handle logout button
         } if (evt.getSource() == showButton) {
-            showController.execute(loggedInViewModel.getState().getUserID());
+            try {
+                showController.execute(loggedInViewModel.getState().getUserID());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

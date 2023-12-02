@@ -37,14 +37,13 @@ public class LoggedInUseCaseFactory {
                                       LoginView loginView,
                                       StockFieldValidator stockFieldValidator,
                                       ShowViewModel showViewModel,
-                                      PortfolioDataAccessInterface portfolioDataAccessObject2,
                                       StockPriceDataAccessInterface stockDataAccessObject
                                       ) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
 
-            ShowController showController = createShowController(showViewModel, viewManagerModel, portfolioDataAccessObject2, stockDataAccessObject);
+            ShowController showController = createShowController(showViewModel, viewManagerModel, portfolioDataAccessObject, stockDataAccessObject);
 
             DeleteState deleteState = new DeleteState();
             ShowState showState = new ShowState();
@@ -69,7 +68,7 @@ public class LoggedInUseCaseFactory {
 
     private static ShowController createShowController(ShowViewModel showViewModel,
                                                        ViewManagerModel viewManagerModel,
-                                                       PortfolioDataAccessInterface portfolioDataAccessObject,
+                                                       ShowPortfolioDataAccessInterface portfolioDataAccessObject,
                                                        StockPriceDataAccessInterface stockDataAccessObject) throws IOException {
         ShowOutputBoundary showPresenter = new ShowPresenter(showViewModel, viewManagerModel);
         ShowInputBoundary showInteractor = new ShowInteractor(portfolioDataAccessObject, stockDataAccessObject, showPresenter);

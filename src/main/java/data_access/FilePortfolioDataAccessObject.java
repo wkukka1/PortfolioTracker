@@ -4,13 +4,14 @@ import entity.Portfolio;
 import entity.Stock;
 import org.apache.commons.lang3.StringUtils;
 import use_case.delete_user.DeletePortfolioAccessInterface;
+import use_case.show.ShowPortfolioDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterface, DeletePortfolioAccessInterface {
+public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterface, DeletePortfolioAccessInterface, ShowPortfolioDataAccessInterface {
     private final File csvFile;
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<Integer, Portfolio> portfolios = new HashMap<>();

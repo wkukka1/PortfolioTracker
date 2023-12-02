@@ -1,5 +1,6 @@
 package app;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import data_access.StockInfoClient;
@@ -9,9 +10,12 @@ import entity.CommonUserFactory;
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.show.ShowViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
 import org.json.JSONObject;
+import use_case.show.ShowInteractor;
+import use_case.show.StockPriceDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
@@ -21,11 +25,12 @@ import view.validation.StockFieldValidatorImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Main {
     private static final String PORTFOLIOS_CSV_FILE_PATH = "./portfolios.csv";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
@@ -51,6 +56,7 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         DeleteViewModel deleteViewModel = new DeleteViewModel();
+        ShowViewModel showViewModel = new ShowViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -74,8 +80,11 @@ public class Main {
                 userDataAccessObject, signupView);
         views.add(loginView, loginView.viewName);
 
+        StockPriceDataAccessInterface stockInfoClient = new StockInfoClient();
+
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
-                userDataAccessObject, deleteViewModel, portfolioDataAccessObject, loginView, new StockFieldValidatorImpl());
+                userDataAccessObject, deleteViewModel, portfolioDataAccessObject, loginView, new StockFieldValidatorImpl(),
+                showViewModel, stockInfoClient);
         views.add(loggedInView, loggedInView.viewName);
 
 
@@ -86,8 +95,17 @@ public class Main {
         application.setVisible(true);
 
         // todo: Test runner code for StockInfoClient (delete code below later)
-        StockInfoClient client = new StockInfoClient();
-        JSONObject result = client.getStockInfo("AAPL");
-        System.out.println(result);
+//        StockInfoClient client = new StockInfoClient();
+//        JSONObject result = client.getStockInfo("AAPL");
+//        HashMap<String, HashMap<String, String>> yeah = ShowInteractor.jsonToHashMap(result);
+//        System.out.println(yeah);
+//        HashMap yeahh = (HashMap) yeah;
+//        System.out.println(yeahh);
+//        System.out.println(yeahh.getClass().getSimpleName());
+//        System.out.println("__________________________________________");
+//        System.out.println(yeahh.keySet());
+//        HashMap yeahhh = (HashMap) yeahh.get("2020-08-05");
+//        System.out.println(yeahhh.getClass().getSimpleName());
+//        System.out.println(yeahhh.get("4. close").getClass().getSimpleName());
     }
 }

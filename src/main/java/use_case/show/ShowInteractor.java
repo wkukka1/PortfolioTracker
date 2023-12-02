@@ -1,14 +1,15 @@
 package use_case.show;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Portfolio;
 import entity.Stock;
 
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -22,11 +23,11 @@ import org.jfree.data.time.TimeSeriesCollection;
 
 
 public class ShowInteractor implements ShowInputBoundary{
-    final PortfolioDataAccessInterface portfolioDataAccessObject;
+    final ShowPortfolioDataAccessInterface portfolioDataAccessObject;
     final StockPriceDataAccessInterface stockDataAccessObject;
     final ShowOutputBoundary showPresenter;
 
-    public ShowInteractor(PortfolioDataAccessInterface portfolioDataAccessObject, StockPriceDataAccessInterface stockDataAccessObject, ShowOutputBoundary showPresenter) {
+    public ShowInteractor(ShowPortfolioDataAccessInterface portfolioDataAccessObject, StockPriceDataAccessInterface stockDataAccessObject, ShowOutputBoundary showPresenter) {
         this.portfolioDataAccessObject = portfolioDataAccessObject;
         this.stockDataAccessObject = stockDataAccessObject;
         this.showPresenter = showPresenter;
@@ -34,7 +35,7 @@ public class ShowInteractor implements ShowInputBoundary{
 
 
     @Override
-    public void execute(ShowInputData showInputData) {
+    public void execute(ShowInputData showInputData) throws JsonProcessingException {
         LocalDateTime now = LocalDateTime.now();
         Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(showInputData.getUserID());
         List<Stock> stockList = portfolio.getStockList();
@@ -46,13 +47,22 @@ public class ShowInteractor implements ShowInputBoundary{
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime startDate = today.minusDays(100);
 
-        populateHashMap(dateToNetWorth, startDate, today);
-
         for (Stock stock : stockList) {
             // Going through each stock in the list of stocks, making an API call for each one
             JSONObject rawStockInfo = stockDataAccessObject.getStockInfo(stock.getTickerSymbol());
-            HashMap<String, Double> processedStockInfo = whateverTheMethodIsCalled(rawStockInfo);
-            updateDateToNetWorth(dateToNetWorth, processedStockInfo, stock.getQuantity());
+            HashMap<String, HashMap<String, String>> processedStockInfo = jsonToHashMap(rawStockInfo);
+            LocalDateTime purchaseDate = stock.getPurchaseLocalDateTime();
+            for (LocalDateTime date = startDate; date.isBefore(today); date = date.plusDays(1)) {
+                if (date.compareTo(purchaseDate) >= 0) {
+                    Double price = Double.valueOf(processedStockInfo.get(date.toString()).get("4. close"));
+                    dateToNetWorth.put(date.toString(),
+                            dateToNetWorth.getOrDefault(date.toString(), 0.0) + stock.getQuantity() * price);
+                }
+                else {
+                    dateToNetWorth.put(date.toString(),
+                            dateToNetWorth.getOrDefault(date.toString(), 0.0));
+                }
+            };
         }
 
         for (Map.Entry<String, Double> entry : dateToNetWorth.entrySet()) {
@@ -62,12 +72,19 @@ public class ShowInteractor implements ShowInputBoundary{
 
         dataset.addSeries(series);
         ChartPanel panel = getPlot(dataset);
-        double newNetWorth = 0.0;
-        double netProfit = 0.0;
+        double newNetWorth = 0.0; //todo update
+        double netProfit = 0.0; //todo update
 
         portfolio.setNetWorth(newNetWorth); // Updating the portfolio's net worth
         ShowOutputData showOutputData = new ShowOutputData(panel, netProfit);
         showPresenter.prepareSuccessView(showOutputData);
+    }
+
+    public HashMap<String, HashMap<String, String>> jsonToHashMap(JSONObject rawStockInfo) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        HashMap rawMap = mapper.readValue(rawStockInfo.toString(), HashMap.class);
+        return (HashMap<String, HashMap<String, String>>) rawMap.get("Time Series (Daily)");
+
     }
 
     /**
@@ -103,12 +120,12 @@ public class ShowInteractor implements ShowInputBoundary{
      * @param stockInfo      the hashmap containing information from the API call
      * @param stockQuantity  the quantity of the stock held
      */
-    private void updateDateToNetWorth(HashMap<String, Double> dateToNetWorth, HashMap<String, Double> stockInfo, double stockQuantity) {
-        for (Map.Entry<String, Double> entry : stockInfo.entrySet()) {
-            String date = entry.getKey();
-            dateToNetWorth.put(date, dateToNetWorth.get(date) + entry.getValue() * stockQuantity);
-        }
-    }
+//    private void updateDateToNetWorth(HashMap<String, Double> dateToNetWorth, HashMap<String, Double> stockInfo, double stockQuantity) {
+//        for (Map.Entry<String, Double> entry : stockInfo.entrySet()) {
+//            String date = entry.getKey();
+//            dateToNetWorth.put(date, dateToNetWorth.get(date) + entry.getValue() * stockQuantity);
+//        }
+//    }
 
 
     /**
