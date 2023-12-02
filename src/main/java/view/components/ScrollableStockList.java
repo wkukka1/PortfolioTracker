@@ -173,5 +173,4 @@ class Datum {
         sb.append("Quantity: " + value);
         return super.toString();
     }
-
 }
