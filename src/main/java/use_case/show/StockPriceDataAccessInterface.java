@@ -1,7 +1,6 @@
 package use_case.show;
-import org.json.JSONObject;
+import entity.AVTimeSeriesDailyResponse;
 
 public interface StockPriceDataAccessInterface {
-    JSONObject getStockInfo(String symbol, String date_from, String date_to);
+    AVTimeSeriesDailyResponse getStockInfoByDate(String symbol, String date) throws RuntimeException;
 }
-
