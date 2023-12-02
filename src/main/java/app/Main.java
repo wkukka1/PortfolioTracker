@@ -2,7 +2,7 @@ package app;
 
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import data_access.MarketStackClient;
+import data_access.StockPriceClientImpl;
 import entity.CommonUserFactory;
 
 import interface_adapter.delete_user.DeleteViewModel;
@@ -72,7 +72,7 @@ public class Main {
                 userDataAccessObject, signupView, portfolioDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        StockPriceDataAccessInterface stockPriceClientImpl = new MarketStackClient();
+        StockPriceDataAccessInterface stockPriceClientImpl = new StockPriceClientImpl();
 
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
                 userDataAccessObject, deleteViewModel, portfolioDataAccessObject, stockPriceClientImpl, loginView);
