@@ -29,6 +29,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private DeleteState deleteState;
     private final DeleteController deleteController;
     private final LoginView loginView;
+    private final JFrame appFrame;
 
     JLabel title;
     JLabel netProfitLabel;
@@ -42,9 +43,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
-                        LoginView loginView, StockFieldValidator stockFieldValidator,
-                AddStockController addStockController) {
+    public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
+                        DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
+                        AddStockController addStockController) {
+        this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
@@ -58,7 +60,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         GridBagConstraints gbc = new GridBagConstraints();
 
         title = new JLabel("Home");
-        netProfitLabel = new JLabel("Net Profit:");
+        netProfitLabel = new JLabel("Net Profit (USD):");
         netProfitValue = new JLabel(); // You can set the value later
 
         addStockButton = new JButton("Add Stock");
@@ -189,7 +191,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     public void propertyChange(PropertyChangeEvent evt) {
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // Update the net profit value using state data
-        netProfitValue.setText(state.getNetProfit());
+        netProfitValue.setText("$" + state.getNetProfit());
         if (!StringUtils.isEmpty(state.getAddStockError())) {
             JOptionPane.showMessageDialog(this, state.getAddStockError());
         }
@@ -207,5 +209,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             stocksScrollableList.revalidate();
             this.add(stocksScrollableList, gbc);
         }
+        appFrame.pack();
     }
 }

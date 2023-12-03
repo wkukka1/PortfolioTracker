@@ -31,14 +31,12 @@ public class LoggedInUseCaseFactory {
     private LoggedInUseCaseFactory() {
     }
 
-    public static LoggedInView create(LoggedInViewModel loggedInViewModel,
-                                      LoginViewModel loginViewModel,
-                                      ViewManagerModel viewManagerModel,
+    public static LoggedInView create(JFrame appFrame, LoggedInViewModel loggedInViewModel,
+                                      LoginViewModel loginViewModel, ViewManagerModel viewManagerModel,
                                       SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
                                       FilePortfolioDataAccessObject portfolioDataAccessObject,
-                                      StockPriceDataAccessInterface stockPriceClientImpl,
-                                      LoginView loginView) {
+                                      StockPriceDataAccessInterface stockPriceClientImpl, LoginView loginView) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
@@ -48,7 +46,7 @@ public class LoggedInUseCaseFactory {
                     portfolioDataAccessObject, loggedInViewModel);
             StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
 
-            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator,
+            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator,
                     addStockController);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");

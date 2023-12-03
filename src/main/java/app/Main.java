@@ -39,7 +39,7 @@ public class Main {
 
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(views, cardLayout, viewManagerModel);
+        new ViewManager(application, views, cardLayout, viewManagerModel);
 
         // The data for the views, such as username and password, are in the ViewModels.
         // This information will be changed by a presenter object that is reporting the
@@ -74,8 +74,9 @@ public class Main {
 
         StockPriceDataAccessInterface stockPriceClientImpl = new StockPriceClientImpl();
 
-        LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
-                userDataAccessObject, deleteViewModel, portfolioDataAccessObject, stockPriceClientImpl, loginView);
+        LoggedInView loggedInView = LoggedInUseCaseFactory.create(application, loggedInViewModel, loginViewModel,
+                viewManagerModel, userDataAccessObject, deleteViewModel, portfolioDataAccessObject,
+                stockPriceClientImpl, loginView);
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);
