@@ -48,7 +48,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Login Example")) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
                 app = (JFrame) window;
             }
         }
@@ -72,7 +72,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Login Example")) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
                 app = (JFrame) window;
             }
         }
@@ -95,7 +95,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Login Example")) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
                 app = (JFrame) window;
             }
         }
