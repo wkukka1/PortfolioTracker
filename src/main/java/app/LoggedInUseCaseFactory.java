@@ -55,7 +55,7 @@ public class LoggedInUseCaseFactory {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
 
-            ShowController showController = createShowController(showViewModel, viewManagerModel, portfolioDataAccessObject, stockDataAccessObject);
+            ShowController showController = createShowController(loggedInViewModel, portfolioDataAccessObject, stockDataAccessObject);
 
             DeleteState deleteState = new DeleteState();
             ShowState showState = new ShowState();
@@ -64,7 +64,7 @@ public class LoggedInUseCaseFactory {
 //            StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
-            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showState, showController);
+            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showController);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
@@ -90,7 +90,6 @@ public class LoggedInUseCaseFactory {
     }
 
     private static ShowController createShowController(LoggedInViewModel loggedInViewModel,
-                                                       ViewManagerModel viewManagerModel,
                                                        ShowPortfolioDataAccessInterface portfolioDataAccessObject,
                                                        StockPriceDataAccessInterface stockDataAccessObject) throws IOException {
         ShowOutputBoundary showPresenter = new ShowPresenter(loggedInViewModel);

@@ -9,6 +9,7 @@ import interface_adapter.delete_user.DeleteState;
 import interface_adapter.logged_in.show.ShowController;
 import interface_adapter.logged_in.show.ShowState;
 import org.apache.commons.lang3.StringUtils;
+import org.jfree.chart.ChartPanel;
 import view.components.ScrollableStockList;
 import interface_adapter.logout_user.LogoutController;
 import view.validation.StockFieldValidator;
@@ -46,16 +47,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JButton deleteUser;
     JButton showButton;
     JPanel stocksScrollableList;
+    JPanel plot;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
     public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
                         DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
-                        AddStockController addStockController, LogoutController logoutController, ShowState showState, ShowController showController) {
+                        AddStockController addStockController, LogoutController logoutController, ShowController showController) {
         this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
-        this.showState = showState;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
@@ -64,7 +65,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.logoutController = logoutController;
         this.stockFieldValidator = stockFieldValidator;
         this.addStockController = addStockController;
-        this.showState = showState;
 
         this.setLayout(new GridBagLayout());
 
@@ -176,6 +176,23 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
         this.add(showButton, gbc);
+
+        //fix here later todo
+        plot = new JPanel();
+        ChartPanel chart = loggedInViewModel.getState().getPanel();
+        if (chart != null) {
+            System.out.println("not null!");//TODO DLETE
+            plot.add(chart);
+        }
+        else {
+            System.out.print("null actually");
+        }
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(plot, gbc);
     }
 
     /**
@@ -300,6 +317,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // Update the net profit value using state data
         netProfitValue.setText("$" + state.getNetProfit());
+        GridBagConstraints gbc = new GridBagConstraints();
         if (!StringUtils.isEmpty(state.getAddStockError())) {
             JOptionPane.showMessageDialog(this, state.getAddStockError());
         }
@@ -308,7 +326,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
-            GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 2;
             gbc.gridwidth = 4;
@@ -317,6 +334,23 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             stocksScrollableList.revalidate();
             this.add(stocksScrollableList, gbc);
         }
+        this.remove(plot);
+        plot = new JPanel();
+        ChartPanel chart = loggedInViewModel.getState().getPanel();
+        if (chart != null) {
+            System.out.println("not null!");//TODO DLETE
+            plot.add(chart);
+        }
+        else {
+            System.out.print("null actually");
+        }
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(plot, gbc);
+
         appFrame.pack();
     }
 }
