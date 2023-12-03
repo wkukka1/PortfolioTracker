@@ -9,7 +9,6 @@ import entity.CommonUserFactory;
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.logged_in.show.ShowViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
 import use_case.show.StockPriceDataAccessInterface;
@@ -52,7 +51,6 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         DeleteViewModel deleteViewModel = new DeleteViewModel();
-        ShowViewModel showViewModel = new ShowViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -80,7 +78,7 @@ public class Main {
 
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(application, loggedInViewModel, loginViewModel, viewManagerModel,
                 userDataAccessObject, deleteViewModel, portfolioDataAccessObject, loginView, new StockFieldValidatorImpl(),
-                showViewModel, stockInfoClient);
+                stockInfoClient);
         views.add(loggedInView, loggedInView.viewName);
 
 

@@ -19,8 +19,6 @@ import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.show.ShowController;
 import interface_adapter.logged_in.show.ShowPresenter;
-import interface_adapter.logged_in.show.ShowState;
-import interface_adapter.logged_in.show.ShowViewModel;
 import use_case.delete_user.DeleteInputBoundary;
 import use_case.delete_user.DeleteInteractor;
 import use_case.delete_user.DeleteOutputBoundary;
@@ -48,7 +46,6 @@ public class LoggedInUseCaseFactory {
                                       FilePortfolioDataAccessObject portfolioDataAccessObject,
                                       LoginView loginView,
                                       StockFieldValidator stockFieldValidator,
-                                      ShowViewModel showViewModel,
                                       StockPriceDataAccessInterface stockDataAccessObject
                                       ) {
         try {
@@ -58,7 +55,6 @@ public class LoggedInUseCaseFactory {
             ShowController showController = createShowController(loggedInViewModel, portfolioDataAccessObject, stockDataAccessObject);
 
             DeleteState deleteState = new DeleteState();
-            ShowState showState = new ShowState();
             AddStockController addStockController = createAddStockUseCase(stockDataAccessObject,
                     portfolioDataAccessObject, loggedInViewModel);
 //            StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();

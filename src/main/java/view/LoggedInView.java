@@ -7,7 +7,6 @@ import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
 import interface_adapter.logged_in.show.ShowController;
-import interface_adapter.logged_in.show.ShowState;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartPanel;
 import view.components.ScrollableStockList;
@@ -32,7 +31,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     public final String viewName = "logged in";
     private final LoggedInViewModel loggedInViewModel;
     private DeleteState deleteState;
-    private ShowState showState;
     private final DeleteController deleteController;
     private final ShowController showController;
     private final LoginView loginView;
