@@ -1,16 +1,26 @@
 package use_case.login;
 
+import entity.Portfolio;
+import entity.Stock;
 import entity.User;
-import view.SignupView;
+import use_case.signup.PortfolioDataAccessInterface;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginInteractor implements LoginInputBoundary {
     final LoginUserDataAccessInterface userDataAccessObject;
+    private final PortfolioDataAccessInterface portfolioDataAccessImpl;
     final LoginOutputBoundary loginPresenter;
 
     public LoginInteractor(LoginUserDataAccessInterface userDataAccessInterface,
-                           LoginOutputBoundary loginOutputBoundary) {
+                           LoginOutputBoundary loginOutputBoundary,
+                           PortfolioDataAccessInterface portfolioDataAccessImpl) {
         this.userDataAccessObject = userDataAccessInterface;
         this.loginPresenter = loginOutputBoundary;
+        this.portfolioDataAccessImpl = portfolioDataAccessImpl;
     }
 
     public void signup() {
@@ -33,10 +43,34 @@ public class LoginInteractor implements LoginInputBoundary {
             } else {
 
                 User user = userDataAccessObject.get(loginInputData.getUsername());
+                Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(user.getUserID());
+                double overallNetProfit = currPortfolio.getNetProfit();
 
-                LoginOutputData loginOutputData = new LoginOutputData(user.getName(), false);
+                LoginOutputData loginOutputData = new LoginOutputData(user.getName(), user.getUserID(),
+                        false, round(overallNetProfit, 2),
+                        generateTickersToQuantities(currPortfolio));
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    private Map<String, Double> generateTickersToQuantities(Portfolio currPortfolio) {
+        Map<String, Double> tickersToQuantities = new HashMap<>();
+        for (Stock stock : currPortfolio.getStockList()) {
+            tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
+                    0.0) + stock.getQuantity());
+        }
+        tickersToQuantities.replaceAll((ticker, quantity) -> round(quantity, 2));
+        return tickersToQuantities;
     }
 }
