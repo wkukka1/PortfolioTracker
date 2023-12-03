@@ -26,7 +26,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final StockFieldValidator stockFieldValidator;
     private final AddStockController addStockController;
     public final String viewName = "logged in";
-    private final LoggedInViewModel loggedInViewModel;
+    public final LoggedInViewModel loggedInViewModel;
     private DeleteState deleteState;
     private final DeleteController deleteController;
     private final LoginView loginView;
