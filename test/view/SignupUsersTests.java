@@ -182,6 +182,16 @@ public class SignupUsersTests {
         return (JButton) buttons.getComponent(1);
     }
 
+    private boolean popupExist(){
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JDialog) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @org.junit.Test
     public void testGetSignUpTextFields() {
@@ -236,8 +246,45 @@ public class SignupUsersTests {
     @org.junit.Test
     public void testSignupExistingUser(){
         addUser(1);
+
+        Main.main(null);
+        JButton signupBtn = getSignupBtn();
+
+        LabelTextPanel[] textPanels = getSignupTextFields();
+
+        JButton switchButton = getSwitchButton();
+
+        switchButton.doClick();
+        createCloseTimer().start();
+
+        textPanels[0].setText("user0");
+        textPanels[1].setText("password0");
+        textPanels[2].setText("password0");
+
+        createCloseTimer().start();
+        signupBtn.doClick();
+
+        assert popupExist();
     }
 
+    @org.junit.Test
+    public void testSignupDifferentPasswords(){
+        Main.main(null);
+        JButton signupBtn = getSignupBtn();
+
+        LabelTextPanel[] textPanels = getSignupTextFields();
+
+        JButton switchButton = getSwitchButton();
+        switchButton.doClick();
+
+        textPanels[0].setText(StringGenerator.generateRandomString(11));
+        textPanels[1].setText("password1");
+        textPanels[2].setText("pass");
+
+        signupBtn.doClick();
+
+        assert popupExist();
+    }
 
     private Timer createCloseTimer() {
         ActionListener close = new ActionListener() {
