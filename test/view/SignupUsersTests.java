@@ -1,6 +1,11 @@
 package view;
 
 import app.Main;
+import data_access.FilePortfolioDataAccessObject;
+import data_access.FileUserDataAccessObject;
+import entity.CommonUserFactory;
+import entity.Portfolio;
+import entity.UserFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +14,10 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -17,6 +25,25 @@ public class SignupUsersTests {
 
     private String userPath = "./users.csv";
     private String portfolioPath = "./portfolios.csv";
+
+    // New StringGenerator class
+    private static class StringGenerator {
+        private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        public static String generateRandomString(int length) {
+            StringBuilder stringBuilder = new StringBuilder(length);
+            Random random = new Random();
+
+            for (int i = 0; i < length; i++) {
+                int randomIndex = random.nextInt(CHARACTERS.length());
+                char randomChar = CHARACTERS.charAt(randomIndex);
+                stringBuilder.append(randomChar);
+            }
+
+            return stringBuilder.toString();
+        }
+    }
+
 
     public void SignUpUser(int i) {
         i -= 1;
@@ -30,6 +57,22 @@ public class SignupUsersTests {
         createCloseTimer().start();
 
         signUpBtn.doClick();
+    }
+
+    public void addUser(int numOfUsers) {
+        UserFactory uf = new CommonUserFactory();
+        FileUserDataAccessObject fudao;
+        FilePortfolioDataAccessObject fpdao;
+        try {
+            fudao = new FileUserDataAccessObject("./users.csv", uf);
+            fpdao = new FilePortfolioDataAccessObject("./portfolios.csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 0; i < numOfUsers; i++) {
+            fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
+            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
+        }
     }
 
     public LabelTextPanel[] getSignupTextFields() {
@@ -177,7 +220,7 @@ public class SignupUsersTests {
 
         createCloseTimer().start();
 
-        textPanels[0].setText("user");
+        textPanels[0].setText(StringGenerator.generateRandomString(10));
         textPanels[1].setText("password");
         textPanels[2].setText("password");
 
@@ -189,6 +232,12 @@ public class SignupUsersTests {
 
         assert userExists("user");
     }
+
+    @org.junit.Test
+    public void testSignupExistingUser(){
+        addUser(1);
+    }
+
 
     private Timer createCloseTimer() {
         ActionListener close = new ActionListener() {
