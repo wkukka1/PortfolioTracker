@@ -10,6 +10,10 @@ public class SignupController {
         this.userSignupUseCaseInteractor = userSignupUseCaseInteractor;
     }
 
+    public void setUpLoginView(){
+        userSignupUseCaseInteractor.login();
+    }
+
     public void execute(String username, String password1, String password2) {
         SignupInputData signupInputData = new SignupInputData(
                 username, password1, password2);

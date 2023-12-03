@@ -11,6 +11,7 @@ public class LabelTextPanel extends JPanel {
     private JLabel label;
     private JTextField textField;
     private PropertyChangeSupport pcs;
+    private String name;
     LabelTextPanel(JLabel label, JTextField textField) {
         this.label = label;
         this.textField = textField;
@@ -40,5 +41,11 @@ public class LabelTextPanel extends JPanel {
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         pcs.removePropertyChangeListener(listener);
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName(){
+        return name;
     }
 }

@@ -8,10 +8,15 @@ import interface_adapter.delete_user.DeleteState;
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.logout_user.LogoutController;
+import interface_adapter.logout_user.LogoutPresenter;
 import use_case.delete_user.DeleteInputBoundary;
 import use_case.delete_user.DeleteInteractor;
 import use_case.delete_user.DeleteOutputBoundary;
 import use_case.delete_user.DeleteUserDataAccessInterface;
+import use_case.logout.LogoutInputBoundary;
+import use_case.logout.LogoutInteractor;
+import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
@@ -34,11 +39,19 @@ public class LoggedInUseCaseFactory {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
-            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator);
-        }catch(IOException e){
+            LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
+            return new LoggedInView(loggedInViewModel, deleteState, deleteController, loginView, logoutController, stockFieldValidator);
+
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
         return null;
+    }
+
+    private static LogoutController createLogoutController(LoginViewModel loginViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel) {
+        LogoutOutputBoundary logoutPresenter = new LogoutPresenter(loginViewModel, loggedInViewModel, viewManagerModel);
+        LogoutInputBoundary logoutInteractor = new LogoutInteractor(logoutPresenter);
+        return new LogoutController(logoutInteractor);
     }
 
     private static DeleteController createDeleteController(DeleteViewModel deleteViewModel,
