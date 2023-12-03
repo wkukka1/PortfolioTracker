@@ -18,9 +18,14 @@ import interface_adapter.delete_user.DeletePresenter;
 import interface_adapter.delete_user.DeleteState;
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.logout_user.LogoutController;
+import interface_adapter.logout_user.LogoutPresenter;
 import use_case.delete_user.DeleteInputBoundary;
 import use_case.delete_user.DeleteInteractor;
 import use_case.delete_user.DeleteOutputBoundary;
+import use_case.logout.LogoutInputBoundary;
+import use_case.logout.LogoutInteractor;
+import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoginView;
 
@@ -46,12 +51,20 @@ public class LoggedInUseCaseFactory {
                     portfolioDataAccessObject, loggedInViewModel);
             StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
 
+            LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
+
             return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator,
-                    addStockController);
-        }catch(IOException e){
+                    addStockController, logoutController);
+        } catch(IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
         return null;
+    }
+
+    private static LogoutController createLogoutController(LoginViewModel loginViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel) {
+        LogoutOutputBoundary logoutPresenter = new LogoutPresenter(loginViewModel, loggedInViewModel, viewManagerModel);
+        LogoutInputBoundary logoutInteractor = new LogoutInteractor(logoutPresenter);
+        return new LogoutController(logoutInteractor);
     }
 
     private static DeleteController createDeleteController(DeleteViewModel deleteViewModel,

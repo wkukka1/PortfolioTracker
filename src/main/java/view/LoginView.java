@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Objects;
 
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -26,7 +27,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     private final JLabel passwordErrorField = new JLabel();
 
     final JButton logIn;
-    final JButton cancel;
     final JButton signup;
     private final LoginController loginController;
 
@@ -47,8 +47,6 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         JPanel buttons = new JPanel();
         logIn = new JButton(loginViewModel.LOGIN_BUTTON_LABEL);
         buttons.add(logIn);
-        cancel = new JButton(loginViewModel.CANCEL_BUTTON_LABEL);
-        buttons.add(cancel);
         signup = new JButton(LoginViewModel.SIGNUP_BUTTON_LABEL);
         buttons.add(signup);
 
@@ -69,33 +67,56 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                         if (evt.getSource().equals(logIn)) {
                             LoginState currentState = loginViewModel.getState();
 
-                            loginController.execute(
-                                    currentState.getUsername(),
-                                    currentState.getPassword()
-                            );
+                            String username = currentState.getUsername();
+                            String password = currentState.getPassword();
+
+                            if(!Objects.equals(username, "") && !Objects.equals(password, "")) {
+                                loginController.execute(
+                                        username,
+                                        password
+                                );
+                            }else{
+                                JOptionPane.showMessageDialog(LoginView.this,
+                                        "Please enter a valid username and password",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+
+                            //If there was an error in logging in the user then it presents the user with a error popup
+                            if (loginViewModel.getState().getUsernameError() != null){
+                                JOptionPane.showMessageDialog(LoginView.this,
+                                        "Username or Password is incorrect!", "Error",
+                                        JOptionPane.ERROR_MESSAGE);
+                            }
+
+                            //Resets the text-fields of the login screen
+                            usernameInputField.setText("");
+                            passwordInputField.setText("");
                         }
                     }
                 }
         );
 
-        cancel.addActionListener(this);
+        usernameInputField.addKeyListener(
+                new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        LoginState currentState = loginViewModel.getState();
+                        currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
+                        loginViewModel.setState(currentState);
+                    }
 
-        usernameInputField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                LoginState currentState = loginViewModel.getState();
-                currentState.setUsername(usernameInputField.getText() + e.getKeyChar());
-                loginViewModel.setState(currentState);
-            }
+                    @Override
+                    public void keyPressed(KeyEvent e) {
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
+                    }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+
+                    }
+                }
+        );
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         passwordInputField.addKeyListener(
@@ -132,6 +153,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 loginViewModel.setState(currentState);
             }
         });
+
 
         this.add(title);
         this.add(usernameInfo);
