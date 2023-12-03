@@ -103,6 +103,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.anchor = GridBagConstraints.EAST;
         this.add(deleteUser, gbc);
 
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+
         this.add(editStock, gbc);
     }
 
@@ -166,6 +171,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 double newQuantity = Double.parseDouble(amountField.getText());
 
                 editStockController.execute(ticker, newQuantity);
+                //TODO Call ShowController.execute() to update the portfolio's netWorth
             }
 
         }
