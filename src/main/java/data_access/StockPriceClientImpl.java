@@ -18,7 +18,8 @@ public class StockPriceClientImpl implements StockPriceDataAccessInterface {
     private static final String BASE_URL = "https://www.alphavantage.co/query";
     private static final String META_DATA_MARKER = "Meta Data";
 
-    public AVTimeSeriesDailyResponse getStockInfoByDate(String symbol, String date) throws RuntimeException {
+    public AVTimeSeriesDailyResponse getStockInfoByDate(String symbol, String date) throws IOException,
+            IllegalArgumentException {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
 
         Request request = new Request.Builder()
@@ -38,8 +39,10 @@ public class StockPriceClientImpl implements StockPriceDataAccessInterface {
 
             AVTimeSeriesDailyResponse res = avTimeSeriesDailyDeserializer.deserialize(responseBody, date);
             return res;
-        } catch (IOException | JSONException | NoSuchElementException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | JSONException e) {
+            throw new IOException(e);
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 }

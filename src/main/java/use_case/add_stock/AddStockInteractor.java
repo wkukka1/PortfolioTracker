@@ -5,6 +5,7 @@ import entity.Stock;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -19,6 +20,8 @@ public class AddStockInteractor implements AddStockInputBoundary {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final String ADD_STOCK_DEFAULT_ERROR = "There was an issue adding this stock.\n Please check the input " +
             "fields and try again.";
+    private final String ADD_STOCK_BAD_DATE_ERROR = "There is no stock data for this date.\n Please" +
+            " check the input date and try again.\n Note: the markets are closed on weekends and holidays.";
 
     public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,
                               PortfolioDataAccessInterface portfolioDataAccessImpl,
@@ -38,8 +41,11 @@ public class AddStockInteractor implements AddStockInputBoundary {
             newStockProfitToDate = calculateNewStockProfitToDate(newStock);
             overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()).getNetProfit() +
                     newStockProfitToDate;
-        } catch (RuntimeException re) {
+        } catch (IOException e) {
             addStockPresenter.prepareNonSuccessView(ADD_STOCK_DEFAULT_ERROR);
+            return;
+        } catch (IllegalArgumentException e) {
+            addStockPresenter.prepareNonSuccessView(ADD_STOCK_BAD_DATE_ERROR);
             return;
         }
 
@@ -52,7 +58,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
         addStockPresenter.prepareSuccessView(addStockOutputData);
     }
 
-    private Stock createNewStock(AddStockInputData addStockData) throws RuntimeException {
+    private Stock createNewStock(AddStockInputData addStockData) throws IOException, IllegalArgumentException {
         String purchaseDate = addStockData.getPurchaseLocalDateTime().format(formatter);
 
         double pastStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
@@ -63,7 +69,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
                 addStockData.getTotalValueAtPurchase());
     }
 
-    private double calculateNewStockProfitToDate(Stock newStock) throws RuntimeException {
+    private double calculateNewStockProfitToDate(Stock newStock) throws IOException, IllegalArgumentException {
         String currDate = LocalDateTime.now().minusDays(1).format(formatter);
 
         double currStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
