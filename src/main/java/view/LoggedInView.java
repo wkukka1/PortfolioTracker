@@ -119,65 +119,46 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         // Title
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.weightx = 1.0; // Allow title to expand horizontally
         gbc.weighty = 0.0; // Allow title to expand vertically
         this.add(title, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(netProfitLabel, gbc);
 
         gbc.gridx = 2;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(netProfitValue, gbc);
 
         // Add Stock Button
         gbc.gridx = 3;
-        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.weightx = 0.0; // Reset weight
         gbc.weighty = 1.0; // Reset weight
         this.add(addStockButton, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 4;
-        this.add(stocksScrollableListLabel, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-        this.add(stocksScrollableList, gbc);
-
-        // Log Out Button
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.weightx = 1.0; // Allow log out button to expand horizontally
-        gbc.weighty = 0.0; // Reset weight
+        gbc.gridx = 4;
+        //gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(logOut, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-        this.add(logOut, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.weightx = 1.0; // Allow delete user button to expand horizontally
-        gbc.weighty = 0.0; // Reset weight
+        gbc.gridx = 5;
+//        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.NORTH;
+//        gbc.weightx = 1.0; // Allow delete user button to expand horizontally
+//        gbc.weighty = 0.0; // Reset weight
         this.add(deleteUser, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridx = 6;
+//        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(showButton, gbc);
 
-
         //fix here later todo
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         plot = new JPanel();
         ChartPanel chart = loggedInViewModel.getState().getPanel();
         if (chart != null) {
@@ -187,11 +168,31 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         else {
             System.out.print("null actually");
         }
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-        this.add(plot);
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        gbc.gridwidth = 6;
+        gbc.gridheight = 2;
+        this.add(plot, gbc);
+
+//        gbc.gridx = 6;
+//        gbc.gridy = 1;
+////        gbc.gridwidth = 4;
+//
+//        gbc.anchor = GridBagConstraints.NORTH;
+//        this.add(stocksScrollableListLabel, gbc);
+
+
+        gbc.gridx = 6;
+        gbc.gridy = 2;
+//        gbc.gridwidth = 4;
+        gbc.gridheight = 5;
+        gbc.anchor = GridBagConstraints.NORTH;
+        this.add(stocksScrollableList, gbc);
+
+
+
+
+
+
 
     }
 
@@ -326,18 +327,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
-            gbc.gridx = 0;
+            gbc.gridx = 6;
             gbc.gridy = 2;
-            gbc.gridwidth = 4;
-            gbc.anchor = GridBagConstraints.EAST;
+//        gbc.gridwidth = 4;
+            gbc.gridheight = 5;
+            gbc.anchor = GridBagConstraints.NORTH;
 
             stocksScrollableList.revalidate();
             this.add(stocksScrollableList, gbc);
         }
         this.remove(plot);
         //fix here later todo
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         plot = new JPanel();
-        plot.setLayout(new FlowLayout(FlowLayout.LEFT));
         ChartPanel chart = loggedInViewModel.getState().getPanel();
         if (chart != null) {
             System.out.println("not null!");//TODO DLETE
@@ -346,11 +349,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         else {
             System.out.print("null actually");
         }
-//        gbc.gridx = 0;
-//        gbc.gridy = 6;
-//        gbc.gridwidth = 4;
-//        gbc.anchor = GridBagConstraints.EAST;
-        this.add(plot);
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        gbc.gridwidth = 6;
+        gbc.gridheight = 2;
+        this.add(plot, gbc);
 
         appFrame.pack();
     }
