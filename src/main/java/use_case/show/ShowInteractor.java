@@ -45,7 +45,7 @@ public class ShowInteractor implements ShowInputBoundary{
         // Key in YYYY-MM-DD format, value is total net worth of portfolio on that day
         HashMap<String, Double> dateToNetWorth = new HashMap<>();
         LocalDateTime today = LocalDateTime.now();
-        LocalDateTime startDate = today.minusDays(100);
+        LocalDateTime startDate = today.minusDays(360);
 
         for (Stock stock : stockList) {
             // Going through each stock in the list of stocks, making an API call for each one
