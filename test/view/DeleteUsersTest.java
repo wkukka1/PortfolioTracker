@@ -6,6 +6,11 @@ import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.Portfolio;
 import entity.UserFactory;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.delete_user.DeleteController;
+import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.signup.SignupViewModel;
+import use_case.signup.PortfolioDataAccessInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +27,6 @@ import static org.junit.Assert.*;
 public class DeleteUsersTest {
     static String message = "";
     static boolean popUpDiscovered = false;
-
 
     public void addUser(int numOfUsers) {
         UserFactory uf = new CommonUserFactory();
@@ -44,7 +48,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
                 app = (JFrame) window;
             }
         }
@@ -68,7 +72,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
                 app = (JFrame) window;
             }
         }
@@ -91,7 +95,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
                 app = (JFrame) window;
             }
         }
@@ -104,7 +108,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(5);
+        return (JButton) lv.getComponent(4);
     }
 
     public int[] countLines() {
@@ -142,7 +146,29 @@ public class DeleteUsersTest {
 
         JButton deleteBtn = getDeleteBtn();
         deleteBtn.doClick();
+
+        createCloseTimer().start();
+        getConfirmationBtn().doClick();
     }
+
+    private JButton getConfirmationBtn() {
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Confirmation")) {
+                app = (JFrame) window;
+            }
+        }
+        assertNotNull(app);
+
+        // Get the content pane
+        Container root = app.getRootPane();
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        // Assuming LoginView is at index 1 in the JPanel
+        return (JButton) ((JPanel) cp).getComponent(1);
+    }
+
 
     @org.junit.Test
     public void testGetLoginBtn() {
@@ -150,6 +176,28 @@ public class DeleteUsersTest {
         JButton button = getLoginBtn();
         System.out.println(button.getText());
         assert (button.getText().equals("Log in"));
+    }
+
+    @org.junit.Test
+    public void getConfirmationTest() {
+        Main.main(null);
+        addUser(1);
+        LabelTextPanel[] textFields = getTextFields();
+
+        createCloseTimer().start();
+
+        textFields[0].setText("user" + 1);
+        textFields[1].setText("password1");
+
+        createCloseTimer().start();
+
+        // Create a SwingWorker to perform the login operation in the background
+        getLoginBtn().doClick();
+
+        getDeleteBtn().doClick();
+
+        assert getConfirmationBtn().getText().equals("Yes");
+
     }
 
     @org.junit.Test

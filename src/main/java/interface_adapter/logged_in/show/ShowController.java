@@ -1,4 +1,4 @@
-package interface_adapter.show;
+package interface_adapter.logged_in.show;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import use_case.show.ShowInputBoundary;

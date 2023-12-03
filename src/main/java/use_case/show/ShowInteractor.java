@@ -72,11 +72,11 @@ public class ShowInteractor implements ShowInputBoundary{
 
         dataset.addSeries(series);
         ChartPanel panel = getPlot(dataset);
-        double newNetWorth = 0.0; //todo update
-        double netProfit = 0.0; //todo update
+//        double newNetWorth = 0.0; //todo update
+//        double netProfit = 0.0; //todo update
 
-        portfolio.setNetWorth(newNetWorth); // Updating the portfolio's net worth
-        ShowOutputData showOutputData = new ShowOutputData(panel, netProfit);
+//        portfolio.setNetWorth(newNetWorth); // Updating the portfolio's net worth
+        ShowOutputData showOutputData = new ShowOutputData(panel);
         showPresenter.prepareSuccessView(showOutputData);
     }
 

@@ -4,17 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import data_access.StockInfoClient;
-import data_access.StockInfoClient;
 import entity.CommonUserFactory;
 
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.show.ShowViewModel;
+import interface_adapter.logged_in.show.ShowViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
-import org.json.JSONObject;
-import use_case.show.ShowInteractor;
 import use_case.show.StockPriceDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
@@ -25,7 +22,6 @@ import view.validation.StockFieldValidatorImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class Main {
     private static final String PORTFOLIOS_CSV_FILE_PATH = "./portfolios.csv";
@@ -35,7 +31,7 @@ public class Main {
         // various cards, and the layout, and stitch them together.
 
         // The main application window.
-        JFrame application = new JFrame("Login Example");
+        JFrame application = new JFrame("PortfolioTracker");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         CardLayout cardLayout = new CardLayout();
@@ -46,7 +42,7 @@ public class Main {
 
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(views, cardLayout, viewManagerModel);
+        new ViewManager(application, views, cardLayout, viewManagerModel);
 
         // The data for the views, such as username and password, are in the ViewModels.
         // This information will be changed by a presenter object that is reporting the
@@ -77,12 +73,12 @@ public class Main {
         views.add(signupView, signupView.viewName);
 
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
-                userDataAccessObject, signupView);
+                userDataAccessObject, signupView, portfolioDataAccessObject);
         views.add(loginView, loginView.viewName);
 
         StockPriceDataAccessInterface stockInfoClient = new StockInfoClient();
 
-        LoggedInView loggedInView = LoggedInUseCaseFactory.create(loggedInViewModel, loginViewModel, viewManagerModel,
+        LoggedInView loggedInView = LoggedInUseCaseFactory.create(application, loggedInViewModel, loginViewModel, viewManagerModel,
                 userDataAccessObject, deleteViewModel, portfolioDataAccessObject, loginView, new StockFieldValidatorImpl(),
                 showViewModel, stockInfoClient);
         views.add(loggedInView, loggedInView.viewName);

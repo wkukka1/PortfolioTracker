@@ -1,4 +1,4 @@
-package interface_adapter.show;
+package interface_adapter.logged_in.show;
 
 import org.jfree.chart.ChartPanel;
 
