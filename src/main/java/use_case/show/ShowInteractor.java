@@ -45,7 +45,7 @@ public class ShowInteractor implements ShowInputBoundary{
         // Key in YYYY-MM-DD format, value is total net worth of portfolio on that day
         HashMap<String, Double> dateToNetWorth = new HashMap<>();
         LocalDateTime today = LocalDateTime.now();
-        LocalDateTime startDate = today.minusDays(360);
+        LocalDateTime startDate = today.minusDays(1000);
 
         for (Stock stock : stockList) {
             // Going through each stock in the list of stocks, making an API call for each one
@@ -54,11 +54,8 @@ public class ShowInteractor implements ShowInputBoundary{
             LocalDateTime purchaseDate = stock.getPurchaseLocalDateTime();
             for (LocalDateTime date = startDate; date.isBefore(today); date = date.plusDays(1)) {
                 String dateStringWithoutTime = date.toString().substring(0, 10);
-                System.out.println(dateStringWithoutTime); // todo delete
-                System.out.println(processedStockInfo); // todo delete
                 if (date.compareTo(purchaseDate) >= 0) {
                     HashMap<String, String> dailyData = processedStockInfo.get(dateStringWithoutTime);
-                    System.out.println(dailyData); // todo delete
                     if (dailyData != null) {
                         String closingPrice = dailyData.get("4. close");
                         Double price = Double.valueOf(closingPrice);
@@ -66,8 +63,9 @@ public class ShowInteractor implements ShowInputBoundary{
                                 dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0) + stock.getQuantity() * price);
                     }
                     else {
+                        String dayBeforeStringWithoutTime = date.minusDays(1).toString().substring(0, 10);
                         dateToNetWorth.put(dateStringWithoutTime,
-                                dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0));
+                                dateToNetWorth.getOrDefault(dayBeforeStringWithoutTime, 0.0));
                     }
                 }
                 else {
@@ -77,8 +75,6 @@ public class ShowInteractor implements ShowInputBoundary{
             };
         }
 
-        System.out.println("HERE");
-        System.out.println(dateToNetWorth); //todo dlete
         for (Map.Entry<String, Double> entry : dateToNetWorth.entrySet()) {
             Day dayObject = stringToDay(entry.getKey());
             series.add(dayObject, entry.getValue());
@@ -86,13 +82,6 @@ public class ShowInteractor implements ShowInputBoundary{
 
         dataset.addSeries(series);
         ChartPanel panel = getPlot(dataset);
-//        double newNetWorth = 0.0; //todo update
-//        double netProfit = 0.0; //todo update
-
-//        portfolio.setNetWorth(newNetWorth); // Updating the portfolio's net worth
-        if (panel != null) {
-            System.out.println("THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG");
-        }  // todo dlete later above
         ShowOutputData showOutputData = new ShowOutputData(panel);
         showPresenter.prepareSuccessView(showOutputData);
     }
@@ -138,7 +127,7 @@ public class ShowInteractor implements ShowInputBoundary{
      */
     private ChartPanel getPlot(TimeSeriesCollection dataset) {
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Net Worth Plot", // Chart
+                "Portfolio Net Worth Plot (Past 1000 Days)", // Chart
                 "Date", // X-Axis Label
                 "Net Worth ($)", // Y-Axis Label
                 dataset);
