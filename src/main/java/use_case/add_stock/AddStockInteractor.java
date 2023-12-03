@@ -22,6 +22,9 @@ public class AddStockInteractor implements AddStockInputBoundary {
             "fields and try again.";
     private final String ADD_STOCK_BAD_DATE_ERROR = "There is no stock data for this date.\n Please" +
             " check the input date and try again.\n Note: the markets are closed on weekends and holidays.";
+    private final int MONDAY_DAY_OF_WEEK = 1;
+    private final int SATURDAY_DAY_OF_WEEK = 6;
+    private final int SUNDAY_DAY_OF_WEEK = 7;
 
     public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,
                               PortfolioDataAccessInterface portfolioDataAccessImpl,
@@ -70,10 +73,18 @@ public class AddStockInteractor implements AddStockInputBoundary {
     }
 
     private double calculateNewStockProfitToDate(Stock newStock) throws IOException, IllegalArgumentException {
-        String currDate = LocalDateTime.now().minusDays(1).format(formatter);
+        int todayDayOfWeek = LocalDateTime.now().getDayOfWeek().getValue();
+        String mostRecentStockDate;
+        if (todayDayOfWeek == SUNDAY_DAY_OF_WEEK || todayDayOfWeek == SATURDAY_DAY_OF_WEEK) {
+            mostRecentStockDate = LocalDateTime.now().minusDays((todayDayOfWeek % 2) + 1).format(formatter);
+        } else if (todayDayOfWeek == MONDAY_DAY_OF_WEEK) {
+            mostRecentStockDate = LocalDateTime.now().minusDays(3).format(formatter);
+        } else {
+            mostRecentStockDate = LocalDateTime.now().minusDays(1).format(formatter);
+        }
 
         double currStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
-                newStock.getTickerSymbol(), currDate).getClose();
+                newStock.getTickerSymbol(), mostRecentStockDate).getClose();
 
         double pastStockClosePrice = newStock.getTotalValueAtPurchase() / newStock.getQuantity();
         return newStock.getQuantity() * (currStockClosePrice - pastStockClosePrice);
