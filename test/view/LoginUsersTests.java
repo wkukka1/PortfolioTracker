@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class LoginUsersTests {
@@ -33,7 +34,7 @@ public class LoginUsersTests {
         }
     }
 
-    private JButton getloginBtn(){
+    private JButton getLoginBtn() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -56,7 +57,7 @@ public class LoginUsersTests {
         return (JButton) buttons.getComponent(0);
     }
 
-    private LabelTextPanel[] getTextfeilds(){
+    private LabelTextPanel[] getTextfeilds() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -88,19 +89,16 @@ public class LoginUsersTests {
         usernameInputField.setText(username);
         passwordInputField.setText(password);
 
-        getloginBtn().doClick();
+        getLoginBtn().doClick();
 
-        boolean result = getloggedInUser().equals(username);
-
-        System.out.println("test");
-        return result;
+        return getloggedInUser().equals(username);
     }
 
     private String getloggedInUser() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
-        for (Window window:windows){
-            if(window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")){
+        for (Window window : windows) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
                 app = (JFrame) window;
             }
         }
@@ -117,6 +115,43 @@ public class LoginUsersTests {
         return lv.loggedInViewModel.getLoggedInUser();
     }
 
+    private boolean popUpExist() {
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JDialog) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @org.junit.Test
+    public void loginIncorrectPassword() {
+        addUser(1);
+        Main.main(null);
+        LabelTextPanel[] textPanels = getTextfeilds();
+        textPanels[0].setText("user0");
+        textPanels[1].setText("password1");
+
+        getLoginBtn().doClick();
+
+        assert popUpExist();
+    }
+
+    @org.junit.Test
+    public void loginIncorrectUser() {
+        Main.main(null);
+        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel usernameInputField = textfield[0];
+        LabelTextPanel passwordInputField = textfield[1];
+
+        usernameInputField.setText("UserNameThatDoesn'tTExist");
+        passwordInputField.setText("1");
+
+        getLoginBtn().doClick();
+
+        assert popUpExist();
+    }
 
     @org.junit.Test
     public void loginOneUserTest() throws IOException {

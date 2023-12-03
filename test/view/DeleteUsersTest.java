@@ -201,8 +201,7 @@ public class DeleteUsersTest {
         Main.main(null);
         LabelTextPanel[] textField = getTextFields();
         System.out.println(textField[0].getLabel().getText());
-        assert (textField[0].getLabel().getText().equals("Username") &&
-                textField[1].getLabel().getText().equals("Password"));
+        assert (textField[0].getLabel().getText().equals("Username") && textField[1].getLabel().getText().equals("Password"));
     }
 
 
@@ -318,8 +317,7 @@ public class DeleteUsersTest {
 
                         // this ignores old dialogs
                         if (dialog.isVisible()) {
-                            String s = ((JOptionPane) ((BorderLayout) dialog.getRootPane()
-                                    .getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER)).getMessage().toString();
+                            String s = ((JOptionPane) ((BorderLayout) dialog.getRootPane().getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER)).getMessage().toString();
                             System.out.println("message = " + s);
 
                             // store the information we got from the JDialog

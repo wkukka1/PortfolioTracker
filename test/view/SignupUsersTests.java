@@ -159,7 +159,7 @@ public class SignupUsersTests {
 
     }
 
-    private JButton getSwitchButton(){
+    private JButton getSwitchButton() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -182,7 +182,7 @@ public class SignupUsersTests {
         return (JButton) buttons.getComponent(1);
     }
 
-    private boolean popupExist(){
+    private boolean popupExist() {
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
             if (window instanceof JDialog) {
@@ -210,7 +210,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testGetSwitchButton(){
+    public void testGetSwitchButton() {
         Main.main(null);
         JButton button = getSwitchButton();
         System.out.println(button.getText());
@@ -244,7 +244,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testSignupExistingUser(){
+    public void testSignupExistingUser() {
         addUser(1);
 
         Main.main(null);
@@ -268,7 +268,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testSignupDifferentPasswords(){
+    public void testSignupDifferentPasswords() {
         Main.main(null);
         JButton signupBtn = getSignupBtn();
 
