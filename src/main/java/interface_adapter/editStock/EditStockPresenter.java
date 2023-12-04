@@ -4,23 +4,21 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.editStock.EditStockOutputBoundary;
+import use_case.editStock.EditStockOutputData;
 
 import javax.swing.*;
 
 public class EditStockPresenter implements EditStockOutputBoundary {
-    private final EditStockViewModel editStockViewModel;
     private final LoggedInViewModel loggedInViewModel;
     private ViewManagerModel viewManagerModel;
 
-    public EditStockPresenter(EditStockViewModel editStockViewModel,
-                              LoggedInViewModel loggedInViewModel,
+    public EditStockPresenter(LoggedInViewModel loggedInViewModel,
                               ViewManagerModel viewManagerModel){
-        this.editStockViewModel = editStockViewModel;
         this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
     }
     @Override
-    public void prepareSuccessView(){
+    public void prepareSuccessView(EditStockOutputData stock){
         LoggedInState loggedInState = loggedInViewModel.getState();
         this.loggedInViewModel.setState(loggedInState);
         loggedInViewModel.firePropertyChanged();

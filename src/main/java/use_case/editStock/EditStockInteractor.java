@@ -39,7 +39,10 @@ public class EditStockInteractor implements EditStockInputBoundary {
 
             Stock stock = portfolio.getStockByTicker(tickerSymbol);
             stock.setQuantity(newQuantity);
-            editStockPresenter.prepareSuccessView();
+
+            EditStockOutputData output = new EditStockOutputData(stock);
+
+            editStockPresenter.prepareSuccessView(output);
         } catch (Exception e){
             editStockPresenter.prepareFailView(e.toString());
             System.out.println(e.toString());
