@@ -16,8 +16,7 @@ import java.util.NoSuchElementException;
 public class StockPriceClientImpl implements StockPriceDataAccessInterface {
     private final AVTimeSeriesDailyDeserializer avTimeSeriesDailyDeserializer = new AVTimeSeriesDailyDeserializerImpl();
     private static final String BASE_URL = "https://www.alphavantage.co/query";
-    private static final String META_DATA_MARKER = "Meta Data";
-
+    
     public AVTimeSeriesDailyResponse getStockInfoByDate(String symbol, String date) throws IOException,
             IllegalArgumentException {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
