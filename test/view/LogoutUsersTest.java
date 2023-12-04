@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertNotNull;
 
 public class LogoutUsersTest {
-    private boolean loginUser(String username, String password) {
+    private void loginUser(String username, String password) {
         LabelTextPanel[] textfield = getTextfeilds();
         LabelTextPanel usernameInputField = textfield[0];
         LabelTextPanel passwordInputField = textfield[1];
@@ -26,8 +26,9 @@ public class LogoutUsersTest {
 
         getLoginBtn().doClick();
 
-        return getloggedInUser().equals(username);
+        getloggedInUser();
     }
+
     private JButton getLoginBtn() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
@@ -111,7 +112,7 @@ public class LogoutUsersTest {
         return lv.loggedInViewModel.getLoggedInUser();
     }
 
-    private JButton getLogoutBtn(){
+    private JButton getLogoutBtn() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -132,7 +133,7 @@ public class LogoutUsersTest {
         return (JButton) lv.getComponent(5);
     }
 
-    private JButton getLogoutBtn1(){
+    private JButton getLogoutBtn1() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -153,7 +154,7 @@ public class LogoutUsersTest {
         return (JButton) lv.getComponent(6);
     }
 
-    private boolean logoutUser(){
+    private boolean logoutUser() {
         addUser(1);
         Main.main(null);
         loginUser("user0", "password0");
@@ -162,22 +163,23 @@ public class LogoutUsersTest {
     }
 
     private boolean popUpExist() {
+        JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JDialog) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Logout Error")) {
                 return true;
             }
         }
-        return false;
+       return false;
     }
 
     @org.junit.Test
-    public void testLogoutOneUser(){
+    public void testLogoutOneUser() {
         assert logoutUser();
     }
 
     @org.junit.Test
-    public void testLogoutError(){
+    public void testLogoutError() {
         Main.main(null);
         getLogoutBtn1().doClick();
         assert popUpExist();
