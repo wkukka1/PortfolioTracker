@@ -13,25 +13,20 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-public class LoginUsersTests {
+public class LogoutUsersTest {
+    private void loginUser(String username, String password) {
+        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel usernameInputField = textfield[0];
+        LabelTextPanel passwordInputField = textfield[1];
 
-    public void addUser(int numOfUsers) {
-        UserFactory uf = new CommonUserFactory();
-        FileUserDataAccessObject fudao;
-        FilePortfolioDataAccessObject fpdao;
-        try {
-            fudao = new FileUserDataAccessObject("./users.csv", uf);
-            fpdao = new FilePortfolioDataAccessObject("./portfolios.csv");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (int i = 0; i < numOfUsers; i++) {
-            fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
-            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
-        }
+        usernameInputField.setText(username);
+        passwordInputField.setText(password);
+
+        getLoginBtn().doClick();
+
+        getloggedInUser();
     }
 
     private JButton getLoginBtn() {
@@ -80,18 +75,20 @@ public class LoginUsersTests {
         return new LabelTextPanel[]{usernameTextField, passwordTextField};
     }
 
-
-    private boolean loginUser(String username, String password) {
-        LabelTextPanel[] textfield = getTextfeilds();
-        LabelTextPanel usernameInputField = textfield[0];
-        LabelTextPanel passwordInputField = textfield[1];
-
-        usernameInputField.setText(username);
-        passwordInputField.setText(password);
-
-        getLoginBtn().doClick();
-
-        return getloggedInUser().equals(username);
+    public void addUser(int numOfUsers) {
+        UserFactory uf = new CommonUserFactory();
+        FileUserDataAccessObject fudao;
+        FilePortfolioDataAccessObject fpdao;
+        try {
+            fudao = new FileUserDataAccessObject("./users.csv", uf);
+            fpdao = new FilePortfolioDataAccessObject("./portfolios.csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 0; i < numOfUsers; i++) {
+            fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
+            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
+        }
     }
 
     private String getloggedInUser() {
@@ -115,59 +112,77 @@ public class LoginUsersTests {
         return lv.loggedInViewModel.getLoggedInUser();
     }
 
-    private boolean popUpExist() {
+    private JButton getLogoutBtn() {
+        JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JDialog) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
+                app = (JFrame) window;
+            }
+        }
+
+        assertNotNull(app);
+
+        Component root = app.getComponent(0);
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+        // Assuming LoggedInView is at index 1 in the JPanel
+        LoggedInView lv = (LoggedInView) jp2.getComponent(2);
+
+        return (JButton) lv.getComponent(5);
+    }
+
+    private JButton getLogoutBtn1() {
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
+                app = (JFrame) window;
+            }
+        }
+
+        assertNotNull(app);
+
+        Component root = app.getComponent(0);
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+        // Assuming LoggedInView is at index 1 in the JPanel
+        LoggedInView lv = (LoggedInView) jp2.getComponent(2);
+
+        return (JButton) lv.getComponent(6);
+    }
+
+    private boolean logoutUser() {
+        addUser(1);
+        Main.main(null);
+        loginUser("user0", "password0");
+        getLogoutBtn().doClick();
+        return getloggedInUser() == null;
+    }
+
+    private boolean popUpExist() {
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Logout Error")) {
                 return true;
             }
         }
-        return false;
+       return false;
     }
 
     @org.junit.Test
-    public void loginIncorrectPassword() {
-        addUser(1);
+    public void testLogoutOneUser() {
+        assert logoutUser();
+    }
+
+    @org.junit.Test
+    public void testLogoutError() {
         Main.main(null);
-        LabelTextPanel[] textPanels = getTextfeilds();
-        textPanels[0].setText("user0");
-        textPanels[1].setText("password1");
-
-        getLoginBtn().doClick();
-
+        getLogoutBtn1().doClick();
         assert popUpExist();
     }
 
-    @org.junit.Test
-    public void loginIncorrectUser() {
-        Main.main(null);
-        LabelTextPanel[] textfield = getTextfeilds();
-        LabelTextPanel usernameInputField = textfield[0];
-        LabelTextPanel passwordInputField = textfield[1];
-
-        usernameInputField.setText("UserNameThatDoesn'tTExist");
-        passwordInputField.setText("1");
-
-        getLoginBtn().doClick();
-
-        assert popUpExist();
-    }
-
-    @org.junit.Test
-    public void loginOneUserTest() throws IOException {
-        addUser(1);
-        Main.main(null);
-        assert loginUser("user0", "password0");
-    }
-
-    @org.junit.Test
-    public void loginMultipleUsersTest() throws IOException {
-        addUser(5);
-        Main.main(null);
-        assert loginUser("user0", "password0");
-        assert loginUser("user1", "password1");
-        assert loginUser("user2", "password2");
-        assert loginUser("user3", "password3");
-        assert loginUser("user4", "password4");
-    }
 }
