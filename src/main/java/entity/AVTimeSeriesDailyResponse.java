@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.Objects;
-
 public class AVTimeSeriesDailyResponse {
     private String date;
     private double open;
@@ -19,51 +17,7 @@ public class AVTimeSeriesDailyResponse {
         this.volume = volume;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public double getOpen() {
-        return open;
-    }
-
-    public void setOpen(double open) {
-        this.open = open;
-    }
-
-    public double getHigh() {
-        return high;
-    }
-
-    public void setHigh(double high) {
-        this.high = high;
-    }
-
-    public double getLow() {
-        return low;
-    }
-
-    public void setLow(double low) {
-        this.low = low;
-    }
-
     public double getClose() {
         return close;
-    }
-
-    public void setClose(double close) {
-        this.close = close;
-    }
-
-    public double getVolume() {
-        return volume;
-    }
-
-    public void setVolume(double volume) {
-        this.volume = volume;
     }
 }
