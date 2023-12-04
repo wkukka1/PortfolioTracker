@@ -31,12 +31,6 @@ public class StockPriceClientImpl implements StockPriceDataAccessInterface {
             Response response = client.newCall(request).execute();
             String responseBody = response.body().string();
 
-            if (!responseBody.contains(META_DATA_MARKER)) {
-                throw new IOException();
-            } else if (!responseBody.contains(date)) {
-                throw new NoSuchElementException();
-            }
-
             AVTimeSeriesDailyResponse res = avTimeSeriesDailyDeserializer.deserialize(responseBody, date);
             return res;
         } catch (IOException | JSONException e) {
