@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AddStockInteractor implements AddStockInputBoundary {
@@ -52,8 +51,8 @@ public class AddStockInteractor implements AddStockInputBoundary {
         }
 
         portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
-        Map<String, Double> tickersToQuantities = generateTickersToQuantities(
-                portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()));
+        Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID());
+        Map<String, Double> tickersToQuantities = currPortfolio.generateTickersToQuantities();
 
         AddStockOutputData addStockOutputData = new AddStockOutputData(round(overallNetProfit, 2),
                 tickersToQuantities);
@@ -79,15 +78,5 @@ public class AddStockInteractor implements AddStockInputBoundary {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
-    }
-
-    private Map<String, Double> generateTickersToQuantities(Portfolio currPortfolio) {
-        Map<String, Double> tickersToQuantities = new HashMap<>();
-        for (Stock stock : currPortfolio.getStockList()) {
-            tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
-                    0.0) + stock.getQuantity());
-        }
-        tickersToQuantities.replaceAll((ticker, quantity) -> round(quantity, 2));
-        return tickersToQuantities;
     }
 }
