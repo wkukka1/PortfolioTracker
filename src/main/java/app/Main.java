@@ -87,19 +87,5 @@ public class Main {
 
         application.pack();
         application.setVisible(true);
-
-        // todo: Test runner code for StockInfoClient (delete code below later)
-//        StockInfoClient client = new StockInfoClient();
-//        JSONObject result = client.getStockInfo("AAPL");
-//        HashMap<String, HashMap<String, String>> yeah = ShowInteractor.jsonToHashMap(result);
-//        System.out.println(yeah);
-//        HashMap yeahh = (HashMap) yeah;
-//        System.out.println(yeahh);
-//        System.out.println(yeahh.getClass().getSimpleName());
-//        System.out.println("__________________________________________");
-//        System.out.println(yeahh.keySet());
-//        HashMap yeahhh = (HashMap) yeahh.get("2020-08-05");
-//        System.out.println(yeahhh.getClass().getSimpleName());
-//        System.out.println(yeahhh.get("4. close").getClass().getSimpleName());
     }
 }

@@ -21,8 +21,7 @@ import org.json.JSONObject;
 import org.jfree.data.time.TimeSeriesCollection;
 
 
-
-public class ShowInteractor implements ShowInputBoundary{
+public class ShowInteractor implements ShowInputBoundary {
     final ShowPortfolioDataAccessInterface portfolioDataAccessObject;
     final StockPriceDataAccessInterface stockDataAccessObject;
     final ShowOutputBoundary showPresenter;
@@ -61,18 +60,17 @@ public class ShowInteractor implements ShowInputBoundary{
                         Double price = Double.valueOf(closingPrice);
                         dateToNetWorth.put(dateStringWithoutTime,
                                 dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0) + stock.getQuantity() * price);
-                    }
-                    else {
+                    } else {
                         String dayBeforeStringWithoutTime = date.minusDays(1).toString().substring(0, 10);
                         dateToNetWorth.put(dateStringWithoutTime,
                                 dateToNetWorth.getOrDefault(dayBeforeStringWithoutTime, 0.0));
                     }
-                }
-                else {
+                } else {
                     dateToNetWorth.put(dateStringWithoutTime,
                             dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0));
                 }
-            };
+            }
+            ;
         }
 
         for (Map.Entry<String, Double> entry : dateToNetWorth.entrySet()) {
@@ -105,20 +103,6 @@ public class ShowInteractor implements ShowInputBoundary{
         return new Day(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[0]));
     }
 
-    /**
-     * Updates the hashmap mapping dates to net worth with information from the API call.
-     *
-     * @param dateToNetWorth the hashmap to be updated
-     * @param stockInfo      the hashmap containing information from the API call
-     * @param stockQuantity  the quantity of the stock held
-     */
-//    private void updateDateToNetWorth(HashMap<String, Double> dateToNetWorth, HashMap<String, Double> stockInfo, double stockQuantity) {
-//        for (Map.Entry<String, Double> entry : stockInfo.entrySet()) {
-//            String date = entry.getKey();
-//            dateToNetWorth.put(date, dateToNetWorth.get(date) + entry.getValue() * stockQuantity);
-//        }
-//    }
-
 
     /**
      * Returns a ChartPanel object containing the plot of the net worth of the portfolio
@@ -133,8 +117,8 @@ public class ShowInteractor implements ShowInputBoundary{
                 dataset);
 
         // Setting background colour
-        XYPlot plot = (XYPlot)chart.getPlot();
-        plot.setBackgroundPaint(new Color(255,255,255));
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.setBackgroundPaint(new Color(255, 255, 255));
         return new ChartPanel(chart);
     }
 

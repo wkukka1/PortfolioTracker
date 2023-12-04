@@ -25,6 +25,7 @@ public class LogoutPresenter implements LogoutOutputBoundary {
     public void prepareSuccessView() {
         LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setUsername(null);
+        loggedInState.setPanel(null);
         this.loggedInViewModel.setState(loggedInState);
         this.loggedInViewModel.setLoggedInUser(null);
         this.loggedInViewModel.firePropertyChanged();
