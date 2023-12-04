@@ -6,6 +6,7 @@ import interface_adapter.logged_in.add_stock.AddStockPresenter;
 import use_case.add_stock.AddStockInputBoundary;
 import use_case.add_stock.AddStockInteractor;
 import use_case.add_stock.AddStockOutputBoundary;
+import use_case.add_stock.StockCalculationService;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 import view.LoggedInView;
@@ -41,14 +42,15 @@ public class LoggedInUseCaseFactory {
                                       SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
                                       FilePortfolioDataAccessObject portfolioDataAccessObject,
-                                      StockPriceDataAccessInterface stockPriceClientImpl, LoginView loginView) {
+                                      StockPriceDataAccessInterface stockPriceClientImpl, LoginView loginView,
+                                      StockCalculationService stockCalculationServiceImpl) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
             DeleteState deleteState = new DeleteState();
 
             AddStockController addStockController = createAddStockUseCase(stockPriceClientImpl,
-                    portfolioDataAccessObject, loggedInViewModel);
+                    portfolioDataAccessObject, loggedInViewModel, stockCalculationServiceImpl);
             StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
@@ -81,10 +83,11 @@ public class LoggedInUseCaseFactory {
 
     private static AddStockController createAddStockUseCase(StockPriceDataAccessInterface stockPriceClientImpl,
                                                             PortfolioDataAccessInterface portfolioDataAccessInterface,
-                                                            LoggedInViewModel loggedInViewModel) {
+                                                            LoggedInViewModel loggedInViewModel,
+                                                            StockCalculationService stockCalculationServiceImpl) {
         AddStockOutputBoundary addStockPresenter = new AddStockPresenter(loggedInViewModel);
         AddStockInputBoundary addStockInteractor = new AddStockInteractor(stockPriceClientImpl,
-                portfolioDataAccessInterface, addStockPresenter);
+                portfolioDataAccessInterface, addStockPresenter, stockCalculationServiceImpl);
         return new AddStockController(addStockInteractor);
     }
 }
