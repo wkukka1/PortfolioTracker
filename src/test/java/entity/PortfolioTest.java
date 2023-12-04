@@ -7,7 +7,9 @@ import org.junit.runners.JUnit4;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,9 +20,9 @@ public class PortfolioTest {
     @Before
     public void setup() {
         List<Stock> stockList = new ArrayList<>();
-        stockList.add(new Stock("", LocalDateTime.now(), 1.0, 100.0));
-        stockList.add(new Stock("", LocalDateTime.now(), 1.0, 100.0));
-        stockList.add(new Stock("", LocalDateTime.now(), 1.0, 100.0));
+        stockList.add(new Stock("A", LocalDateTime.now(), 1.0, 100.0));
+        stockList.add(new Stock("B", LocalDateTime.now(), 1.0, 100.0));
+        stockList.add(new Stock("A", LocalDateTime.now(), 1.4, 100.0));
 
         this.portfolio = new Portfolio(stockList, 1234.5, 1);
     }
@@ -65,5 +67,15 @@ public class PortfolioTest {
     public void testSetUserID() {
         portfolio.setUserID(123);
         assertEquals(123, portfolio.getUserID());
+    }
+
+    @Test
+    public void testGenerateTickersToQuantities() {
+        Map<String, Double> actual = portfolio.generateTickersToQuantities();
+        Map<String, Double> expected = new HashMap<>();
+        expected.put("A", 2.4);
+        expected.put("B", 1.0);
+
+        assertEquals(expected, actual);
     }
 }
