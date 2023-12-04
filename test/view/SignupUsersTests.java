@@ -219,6 +219,7 @@ public class SignupUsersTests {
 
     @org.junit.Test
     public void testSignupOneUser() {
+        String user = StringGenerator.generateRandomString(10);
         Main.main(null);
 
         JButton signupBtn = getSignupBtn();
@@ -230,7 +231,7 @@ public class SignupUsersTests {
 
         createCloseTimer().start();
 
-        textPanels[0].setText(StringGenerator.generateRandomString(10));
+        textPanels[0].setText(user);
         textPanels[1].setText("password");
         textPanels[2].setText("password");
 
@@ -240,7 +241,7 @@ public class SignupUsersTests {
 
         createCloseTimer().start();
 
-        assert userExists("user");
+        assert userExists(user);
     }
 
     @org.junit.Test
