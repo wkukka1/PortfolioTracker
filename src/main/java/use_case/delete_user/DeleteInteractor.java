@@ -22,7 +22,7 @@ public class DeleteInteractor implements DeleteInputBoundary{
             deletePresenter.prepareSuccessView(output);
         } catch (Exception e) {
             deletePresenter.prepareFailView(e.toString());
-            System.out.println(e.toString());
+            System.out.println(e);
         }
 
     }

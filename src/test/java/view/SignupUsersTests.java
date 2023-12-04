@@ -1,6 +1,11 @@
 package view;
 
 import app.Main;
+import data_access.FilePortfolioDataAccessObject;
+import data_access.FileUserDataAccessObject;
+import entity.CommonUserFactory;
+import entity.Portfolio;
+import entity.UserFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +14,10 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -17,6 +25,25 @@ public class SignupUsersTests {
 
     private String userPath = "./users.csv";
     private String portfolioPath = "./portfolios.csv";
+
+    // New StringGenerator class
+    private static class StringGenerator {
+        private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        public static String generateRandomString(int length) {
+            StringBuilder stringBuilder = new StringBuilder(length);
+            Random random = new Random();
+
+            for (int i = 0; i < length; i++) {
+                int randomIndex = random.nextInt(CHARACTERS.length());
+                char randomChar = CHARACTERS.charAt(randomIndex);
+                stringBuilder.append(randomChar);
+            }
+
+            return stringBuilder.toString();
+        }
+    }
+
 
     public void SignUpUser(int i) {
         i -= 1;
@@ -30,6 +57,22 @@ public class SignupUsersTests {
         createCloseTimer().start();
 
         signUpBtn.doClick();
+    }
+
+    public void addUser(int numOfUsers) {
+        UserFactory uf = new CommonUserFactory();
+        FileUserDataAccessObject fudao;
+        FilePortfolioDataAccessObject fpdao;
+        try {
+            fudao = new FileUserDataAccessObject("./users.csv", uf);
+            fpdao = new FilePortfolioDataAccessObject("./portfolios.csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (int i = 0; i < numOfUsers; i++) {
+            fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
+            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
+        }
     }
 
     public LabelTextPanel[] getSignupTextFields() {
@@ -116,7 +159,7 @@ public class SignupUsersTests {
 
     }
 
-    private JButton getSwitchButton(){
+    private JButton getSwitchButton() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -139,6 +182,16 @@ public class SignupUsersTests {
         return (JButton) buttons.getComponent(1);
     }
 
+    private boolean popupExist() {
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JDialog) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @org.junit.Test
     public void testGetSignUpTextFields() {
@@ -157,7 +210,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testGetSwitchButton(){
+    public void testGetSwitchButton() {
         Main.main(null);
         JButton button = getSwitchButton();
         System.out.println(button.getText());
@@ -166,6 +219,7 @@ public class SignupUsersTests {
 
     @org.junit.Test
     public void testSignupOneUser() {
+        String user = StringGenerator.generateRandomString(10);
         Main.main(null);
 
         JButton signupBtn = getSignupBtn();
@@ -177,7 +231,7 @@ public class SignupUsersTests {
 
         createCloseTimer().start();
 
-        textPanels[0].setText("user");
+        textPanels[0].setText(user);
         textPanels[1].setText("password");
         textPanels[2].setText("password");
 
@@ -187,7 +241,50 @@ public class SignupUsersTests {
 
         createCloseTimer().start();
 
-        assert userExists("user");
+        assert userExists(user);
+    }
+
+    @org.junit.Test
+    public void testSignupExistingUser() {
+        addUser(1);
+
+        Main.main(null);
+        JButton signupBtn = getSignupBtn();
+
+        LabelTextPanel[] textPanels = getSignupTextFields();
+
+        JButton switchButton = getSwitchButton();
+
+        switchButton.doClick();
+        createCloseTimer().start();
+
+        textPanels[0].setText("user0");
+        textPanels[1].setText("password0");
+        textPanels[2].setText("password0");
+
+        createCloseTimer().start();
+        signupBtn.doClick();
+
+        assert popupExist();
+    }
+
+    @org.junit.Test
+    public void testSignupDifferentPasswords() {
+        Main.main(null);
+        JButton signupBtn = getSignupBtn();
+
+        LabelTextPanel[] textPanels = getSignupTextFields();
+
+        JButton switchButton = getSwitchButton();
+        switchButton.doClick();
+
+        textPanels[0].setText(StringGenerator.generateRandomString(11));
+        textPanels[1].setText("password1");
+        textPanels[2].setText("pass");
+
+        signupBtn.doClick();
+
+        assert popupExist();
     }
 
     private Timer createCloseTimer() {

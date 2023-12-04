@@ -9,8 +9,10 @@ public class LogoutInteractor implements LogoutInputBoundary {
 
     @Override
     public void execute(LogoutInputData logoutInputData) {
-
         try {
+            if (logoutInputData.getUsername() == null) {
+                throw new Exception();
+            }
             logoutPresenter.prepareSuccessView();
         } catch (Exception e) {
             logoutPresenter.prepareFailView();
