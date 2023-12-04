@@ -8,14 +8,13 @@ import use_case.signup.PortfolioDataAccessInterface;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AddStockInteractor implements AddStockInputBoundary {
     private final StockPriceDataAccessInterface stockPriceClientImpl;
     private final PortfolioDataAccessInterface portfolioDataAccessImpl;
+    private final StockCalculationService stockCalculationServiceImpl;
     private final AddStockOutputBoundary addStockPresenter;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final String ADD_STOCK_DEFAULT_ERROR = "There was an issue adding this stock.\n Please check the input " +
@@ -25,10 +24,12 @@ public class AddStockInteractor implements AddStockInputBoundary {
 
     public AddStockInteractor(StockPriceDataAccessInterface stockPriceClientImpl,
                               PortfolioDataAccessInterface portfolioDataAccessImpl,
-                              AddStockOutputBoundary addStockPresenter) {
+                              AddStockOutputBoundary addStockPresenter,
+                              StockCalculationService stockCalculationServiceImpl) {
         this.stockPriceClientImpl = stockPriceClientImpl;
         this.portfolioDataAccessImpl = portfolioDataAccessImpl;
         this.addStockPresenter = addStockPresenter;
+        this.stockCalculationServiceImpl = stockCalculationServiceImpl;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
         double overallNetProfit;
         try {
             newStock = createNewStock(addStockData);
-            newStockProfitToDate = calculateNewStockProfitToDate(newStock);
+            newStockProfitToDate = stockCalculationServiceImpl.calculateNewStockProfitToDate(newStock);
             overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()).getNetProfit() +
                     newStockProfitToDate;
         } catch (IOException e) {
@@ -50,8 +51,8 @@ public class AddStockInteractor implements AddStockInputBoundary {
         }
 
         portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
-        Map<String, Double> tickersToQuantities = generateTickersToQuantities(
-                portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()));
+        Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID());
+        Map<String, Double> tickersToQuantities = currPortfolio.generateTickersToQuantities();
 
         AddStockOutputData addStockOutputData = new AddStockOutputData(round(overallNetProfit, 2),
                 tickersToQuantities);
@@ -69,16 +70,6 @@ public class AddStockInteractor implements AddStockInputBoundary {
                 addStockData.getTotalValueAtPurchase());
     }
 
-    private double calculateNewStockProfitToDate(Stock newStock) throws IOException, IllegalArgumentException {
-        String currDate = LocalDateTime.now().minusDays(1).format(formatter);
-
-        double currStockClosePrice = stockPriceClientImpl.getStockInfoByDate(
-                newStock.getTickerSymbol(), currDate).getClose();
-
-        double pastStockClosePrice = newStock.getTotalValueAtPurchase() / newStock.getQuantity();
-        return newStock.getQuantity() * (currStockClosePrice - pastStockClosePrice);
-    }
-
     private double round(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
@@ -87,15 +78,5 @@ public class AddStockInteractor implements AddStockInputBoundary {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
-    }
-
-    private Map<String, Double> generateTickersToQuantities(Portfolio currPortfolio) {
-        Map<String, Double> tickersToQuantities = new HashMap<>();
-        for (Stock stock : currPortfolio.getStockList()) {
-            tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
-                    0.0) + stock.getQuantity());
-        }
-        tickersToQuantities.replaceAll((ticker, quantity) -> round(quantity, 2));
-        return tickersToQuantities;
     }
 }

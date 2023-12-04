@@ -10,6 +10,8 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.ViewManagerModel;
+import use_case.add_stock.StockCalculationService;
+import use_case.add_stock.StockCalculationServiceImpl;
 import use_case.show.StockPriceDataAccessInterface;
 import view.LoggedInView;
 import view.LoginView;
@@ -73,10 +75,11 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
         StockPriceDataAccessInterface stockPriceClientImpl = new StockPriceClientImpl();
+        StockCalculationService stockCalculationServiceImpl = new StockCalculationServiceImpl(stockPriceClientImpl);
 
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(application, loggedInViewModel, loginViewModel,
                 viewManagerModel, userDataAccessObject, deleteViewModel, portfolioDataAccessObject,
-                stockPriceClientImpl, loginView);
+                stockPriceClientImpl, loginView, stockCalculationServiceImpl);
         views.add(loggedInView, loggedInView.viewName);
 
         viewManagerModel.setActiveView(loginView.viewName);
