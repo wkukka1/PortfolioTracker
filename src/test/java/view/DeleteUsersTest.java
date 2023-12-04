@@ -6,11 +6,6 @@ import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.Portfolio;
 import entity.UserFactory;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.delete_user.DeleteController;
-import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.signup.SignupViewModel;
-import use_case.signup.PortfolioDataAccessInterface;
 
 import javax.swing.*;
 import java.awt.*;
