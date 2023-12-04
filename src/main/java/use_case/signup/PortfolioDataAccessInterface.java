@@ -7,4 +7,5 @@ public interface PortfolioDataAccessInterface {
     void savePortfolio(Portfolio currPortfolio);
     Portfolio getPortfolioByID(int userID);
     void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate);
+    void deletePortfolio(int id);
 }
