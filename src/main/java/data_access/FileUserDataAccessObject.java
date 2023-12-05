@@ -108,31 +108,6 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         return accounts.containsKey(identifier);
     }
 
-    /**
-     *
-     * @return a arraylist of strings that contain the usernames of the users
-     */
-    public ArrayList<String> getUserList() {
-        ArrayList<String> users = new ArrayList<>();
-        BufferedReader reader;
-        try {
-            String line;
-            reader = new BufferedReader(new FileReader(csvFile));
-            int count = 0;
-            while ((line = reader.readLine()) != null) {
-                String[] columns = line.split(",");
-                if (count > 0) {
-                    users.add(columns[0]);
-                }
-                count++;
-            }
-            reader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return users;
-    }
-
     @Override
     public void deleteUser(String username) {
         accounts.remove(username);

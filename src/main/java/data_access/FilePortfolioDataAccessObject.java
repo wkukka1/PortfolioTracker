@@ -34,12 +34,12 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                     String[] col = row.split(",", headers.size());
 
                     int userID = Integer.parseInt(String.valueOf(col[headers.get("userID")]));
-                    long netWorth = Long.parseLong(String.valueOf(col[headers.get("netWorth")]));
+                    double netProfit = Double.parseDouble(String.valueOf(col[headers.get("netWorth")]));
 
                     String encodedStocks = String.valueOf(col[headers.get("stockList")]);
                     ArrayList<Stock> decodedStockList = decodeStockStrIntoStockList(encodedStocks);
 
-                    Portfolio currPortfolio = new Portfolio(decodedStockList, netWorth, userID);
+                    Portfolio currPortfolio = new Portfolio(decodedStockList, netProfit, userID);
                     portfolios.put(userID, currPortfolio);
                 }
             }
@@ -57,6 +57,15 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
         return this.portfolios.get(userID);
     }
 
+    @Override
+    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) {
+        Portfolio currPortfolio = portfolios.get(userID);
+        currPortfolio.addStockToStockList(newStock);
+        currPortfolio.setNetProfit(currPortfolio.getNetProfit() + stockProfitToDate);
+
+        this.save();
+    }
+
     private void save() {
         BufferedWriter writer;
         try {
@@ -68,7 +77,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                 String encodedStocks = encodeStockListIntoStockStr((ArrayList<Stock>) portfolio.getStockList());
 
                 String line = String.format("%s,%s,%s",
-                        portfolio.getUserID(), portfolio.getNetWorth(), encodedStocks);
+                        portfolio.getUserID(), portfolio.getNetProfit(), encodedStocks);
 
                 writer.write(line);
                 writer.newLine();

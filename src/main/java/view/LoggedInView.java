@@ -2,9 +2,13 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
 import interface_adapter.editStock.EditStockController;
+import org.apache.commons.lang3.StringUtils;
+import view.components.ScrollableStockList;
+import interface_adapter.logout_user.LogoutController;
 import view.validation.StockFieldValidator;
 
 import javax.swing.*;
@@ -16,46 +20,61 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final StockFieldValidator stockFieldValidator;
+    private final AddStockController addStockController;
     public final String viewName = "logged in";
-    private final LoggedInViewModel loggedInViewModel;
+    public final LoggedInViewModel loggedInViewModel;
     private DeleteState deleteState;
     private final DeleteController deleteController;
     private final LoginView loginView;
     private final EditStockController editStockController;
 
+    private final JFrame appFrame;
+    private final LogoutController logoutController;
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
+    JLabel stocksScrollableListLabel;
     JButton addStockButton;
     JButton logOut;
     JButton deleteUser;
+
     JButton editStock;
+    JPanel stocksScrollableList;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, DeleteState deleteState, DeleteController deleteController,
-                        LoginView loginView, StockFieldValidator stockFieldValidator, EditStockController editStockController) {
+
+    public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
+                        DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
+                        AddStockController addStockController, LogoutController logoutController, EditStockController editStockController) {
+        this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
         this.loginView = loginView;
+        this.logoutController = logoutController;
         this.stockFieldValidator = stockFieldValidator;
         this.editStockController = editStockController;
-
+        this.addStockController = addStockController;
 
         this.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-
         title = new JLabel("Home");
+        JPanel netProfitPanel = new JPanel();
+        netProfitPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
         netProfitLabel = new JLabel("Net Profit:");
         netProfitValue = new JLabel(); // You can set the value later
+
+        netProfitPanel.add(netProfitLabel);
+        netProfitPanel.add(netProfitValue);
 
         addStockButton = new JButton("Add Stock");
         addStockButton.addActionListener(this);
@@ -68,46 +87,88 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         editStock = new JButton(LoggedInViewModel.EDIT_STOCK_LABEL);
         editStock.addActionListener(this);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
+        this.setLayout(new GridBagLayout()); // Use GridBagLayout
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
+        title = new JLabel("Home");
+        netProfitLabel = new JLabel("Net Profit (USD):");
+        netProfitValue = new JLabel(); // You can set the value later
+
+        addStockButton = new JButton("Add Stock");
+        addStockButton.addActionListener(this);
+
+        logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut.addActionListener(this);
+
+        deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
+        deleteUser.addActionListener(this);
+
+        stocksScrollableList = new ScrollableStockList(new HashMap<>());
+        stocksScrollableListLabel = new JLabel("Currently Held Assets:");
+
+        // Title
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.weightx = 1.0; // Allow title to expand horizontally
+        gbc.weighty = 0.0; // Allow title to expand vertically
         this.add(title, gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.CENTER;
-
         this.add(netProfitLabel, gbc);
 
         gbc.gridx = 2;
         gbc.anchor = GridBagConstraints.WEST;
-
         this.add(netProfitValue, gbc);
 
+        // Add Stock Button
         gbc.gridx = 3;
-        gbc.anchor = GridBagConstraints.EAST;
-
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.weightx = 0.0; // Reset weight
+        gbc.weighty = 1.0; // Reset weight
         this.add(addStockButton, gbc);
 
+        // Log Out Button
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-
-        this.add(logOut, gbc);
+        this.add(stocksScrollableListLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        this.add(deleteUser, gbc);
+        this.add(stocksScrollableList, gbc);
+
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.weightx = 1.0; // Allow log out button to expand horizontally
+        gbc.weighty = 0.0; // Reset weight
+        this.add(logOut, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        this.add(logOut, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
+        gbc.weightx = 1.0; // Allow delete user button to expand horizontally
+        gbc.weighty = 0.0; // Reset weight
+        this.add(deleteUser, gbc);
 
+        // Sets the coordinates for the Edit Stock button
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        // Creates the Edit Stock button
         this.add(editStock, gbc);
     }
 
@@ -144,14 +205,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
                 } catch (ValidationException validationException) {
                     System.out.println("Stock Field Validation Exception Occurred");;
+                    return;
                 }
+
+                addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
             }
 
-        }if (evt.getSource() == deleteUser){
-            deleteController.execute(loggedInViewModel.getLoggedInUser());
-//            deleteState = deleteState.getState();
-        }else if (evt.getSource() == logOut) {
-            System.out.println("Click " + evt.getActionCommand()); // Handle logout button
+        }if (evt.getSource() == deleteUser) {
+            deleteConfirmation();
+        } else if (evt.getSource() == logOut) {
+            logoutController.execute(loggedInViewModel.getLoggedInUser());
         } if (evt.getSource() == editStock){
             JTextField tickerField = new JTextField(10);
             JTextField amountField = new JTextField(10);
@@ -177,6 +240,51 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         }
     }
 
+    private void deleteConfirmation(){
+        JFrame popup = new JFrame("Confirmation");
+        popup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JLabel text = new JLabel("Are you sure you want to delete your account?");
+
+        JButton yesButton = new JButton("Yes");
+        yesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteController.execute(loggedInViewModel.getLoggedInUser());
+                popup.dispose();
+            }
+        });
+
+        JButton noButton = new JButton("No");
+        noButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popup.dispose();
+            }
+        });
+
+        // Set layout manager to null for manual positioning
+        popup.setLayout(null);
+
+        // Set position and size of the label
+        text.setBounds(50, 20, 300, 30); // Adjust the values as needed
+
+        // Set position and size of the buttons
+        yesButton.setBounds(100, 70, 80, 30); // Adjust the values as needed
+        noButton.setBounds(200, 70, 80, 30); // Adjust the values as needed
+
+        // Add components to the frame
+        popup.add(text);
+        popup.add(yesButton);
+        popup.add(noButton);
+
+        // Set frame properties
+        popup.setSize(400, 150);
+        popup.setLocationRelativeTo(this);
+        popup.setVisible(true);
+    }
+
+
     private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr)
             throws ValidationException {
         if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
@@ -201,6 +309,24 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     public void propertyChange(PropertyChangeEvent evt) {
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // Update the net profit value using state data
-        netProfitValue.setText(state.getNetProfit());
+        netProfitValue.setText("$" + state.getNetProfit());
+        if (!StringUtils.isEmpty(state.getAddStockError())) {
+            JOptionPane.showMessageDialog(this, state.getAddStockError());
+        }
+        if (!StringUtils.isEmpty(state.getUsername()) &&
+                StringUtils.isEmpty(loggedInViewModel.getState().getAddStockError())) {
+            this.remove(stocksScrollableList);
+            stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 2;
+            gbc.gridwidth = 4;
+            gbc.anchor = GridBagConstraints.EAST;
+
+            stocksScrollableList.revalidate();
+            this.add(stocksScrollableList, gbc);
+        }
+        appFrame.pack();
     }
 }
