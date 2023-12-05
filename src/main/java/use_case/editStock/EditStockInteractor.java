@@ -6,6 +6,8 @@ import entity.User;
 import entity.Stock;
 import entity.Portfolio;
 
+import java.util.Map;
+
 public class EditStockInteractor implements EditStockInputBoundary {
     final LoggedInViewModel loggedInViewModel;
     final EditStockOutputBoundary editStockPresenter;
@@ -40,8 +42,9 @@ public class EditStockInteractor implements EditStockInputBoundary {
             Stock stock = portfolio.getStockByTicker(tickerSymbol);
             stock.setQuantity(newQuantity);
 
-            EditStockOutputData output = new EditStockOutputData(stock);
+            Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities();
 
+            EditStockOutputData output = new EditStockOutputData(stock, tickersToQuantities);
             editStockPresenter.prepareSuccessView(output);
         } catch (Exception e){
             editStockPresenter.prepareFailView(e.toString());
