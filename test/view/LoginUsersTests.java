@@ -51,7 +51,7 @@ public class LoginUsersTests {
             SignupInputBoundary signupInteractor = new SignupInteractor(userDataAccessObject, portfolioDataAccessInterface, signupPresenter, userFactory);
             SignupController signupController = new SignupController(signupInteractor);
             LoginOutputBoundary loginPresenter = new LoginPresenter(viewManagerModel, loggedInViewModel, loginViewModel, new SignupView(signupController, signupViewModel));
-            LoginInputBoundary loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter);
+            LoginInputBoundary loginInteractor = new LoginInteractor(userDataAccessObject, loginPresenter, portfolioDataAccessInterface);
             LoginController loginController = new LoginController(loginInteractor);
             loginController.execute(username, password);
             return loggedInViewModel.getLoggedInUser().equals(username);
