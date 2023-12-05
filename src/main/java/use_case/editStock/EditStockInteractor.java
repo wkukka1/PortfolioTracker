@@ -44,7 +44,7 @@ public class EditStockInteractor implements EditStockInputBoundary {
 
             Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities();
 
-            EditStockOutputData output = new EditStockOutputData(stock, tickersToQuantities);
+            EditStockOutputData output = new EditStockOutputData(tickersToQuantities);
             editStockPresenter.prepareSuccessView(output);
         } catch (Exception e){
             editStockPresenter.prepareFailView(e.toString());
