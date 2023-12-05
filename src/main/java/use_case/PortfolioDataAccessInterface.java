@@ -1,4 +1,4 @@
-package use_case.portfolioDataAccessInterface;
+package use_case;
 
 import entity.Portfolio;
 import entity.Stock;

@@ -1,5 +1,6 @@
 package app;
 
+import data_access.FilePortfolioDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -11,7 +12,7 @@ import use_case.login.LoginInputBoundary;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginUserDataAccessInterface;
-import use_case.signup.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 import view.LoginView;
 import view.SignupView;
 
@@ -31,7 +32,7 @@ public class LoginUseCaseFactory {
             LoginViewModel loginViewModel,
             LoggedInViewModel loggedInViewModel,
             LoginUserDataAccessInterface userDataAccessObject, SignupView signupView,
-            PortfolioDataAccessInterface portfolioDataAccessImpl) {
+            FilePortfolioDataAccessObject portfolioDataAccessImpl) {
 
         try {
             LoginController loginController = createLoginUseCase(viewManagerModel, loginViewModel, loggedInViewModel,

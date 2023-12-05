@@ -3,7 +3,7 @@ package use_case.removeStock;
 import java.util.List;
 
 import interface_adapter.logged_in.LoggedInViewModel;
-import use_case.portfolioDataAccessInterface.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 import entity.Portfolio;
 import entity.Stock;
 import entity.User;

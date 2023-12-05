@@ -8,7 +8,7 @@ import use_case.add_stock.AddStockInteractor;
 import use_case.add_stock.AddStockOutputBoundary;
 import use_case.add_stock.StockCalculationService;
 import use_case.show.StockPriceDataAccessInterface;
-import use_case.signup.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 import view.LoggedInView;
 import view.validation.StockFieldValidator;
 import view.validation.StockFieldValidatorImpl;
@@ -82,12 +82,12 @@ public class LoggedInUseCaseFactory {
     }
 
     private static AddStockController createAddStockUseCase(StockPriceDataAccessInterface stockPriceClientImpl,
-                                                            PortfolioDataAccessInterface portfolioDataAccessInterface,
+                                                            PortfolioDataAccessInterface portfolioDataAccessObject,
                                                             LoggedInViewModel loggedInViewModel,
                                                             StockCalculationService stockCalculationServiceImpl) {
         AddStockOutputBoundary addStockPresenter = new AddStockPresenter(loggedInViewModel);
         AddStockInputBoundary addStockInteractor = new AddStockInteractor(stockPriceClientImpl,
-                portfolioDataAccessInterface, addStockPresenter, stockCalculationServiceImpl);
+                portfolioDataAccessObject, addStockPresenter, stockCalculationServiceImpl);
         return new AddStockController(addStockInteractor);
     }
 }

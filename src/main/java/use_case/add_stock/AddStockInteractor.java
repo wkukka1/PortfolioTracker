@@ -3,7 +3,7 @@ package use_case.add_stock;
 import entity.Portfolio;
 import entity.Stock;
 import use_case.show.StockPriceDataAccessInterface;
-import use_case.signup.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 
 import java.io.IOException;
 import java.math.BigDecimal;

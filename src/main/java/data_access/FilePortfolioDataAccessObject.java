@@ -3,7 +3,7 @@ package data_access;
 import entity.Portfolio;
 import entity.Stock;
 import org.apache.commons.lang3.StringUtils;
-import use_case.portfolioDataAccessInterface.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 import use_case.delete_user.DeletePortfolioAccessInterface;
 
 import java.io.*;
