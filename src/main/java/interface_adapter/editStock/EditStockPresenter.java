@@ -18,9 +18,10 @@ public class EditStockPresenter implements EditStockOutputBoundary {
         this.viewManagerModel = viewManagerModel;
     }
     @Override
-    public void prepareSuccessView(EditStockOutputData stock){
+    public void prepareSuccessView(EditStockOutputData outputData){
         LoggedInState loggedInState = loggedInViewModel.getState();
         this.loggedInViewModel.setState(loggedInState);
+        loggedInState.setTickersToAggregatedQuantities(outputData.getTickersToAggregatedQuantities());
         loggedInViewModel.firePropertyChanged();
 
         viewManagerModel.setActiveView(loggedInViewModel.getViewName());
