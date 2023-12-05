@@ -215,29 +215,55 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             deleteConfirmation();
         } else if (evt.getSource() == logOut) {
             logoutController.execute(loggedInViewModel.getLoggedInUser());
-        } if (evt.getSource() == editStock){
-            JTextField tickerField = new JTextField(10);
-            JTextField amountField = new JTextField(10);
+        } if (evt.getSource() == editStock) {
+            LabelTextPanel tickerField = new LabelTextPanel(new JLabel("Enter Ticker Symbol:"), new JTextField(10));
+            LabelTextPanel amountField = new LabelTextPanel(new JLabel("Enter Amount of Shares:"), new JTextField(10));
 
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-            panel.add(new JLabel("Enter Ticker Symbol:"));
-            panel.add(tickerField);
-            panel.add(new JLabel("Enter Amount of Shares:"));
-            panel.add(amountField);
+            JFrame editStockFrame = new JFrame("Edit Stock");
+            editStockFrame.setLayout(new BoxLayout(editStockFrame.getContentPane(), BoxLayout.Y_AXIS));
 
-            int result = JOptionPane.showConfirmDialog(this, panel, "Add Stock",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            // Adding the text fields
+            editStockFrame.add(tickerField);
+            editStockFrame.add(amountField);
 
-            if (result == JOptionPane.OK_OPTION) {
-                String ticker = tickerField.getText();
-                double newQuantity = Double.parseDouble(amountField.getText());
+            // Creating a panel for the buttons with a FlowLayout
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-                editStockController.execute(ticker, newQuantity);
-                //TODO Call ShowController.execute() to update the portfolio's netWorth
-            }
+            JButton okButton = new JButton("OK");
+            okButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String ticker = tickerField.getText();
+                    double newQuantity = Double.parseDouble(amountField.getText());
 
+                    editStockController.execute(ticker, newQuantity);
+                    // TODO: Call ShowController.execute() to update the portfolio's netWorth
+
+                    editStockFrame.dispose();  // Close the frame after the operation
+                }
+            });
+
+            JButton cancelButton = new JButton("Cancel");
+            cancelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    editStockFrame.dispose();  // Close the frame on cancel
+                }
+            });
+
+            // Adding buttons to the button panel
+            buttonPanel.add(okButton);
+            buttonPanel.add(cancelButton);
+
+            // Adding the button panel to the main frame
+            editStockFrame.add(buttonPanel);
+
+            editStockFrame.setSize(300, 200);
+            editStockFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            editStockFrame.setLocationRelativeTo(this);
+            editStockFrame.setVisible(true);
         }
+
     }
 
     private void deleteConfirmation(){
