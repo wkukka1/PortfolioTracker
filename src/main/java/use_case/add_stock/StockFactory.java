@@ -1,5 +1,6 @@
 package use_case.add_stock;
 
+import entity.Investment;
 import entity.Stock;
 import use_case.show.StockPriceDataAccessInterface;
 
@@ -7,7 +8,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
-public class StockFactory {
+public class StockFactory implements InvestmentFactory{
     private final StockPriceDataAccessInterface stockPriceClientImpl;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -15,7 +16,8 @@ public class StockFactory {
         this.stockPriceClientImpl = stockPriceClientImpl;
     }
 
-    public Stock createStock(AddStockInputData addStockData) throws NoSuchElementException {
+    @Override
+    public Investment createInvestment(AddStockInputData addStockData) throws NoSuchElementException {
         String purchaseDate = addStockData.getPurchaseLocalDateTime().format(formatter);
 
         try {

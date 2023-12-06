@@ -47,14 +47,14 @@ public class AddStockInteractor implements AddStockInputBoundary {
             try {
                 if (addStockData.getInvestmentType().equals("Long") ) {
                     Stock newStock;
-                    newStock = stockFactory.createStock(addStockData);
+                    newStock = (Stock) stockFactory.createInvestment(addStockData);
                     newStockProfitToDate = stockCalculationServiceImpl.calculateNewStockProfitToDate(newStock);
                     overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()).getNetProfit() +
                             newStockProfitToDate;
                     portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
 
                 }else if(addStockData.getInvestmentType().equals("Short")){
-                    Short newShort = shortFactory.createShort(addStockData);
+                    Short newShort = (Short) shortFactory.createInvestment(addStockData);
                     newStockProfitToDate = stockCalculationServiceImpl.calculateNewShortProfitToDate(newShort);
                     overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()).getNetProfit() +
                             newStockProfitToDate;
