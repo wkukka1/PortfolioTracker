@@ -3,6 +3,7 @@ package data_access;
 import entity.User;
 import entity.UserFactory;
 import use_case.delete_user.DeleteUserDataAccessInterface;
+import use_case.editStock.EditStockUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface, DeleteUserDataAccessInterface {
+public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface, DeleteUserDataAccessInterface, EditStockUserDataAccessInterface {
 
     private final File csvFile;
 
