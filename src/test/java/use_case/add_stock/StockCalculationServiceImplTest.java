@@ -1,6 +1,6 @@
 package use_case.add_stock;
 
-import data_access.StockPriceClientImpl;
+import data_access.StockInfoClient;
 import entity.AVTimeSeriesDailyResponse;
 import entity.Stock;
 import org.junit.After;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
 public class StockCalculationServiceImplTest {
-    private final StockPriceClientImpl mockClient = Mockito.mock(StockPriceClientImpl.class);
+    private final StockInfoClient mockClient = Mockito.mock(StockInfoClient.class);
     private StockCalculationService mockStockCalculationServiceImpl;
     private MockedStatic<LocalDateTime> mockLocalDateTime;
 

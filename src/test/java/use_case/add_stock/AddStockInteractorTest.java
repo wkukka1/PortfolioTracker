@@ -1,7 +1,7 @@
 package use_case.add_stock;
 
 import data_access.FilePortfolioDataAccessObject;
-import data_access.StockPriceClientImpl;
+import data_access.StockInfoClient;
 import entity.AVTimeSeriesDailyResponse;
 import entity.Portfolio;
 import entity.Stock;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 public class AddStockInteractorTest {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final StockPriceDataAccessInterface mockStockClient = Mockito.mock(StockPriceClientImpl.class);
+    private final StockPriceDataAccessInterface mockStockClient = Mockito.mock(StockInfoClient.class);
     private final PortfolioDataAccessInterface mockPortfolioDAO = Mockito.mock(FilePortfolioDataAccessObject.class);
     private final AddStockOutputBoundary mockPresenter = Mockito.mock(AddStockPresenter.class);
     private final StockCalculationService mockStockCalcService = Mockito.mock(StockCalculationServiceImpl.class);

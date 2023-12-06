@@ -1,11 +1,14 @@
 package view;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import interface_adapter.logged_in.show.ShowController;
 import org.apache.commons.lang3.StringUtils;
+import org.jfree.chart.ChartPanel;
 import view.components.ScrollableStockList;
 import interface_adapter.logout_user.LogoutController;
 import view.validation.StockFieldValidator;
@@ -29,6 +32,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     public final LoggedInViewModel loggedInViewModel;
     private DeleteState deleteState;
     private final DeleteController deleteController;
+    private final ShowController showController;
     private final LoginView loginView;
     private final JFrame appFrame;
     private final LogoutController logoutController;
@@ -39,19 +43,22 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JButton addStockButton;
     JButton logOut;
     JButton deleteUser;
+    JButton showButton;
     JPanel stocksScrollableList;
+    JPanel plot;
 
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
     public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
                         DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
-                        AddStockController addStockController, LogoutController logoutController) {
+                        AddStockController addStockController, LogoutController logoutController, ShowController showController) {
         this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
+        this.showController = showController;
         this.loginView = loginView;
         this.logoutController = logoutController;
         this.stockFieldValidator = stockFieldValidator;
@@ -69,13 +76,19 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         netProfitPanel.add(netProfitLabel);
         netProfitPanel.add(netProfitValue);
 
+
         addStockButton = new JButton("Add Stock");
         addStockButton.addActionListener(this);
 
         logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
         logOut.addActionListener(this);
+
         deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
         deleteUser.addActionListener(this);
+
+
+        showButton = new JButton("Update Plot and Net Profit");
+        showButton.addActionListener(this);
 
         this.setLayout(new GridBagLayout()); // Use GridBagLayout
 
@@ -101,56 +114,61 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         // Title
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.weightx = 1.0; // Allow title to expand horizontally
         gbc.weighty = 0.0; // Allow title to expand vertically
         this.add(title, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(netProfitLabel, gbc);
 
         gbc.gridx = 2;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(netProfitValue, gbc);
 
         // Add Stock Button
         gbc.gridx = 3;
-        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.weightx = 0.0; // Reset weight
         gbc.weighty = 1.0; // Reset weight
         this.add(addStockButton, gbc);
 
-        // Log Out Button
+        gbc.gridx = 4;
+        gbc.anchor = GridBagConstraints.NORTH;
+        this.add(logOut, gbc);
+
+        gbc.gridx = 5;
+        gbc.anchor = GridBagConstraints.NORTH;
+        this.add(deleteUser, gbc);
+
+        gbc.gridx = 6;
+        gbc.anchor = GridBagConstraints.NORTH;
+        this.add(showButton, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 4;
-        this.add(stocksScrollableListLabel, gbc);
-
-        gbc.gridx = 0;
+        plot = new JPanel();
+        ChartPanel chart = loggedInViewModel.getState().getPanel();
+        if (chart != null) {
+            plot.add(chart);
+        }
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        gbc.gridwidth = 6;
+        gbc.gridheight = 2;
+        this.add(plot, gbc);
+        gbc.gridx = 6;
         gbc.gridy = 2;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.gridheight = 5;
+        gbc.anchor = GridBagConstraints.NORTH;
         this.add(stocksScrollableList, gbc);
 
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.weightx = 1.0; // Allow log out button to expand horizontally
-        gbc.weighty = 0.0; // Reset weight
-        this.add(logOut, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-        this.add(logOut, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.weightx = 1.0; // Allow delete user button to expand horizontally
-        gbc.weighty = 0.0; // Reset weight
-        this.add(deleteUser, gbc);
+
+
+
+
     }
 
     /**
@@ -192,11 +210,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
             }
 
-        }
-        if (evt.getSource() == deleteUser) {
+        } if (evt.getSource() == deleteUser){
             deleteConfirmation();
-        } else if (evt.getSource() == logOut) {
+        } if (evt.getSource() == logOut) {
             logoutController.execute(loggedInViewModel.getLoggedInUser());
+        } if (evt.getSource() == showButton) {
+            try {
+                showController.execute(loggedInViewModel.getState().getUserID());
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -270,6 +293,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // Update the net profit value using state data
         netProfitValue.setText("$" + state.getNetProfit());
+        GridBagConstraints gbc = new GridBagConstraints();
         if (!StringUtils.isEmpty(state.getAddStockError())) {
             JOptionPane.showMessageDialog(this, state.getAddStockError());
         }
@@ -278,15 +302,27 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
+            gbc.gridx = 6;
             gbc.gridy = 2;
-            gbc.gridwidth = 4;
-            gbc.anchor = GridBagConstraints.EAST;
+            gbc.gridheight = 5;
+            gbc.anchor = GridBagConstraints.NORTH;
 
             stocksScrollableList.revalidate();
             this.add(stocksScrollableList, gbc);
         }
+        this.remove(plot);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        plot = new JPanel();
+        ChartPanel chart = loggedInViewModel.getState().getPanel();
+        if (chart != null) {
+            plot.add(chart);
+        }
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
+        gbc.gridwidth = 6;
+        gbc.gridheight = 2;
+        this.add(plot, gbc);
+
         appFrame.pack();
     }
 }

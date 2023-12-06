@@ -25,6 +25,7 @@ public class Portfolio {
         this.stockList = stockList;
     }
 
+
     public void addStockToStockList(Stock newStock) {
         stockList.add(newStock);
     }
