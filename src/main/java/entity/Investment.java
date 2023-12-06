@@ -6,9 +6,10 @@ public abstract class Investment {
     private double quantity;
     private double totalValueAtPurchase;
     abstract void setPurchaseLocalDateTime(LocalDateTime purchaseLocalDateTime);
-    abstract double getQuantity();
-    abstract LocalDateTime getPurchaseLocalDateTime();
+    public abstract double getQuantity();
+    public abstract LocalDateTime getPurchaseLocalDateTime();
     abstract void setQuantity(double quantity);
-    abstract double getTotalValueAtPurchase();
+    public abstract double getTotalValueAtPurchase();
     abstract void setTotalValueAtPurchase(double totalValueAtPurchase);
+    public abstract String getTickerSymbol();
 }

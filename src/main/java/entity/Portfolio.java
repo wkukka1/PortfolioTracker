@@ -7,26 +7,26 @@ import java.util.List;
 import java.util.Map;
 
 public class Portfolio {
-    private List<Stock> stockList;
+    private List<Investment> stockList;
     private double netProfit;
     private int userID;
 
-    public Portfolio(List<Stock> stockList, double netProfit, int userID) {
+    public Portfolio(List<Investment> stockList, double netProfit, int userID) {
         this.stockList = stockList;
         this.netProfit = netProfit;
         this.userID = userID;
     }
 
-    public List<Stock> getStockList() {
+    public List<Investment> getStockList() {
         return stockList;
     }
 
-    public void setStockList(List<Stock> stockList) {
+    public void setStockList(List<Investment> stockList) {
         this.stockList = stockList;
     }
 
 
-    public void addStockToStockList(Stock newStock) {
+    public void addStockToStockList(Investment newStock) {
         stockList.add(newStock);
     }
 
@@ -48,7 +48,7 @@ public class Portfolio {
 
     public Map<String, Double> generateTickersToQuantities() {
         Map<String, Double> tickersToQuantities = new HashMap<>();
-        for (Stock stock : this.getStockList()) {
+        for (Investment stock : this.getStockList()) {
             tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
                     0.0) + stock.getQuantity());
         }

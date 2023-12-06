@@ -22,6 +22,7 @@ public class Stock extends Investment{
     public void setTickerSymbol(String tickerSymbol) {
         this.tickerSymbol = tickerSymbol;
     }
+   @Override
     public LocalDateTime getPurchaseLocalDateTime() {
         return purchaseLocalDateTime;
     }
