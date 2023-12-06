@@ -3,10 +3,16 @@ package app;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.logged_in.add_stock.AddStockPresenter;
+import interface_adapter.removeStock.RemoveStockController;
+import interface_adapter.removeStock.RemoveStockPresenter;
 import use_case.add_stock.AddStockInputBoundary;
 import use_case.add_stock.AddStockInteractor;
 import use_case.add_stock.AddStockOutputBoundary;
 import use_case.add_stock.StockCalculationService;
+import use_case.removeStock.RemoveStockInputBoundary;
+import use_case.removeStock.RemoveStockInteractor;
+import use_case.removeStock.RemoveStockOutputBoundary;
+import use_case.removeStock.RemoveStockUserDataAccessInterface;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.PortfolioDataAccessInterface;
 import view.LoggedInView;
@@ -89,5 +95,14 @@ public class LoggedInUseCaseFactory {
         AddStockInputBoundary addStockInteractor = new AddStockInteractor(stockPriceClientImpl,
                 portfolioDataAccessObject, addStockPresenter, stockCalculationServiceImpl);
         return new AddStockController(addStockInteractor);
+    }
+
+    private static RemoveStockController createRemoveStockUseCase(ViewManagerModel viewManagerModel,
+                                                                  LoggedInViewModel loggedInViewModel,
+                                                                  RemoveStockUserDataAccessInterface userDataAccessObject,
+                                                                  PortfolioDataAccessInterface portfolioDataAccessObject){
+        RemoveStockOutputBoundary removeStockPresenter = new RemoveStockPresenter(viewManagerModel, loggedInViewModel);
+        RemoveStockInputBoundary removeStockInteractor = new RemoveStockInteractor(userDataAccessObject, portfolioDataAccessObject, removeStockPresenter, loggedInViewModel);
+        return new RemoveStockController(removeStockInteractor);
     }
 }
