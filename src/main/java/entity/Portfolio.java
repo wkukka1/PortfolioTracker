@@ -73,6 +73,5 @@ public class Portfolio {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
-
     }
 }
