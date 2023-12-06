@@ -145,7 +145,7 @@ public class EditStockTest {
             throw new RuntimeException(e);
         }
 
-        ArrayList<Stock> stockList = new ArrayList<>();
+        ArrayList<Investment> stockList = new ArrayList<>();
 
         Stock stock = new Stock("AAPL", LocalDateTime.now(), 1, 10);
 
@@ -196,7 +196,7 @@ public class EditStockTest {
             throw new RuntimeException(e);
         }
 
-        ArrayList<Stock> stockList = new ArrayList<>();
+        ArrayList<Investment> stockList = new ArrayList<>();
 
         Stock stock1 = new Stock("AAPL", LocalDateTime.now(), 1, 10);
         Stock stock2 = new Stock("GOOGL", LocalDateTime.now(), 5, 5);
@@ -250,7 +250,7 @@ public class EditStockTest {
             throw new RuntimeException(e);
         }
 
-        ArrayList<Stock> stockList = new ArrayList<>();
+        ArrayList<Investment> stockList = new ArrayList<>();
 
         Stock stock = new Stock("AAPL", LocalDateTime.now(), 10, 10);
 

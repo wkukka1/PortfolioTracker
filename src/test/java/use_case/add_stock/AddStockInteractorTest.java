@@ -41,7 +41,7 @@ public class AddStockInteractorTest {
         LocalDateTime now = LocalDateTime.now();
         String nowStr = now.format(formatter);
         AddStockInputData mockInputData = new AddStockInputData("AAPL", now,
-                200.0, 1);
+                200.0, 1, "Long");
         AVTimeSeriesDailyResponse mockClientRes = new AVTimeSeriesDailyResponse("2023-12-01", 1, 1,
                 1, 200.0, 1);
         Portfolio mockPortfolioRes = new Portfolio(new ArrayList<>(), 0, 1);
@@ -64,7 +64,7 @@ public class AddStockInteractorTest {
     @Test
     public void testAddStockUnsuccessViewOnIOException() throws IOException {
         AddStockInputData mockInputData = new AddStockInputData("AAPL", LocalDateTime.now(),
-                200.0, 1);
+                200.0, 1, "Long");
 
         when(mockStockClient.getStockInfoByDate(anyString(), anyString())).thenThrow(IOException.class);
 
@@ -75,7 +75,7 @@ public class AddStockInteractorTest {
     @Test
     public void testAddStockUnsuccessViewOnIllegalArgException() throws IOException {
         AddStockInputData mockInputData = new AddStockInputData("AAPL", LocalDateTime.now(),
-                200.0, 1);
+                200.0, 1, "Long");
 
         when(mockStockClient.getStockInfoByDate(anyString(), anyString())).thenThrow(IllegalArgumentException.class);
 

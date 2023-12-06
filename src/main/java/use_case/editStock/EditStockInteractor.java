@@ -1,5 +1,6 @@
 package use_case.editStock;
 
+import entity.Investment;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.signup.PortfolioDataAccessInterface;
 import entity.User;
@@ -39,7 +40,7 @@ public class EditStockInteractor implements EditStockInputBoundary {
             int userId = user.getUserID();
             Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId);
 
-            Stock stock = portfolio.getStockByTicker(tickerSymbol);
+            Investment stock = portfolio.getStockByTicker(tickerSymbol);
             stock.setQuantity(newQuantity);
 
             Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities();

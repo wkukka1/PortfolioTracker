@@ -46,8 +46,8 @@ public class Portfolio {
         this.userID = userID;
     }
 
-    public Stock getStockByTicker(String tickerSymbol) {
-        for (Stock s : stockList) {
+    public Investment getStockByTicker(String tickerSymbol) {
+        for (Investment s : stockList) {
             String ticker = s.getTickerSymbol();
             if (ticker.equals(tickerSymbol)) {
                 return s;
