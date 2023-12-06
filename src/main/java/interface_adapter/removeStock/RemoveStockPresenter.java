@@ -11,15 +11,12 @@ import view.LoggedInView;
 import javax.swing.*;
 
 public class RemoveStockPresenter implements RemoveStockOutputBoundary {
-    private final RemoveStockViewModel removeStockViewModel;
     private final LoggedInViewModel loggedInViewModel;
     private ViewManagerModel viewManagerModel;
 
     public RemoveStockPresenter(ViewManagerModel viewManagerModel,
-                                RemoveStockViewModel removeStockViewModel,
                                 LoggedInViewModel loggedInViewModel){
         this.viewManagerModel = viewManagerModel;
-        this.removeStockViewModel = removeStockViewModel;
         this.loggedInViewModel = loggedInViewModel;
     }
 
