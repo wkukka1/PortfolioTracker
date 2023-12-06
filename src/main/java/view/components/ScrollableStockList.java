@@ -120,6 +120,9 @@ class DatumPanel extends JPanel {
         add(nameLabel, createGbc(1, 0));
         add(new JLabel("Quantity:"), createGbc(0, 1));
         add(valueLabel, createGbc(1, 1));
+
+        JButton sellStockButton = new JButton("Sell");
+        add(sellStockButton, createGbc(0, 2));
     }
 
     public DatumPanel(Datum datum) {
