@@ -34,7 +34,7 @@ public class EditStockInteractor implements EditStockInputBoundary {
             String tickerSymbol = editStock.getTickerSymbol();
             double newQuantity = editStock.getNewQuantity();
 
-            String username = loggedInViewModel.getLoggedInUser();
+            String username = editStock.getUsername();
             User user = userDataAccessObject.get(username);
             int userId = user.getUserID();
             Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId);
