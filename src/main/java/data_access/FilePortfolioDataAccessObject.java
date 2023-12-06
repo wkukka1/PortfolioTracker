@@ -1,5 +1,6 @@
 package data_access;
 
+import entity.Investment;
 import entity.Portfolio;
 import entity.Stock;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                     double netProfit = Double.parseDouble(String.valueOf(col[headers.get("netProfit")]));
 
                     String encodedStocks = String.valueOf(col[headers.get("stockList")]);
-                    ArrayList<Stock> decodedStockList = decodeStockStrIntoStockList(encodedStocks);
+                    ArrayList<Investment> decodedStockList = decodeStockStrIntoStockList(encodedStocks);
 
                     Portfolio currPortfolio = new Portfolio(decodedStockList, netProfit, userID);
                     portfolios.put(userID, currPortfolio);
@@ -59,7 +60,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     }
 
     @Override
-    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) throws
+    public void addStockToPortfolioByID(int userID, Investment newStock, double stockProfitToDate) throws
             NoSuchElementException {
         try {
             Portfolio currPortfolio = portfolios.get(userID);
@@ -80,7 +81,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
             writer.newLine();
 
             for (Portfolio portfolio : portfolios.values()) {
-                String encodedStocks = encodeStockListIntoStockStr((ArrayList<Stock>) portfolio.getStockList());
+                String encodedStocks = encodeStockListIntoStockStr((ArrayList<Investment>) portfolio.getStockList());
 
                 String line = String.format("%s,%s,%s",
                         portfolio.getUserID(), portfolio.getNetProfit(), encodedStocks);
@@ -114,8 +115,8 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
      * @param encodedStocks
      * @return ArrayList<Stock>
      */
-    private ArrayList<Stock> decodeStockStrIntoStockList(String encodedStocks) {
-        ArrayList<Stock> stockList = new ArrayList<>();
+    private ArrayList<Investment> decodeStockStrIntoStockList(String encodedStocks) {
+        ArrayList<Investment> stockList = new ArrayList<>();
         if (StringUtils.isEmpty(encodedStocks)) {
             return stockList;
         }
@@ -171,10 +172,10 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
      * @param stockList
      * @return encoded stock string
      */
-    private String encodeStockListIntoStockStr(ArrayList<Stock> stockList) {
+    private String encodeStockListIntoStockStr(ArrayList<Investment> stockList) {
         String encodedStocks = "";
         for (int i = 0; i < stockList.size(); i++) {
-            Stock currStock = stockList.get(i);
+            Investment currStock = stockList.get(i);
             if (i > 0) {
                 encodedStocks = encodedStocks + STOCK_ENTITY_DELIMITER;
             }
