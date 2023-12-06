@@ -2,11 +2,13 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
+import interface_adapter.removeStock.RemoveStockController;
 import interface_adapter.removeStock.RemoveStockViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
 import org.apache.commons.lang3.StringUtils;
+import use_case.removeStock.RemoveStockInputData;
 import view.components.ScrollableStockList;
 import interface_adapter.logout_user.LogoutController;
 import view.validation.StockFieldValidator;
@@ -33,6 +35,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final LoginView loginView;
     private final JFrame appFrame;
     private final LogoutController logoutController;
+
+    private final RemoveStockController removeStockController;
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
@@ -47,7 +51,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      */
     public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
                         DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
-                        AddStockController addStockController, LogoutController logoutController) {
+                        AddStockController addStockController, LogoutController logoutController, RemoveStockController removeStockController) {
         this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
@@ -57,6 +61,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.logoutController = logoutController;
         this.stockFieldValidator = stockFieldValidator;
         this.addStockController = addStockController;
+        this.removeStockController = removeStockController;
 
         this.setLayout(new GridBagLayout());
 
@@ -279,6 +284,30 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
+            // Accessing each component to get access to the stock components
+            Component root = stocksScrollableList.getComponent(0); // ScrollPane
+            Component viewPort = ((JScrollPane) root).getComponent(0); // ViewPort
+            Component dataPanelComponent = ((JViewport) viewPort).getComponent(0); // DataPanel
+            JPanel dataPanel = (JPanel) dataPanelComponent;
+
+            Component[] stockComponents = dataPanel.getComponents(); // The list of stocks
+
+            for (int i = 0; i < stockComponents.length; i++){
+                // Instantiate the Sell button for every stock in the scroll field
+                JButton sellStockButton = (JButton) ((JPanel) stockComponents[i]).getComponent(4);
+
+                JLabel tickerLabel = (JLabel) ((JPanel) stockComponents[i]).getComponent(1);
+                String tickerSymbol = tickerLabel.getText(); // String ticker symbol of the stock to sell
+
+                // Add an action listener to call removeStock.execute() to sell the stock
+                sellStockButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String username = loggedInViewModel.getLoggedInUser();
+                        removeStockController.execute(tickerSymbol, username);
+                    }
+                });
+            }
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 2;
