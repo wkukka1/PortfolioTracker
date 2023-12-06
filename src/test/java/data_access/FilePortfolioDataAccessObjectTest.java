@@ -11,6 +11,7 @@ import use_case.signup.PortfolioDataAccessInterface;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -54,6 +55,12 @@ public class FilePortfolioDataAccessObjectTest {
         filePortfolioDataAccessObject.addStockToPortfolioByID(1, newStock, 123.0);
 
         assertEquals(newStock, filePortfolioDataAccessObject.getPortfolioByID(1).getStockList().get(0));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testAddStockToPortfolioByIDThrowsNoSuchElementExceptionForUnmappedUserID() {
+        Stock newStock = new Stock("AAPL", LocalDateTime.now(), 1.0, 100.0);
+        filePortfolioDataAccessObject.addStockToPortfolioByID(2, newStock, 123.0);
     }
 
     @Test
