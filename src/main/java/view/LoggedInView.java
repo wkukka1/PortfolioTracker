@@ -235,8 +235,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 public void actionPerformed(ActionEvent e) {
                     String ticker = tickerField.getText();
                     double newQuantity = Double.parseDouble(amountField.getText());
+                    String username = loggedInViewModel.getLoggedInUser();
 
-                    editStockController.execute(ticker, newQuantity);
+                    editStockController.execute(ticker, newQuantity, username);
                     // TODO: Call ShowController.execute() to update the portfolio's netWorth
 
                     editStockFrame.dispose();  // Close the frame after the operation

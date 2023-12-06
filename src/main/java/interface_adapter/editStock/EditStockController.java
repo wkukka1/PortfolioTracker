@@ -10,8 +10,8 @@ public class EditStockController {
         this.editStockInteractor = interactor;
     }
 
-    public void execute(String tickerSymbol, double newQuantity){
-        EditStockInputData input = new EditStockInputData(tickerSymbol, newQuantity);
+    public void execute(String tickerSymbol, double newQuantity, String username){
+        EditStockInputData input = new EditStockInputData(tickerSymbol, newQuantity, username);
         editStockInteractor.execute(input);
     }
 }
