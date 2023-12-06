@@ -34,7 +34,7 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
 
             String tickerSymbol = removeStockInputData.getTicker(); // Ticker of Stock that needs to be removed
             String username = removeStockInputData.getUsername();
-            User user = userDataAccessObject.get(username);
+            User user = userDataAccessObject.getUserFromUsername(username);
             int userId = user.getUserID();
             Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId); // Current user's portfolio
             List<Stock> stockList = portfolio.getStockList();
