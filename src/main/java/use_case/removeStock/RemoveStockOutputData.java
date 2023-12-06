@@ -2,14 +2,30 @@ package use_case.removeStock;
 
 import entity.Stock;
 import java.util.List;
-public class RemoveStockOutputData {
-    private final List<Stock> stockList;
+import java.util.Map;
 
-    public RemoveStockOutputData(List<Stock> stockList){
-        this.stockList = stockList;
+public class RemoveStockOutputData {
+    private double newStockProfitToDate;
+    private Map<String, Double> tickersToQuantities;
+
+    public RemoveStockOutputData(double newStockProfitToDate, Map<String, Double> tickersToQuantities) {
+        this.newStockProfitToDate = newStockProfitToDate;
+        this.tickersToQuantities = tickersToQuantities;
     }
 
-    public List<Stock> getStockList(){
-        return this.stockList;
+    public double getNewStockProfitToDate() {
+        return newStockProfitToDate;
+    }
+
+    public void setNewStockProfitToDate(double newStockProfitToDate) {
+        this.newStockProfitToDate = newStockProfitToDate;
+    }
+
+    public Map<String, Double> getTickersToQuantities() {
+        return tickersToQuantities;
+    }
+
+    public void setTickersToQuantities(Map<String, Double> tickersToQuantities) {
+        this.tickersToQuantities = tickersToQuantities;
     }
 }
