@@ -1,6 +1,7 @@
 package view;
 
 import app.Main;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -126,7 +127,7 @@ public class LoginUsersTests {
     }
 
     @org.junit.Test
-    public void loginIncorrectPassword() {
+    public void loginIncorrectPassword() throws JsonProcessingException {
         addUser(1);
         Main.main(null);
         LabelTextPanel[] textPanels = getTextfeilds();
@@ -139,7 +140,7 @@ public class LoginUsersTests {
     }
 
     @org.junit.Test
-    public void loginIncorrectUser() {
+    public void loginIncorrectUser() throws JsonProcessingException {
         Main.main(null);
         LabelTextPanel[] textfield = getTextfeilds();
         LabelTextPanel usernameInputField = textfield[0];
