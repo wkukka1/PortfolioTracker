@@ -12,11 +12,9 @@ import javax.swing.*;
 
 public class RemoveStockPresenter implements RemoveStockOutputBoundary {
     private final LoggedInViewModel loggedInViewModel;
-    private ViewManagerModel viewManagerModel;
 
     public RemoveStockPresenter(ViewManagerModel viewManagerModel,
                                 LoggedInViewModel loggedInViewModel){
-        this.viewManagerModel = viewManagerModel;
         this.loggedInViewModel = loggedInViewModel;
     }
 
@@ -27,11 +25,9 @@ public class RemoveStockPresenter implements RemoveStockOutputBoundary {
     @Override
     public void prepareSuccessView(RemoveStockOutputData response){
         LoggedInState loggedInState = loggedInViewModel.getState();
-        this.loggedInViewModel.setState(loggedInState);
+        loggedInState.setNetProfit(response.getNewStockProfitToDate());
+        loggedInState.setTickersToAggregatedQuantities(response.getTickersToQuantities());
         loggedInViewModel.firePropertyChanged();
-
-        viewManagerModel.setActiveView(loggedInViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
     }
 
     /**
@@ -40,7 +36,7 @@ public class RemoveStockPresenter implements RemoveStockOutputBoundary {
      */
     @Override
     public void prepareFailView(String error){
-        JOptionPane.showMessageDialog(null, "There was an error in removing the stock. " + error,
+        JOptionPane.showMessageDialog(null, "There was an error in removing the stock.",
                 "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
