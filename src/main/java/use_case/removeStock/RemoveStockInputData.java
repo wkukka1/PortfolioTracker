@@ -2,11 +2,15 @@ package use_case.removeStock;
 import entity.Stock;
 
 public class RemoveStockInputData {
-    final private Stock stock;
+    final private String ticker;
 
-    public RemoveStockInputData(Stock stock){
-        this.stock = stock;
+    private final String username;
+
+    public RemoveStockInputData(String ticker, String username){
+        this.ticker = ticker;
+        this.username = username;
     }
 
-    public Stock getStock(){return this.stock;}
+    public String getTicker(){return this.ticker;}
+    public String getUsername(){return this.username;}
 }

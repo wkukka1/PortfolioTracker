@@ -11,8 +11,8 @@ public class RemoveStockController {
         this.removeStockInteractor = removeStockInteractor;
     }
 
-    public void execute(Stock stock){
-        RemoveStockInputData input = new RemoveStockInputData(stock);
+    public void execute(String ticker, String username){
+        RemoveStockInputData input = new RemoveStockInputData(ticker, username);
         removeStockInteractor.execute(input);
     }
 }
