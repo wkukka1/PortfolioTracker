@@ -179,14 +179,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridheight = 5;
         gbc.anchor = GridBagConstraints.NORTH;
         this.add(stocksScrollableList, gbc);
-
-//        gbc.gridx = 0;
-//        gbc.gridy = 4;
-//        gbc.gridwidth = 4;
-//        gbc.anchor = GridBagConstraints.EAST;
-//        gbc.weightx = 1.0; // Allow delete user button to expand horizontally
-//        gbc.weighty = 0.0; // Reset weight
-//        this.add(deleteUser, gbc);
     }
 
     /**
@@ -274,7 +266,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     String username = loggedInViewModel.getLoggedInUser();
 
                     editStockController.execute(ticker, newQuantity, username);
-                    // TODO: Call ShowController.execute() to update the portfolio's netWorth
 
                     editStockFrame.dispose();  // Close the frame after the operation
                 }

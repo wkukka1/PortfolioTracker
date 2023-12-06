@@ -43,7 +43,9 @@ public class EditStockInteractor implements EditStockInputBoundary {
             Investment stock = portfolio.getStockByTicker(tickerSymbol);
             stock.setQuantity(newQuantity);
 
-            Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities();
+            portfolioDataAccessObject.savePortfolio(portfolio); // Saves portfolio with updated quantity of the stock
+
+            Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities(); // Used in the outputdata to output the new quantity in the LoggedInView
 
             EditStockOutputData output = new EditStockOutputData(tickersToQuantities);
             editStockPresenter.prepareSuccessView(output);
