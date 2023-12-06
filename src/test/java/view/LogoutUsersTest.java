@@ -1,6 +1,7 @@
 package view;
 
 import app.Main;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -49,7 +50,9 @@ public class LogoutUsersTest {
         JPanel buttons = (JPanel) lv.getComponent(5);
 
         // Assuming logIn button is at index 0 in the buttons JPanel
-        return (JButton) buttons.getComponent(0);
+        JButton button =  (JButton) buttons.getComponent(0);
+
+        return button;
     }
 
     private LabelTextPanel[] getTextfeilds() {
@@ -130,7 +133,7 @@ public class LogoutUsersTest {
         // Assuming LoggedInView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(5);
+        return (JButton) lv.getComponent(4);
     }
 
     private JButton getLogoutBtn1() {
@@ -151,10 +154,10 @@ public class LogoutUsersTest {
         // Assuming LoggedInView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(6);
+        return (JButton) lv.getComponent(4);
     }
 
-    private boolean logoutUser() {
+    private boolean logoutUser() throws JsonProcessingException {
         addUser(1);
         Main.main(null);
         loginUser("user0", "password0");
@@ -174,12 +177,12 @@ public class LogoutUsersTest {
     }
 
     @org.junit.Test
-    public void testLogoutOneUser() {
+    public void testLogoutOneUser() throws JsonProcessingException {
         assert logoutUser();
     }
 
     @org.junit.Test
-    public void testLogoutError() {
+    public void testLogoutError() throws JsonProcessingException {
         Main.main(null);
         getLogoutBtn1().doClick();
         assert popUpExist();
