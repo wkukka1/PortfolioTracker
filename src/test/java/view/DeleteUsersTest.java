@@ -104,7 +104,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(6);
+        return (JButton) lv.getComponent(5);
     }
 
     public int[] countLines() {
@@ -127,23 +127,16 @@ public class DeleteUsersTest {
         // Get all the buttons
         LabelTextPanel[] textFields = getTextFields();
 
-        createCloseTimer().start();
 
         textFields[0].setText("user" + num);
         textFields[1].setText("password" + num);
 
-        createCloseTimer().start();
-
-        // Create a SwingWorker to perform the login operation in the background
         getLoginBtn().doClick();
 
-        // Start the close timer before clicking the delete button
-        createCloseTimer().start();
 
         JButton deleteBtn = getDeleteBtn();
         deleteBtn.doClick();
 
-        createCloseTimer().start();
         getConfirmationBtn().doClick();
     }
 
@@ -175,12 +168,8 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
-<<<<<<< HEAD:test/view/DeleteUsersTest.java
     public void getConfirmationTest() throws JsonProcessingException {
         Main.main(null);
-=======
-    public void getConfirmationTest() {
->>>>>>> main:src/test/java/view/DeleteUsersTest.java
         addUser(1);
         Main.main(null);
 
@@ -210,7 +199,6 @@ public class DeleteUsersTest {
         assert (textField[0].getLabel().getText().equals("Username") && textField[1].getLabel().getText().equals("Password"));
     }
 
-<<<<<<< HEAD:test/view/DeleteUsersTest.java
     @org.junit.Test
     public void testGetDeleteBtn() throws JsonProcessingException {
         Main.main(null);
@@ -218,9 +206,6 @@ public class DeleteUsersTest {
         System.out.println(button.getText());
         assert (button.getText().equals("Delete Account"));
     }
-=======
->>>>>>> main:src/test/java/view/DeleteUsersTest.java
-
     @org.junit.Test
     public void testDeleteOneAccount() throws JsonProcessingException {
         addUser(1);
@@ -267,19 +252,22 @@ public class DeleteUsersTest {
     @org.junit.Test
     public void testUsernameError() {
         addUser(1);
-        Main.main(null);
+        try {
+            Main.main(null);
+            int[] lines = countLines();
+            int initalUsers = lines[0];
+            int initalPort = lines[1];
 
-        int[] lines = countLines();
-        int initalUsers = lines[0];
-        int initalPort = lines[1];
+            deleteWrongAcc();
 
-        deleteWrongAcc();
+            int[] finalLines = countLines();
+            int finalUsers = finalLines[0];
+            int finalPortfolio = finalLines[1];
 
-        int[] finalLines = countLines();
-        int finalUsers = finalLines[0];
-        int finalPortfolio = finalLines[1];
-
-        assert (initalUsers == finalUsers && initalPort == finalPortfolio);
+            assert (initalUsers == finalUsers && initalPort == finalPortfolio);
+        } catch (JsonProcessingException e) {
+            System.out.println(e);
+        }
     }
 
     private void deleteWrongAcc() {
@@ -299,7 +287,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        JButton deleteBtn = (JButton) lv.getComponent(7);
+        JButton deleteBtn = (JButton) lv.getComponent(5);
         deleteBtn.doClick();
 
         windows = Window.getWindows();
