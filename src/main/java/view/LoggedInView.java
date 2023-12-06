@@ -49,6 +49,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     JButton editStock;
     JButton showButton;
+    JButton currencyButton;
     JPanel stocksScrollableList;
     JPanel plot;
 
@@ -98,6 +99,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         showButton = new JButton("Update Plot and Net Profit");
         showButton.addActionListener(this);
+
+        currencyButton = new JButton("Change Net Profit Currency");
+        currencyButton.addActionListener(this);
 
         this.setLayout(new GridBagLayout()); // Use GridBagLayout
 
@@ -158,10 +162,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         // Sets the coordinates for the Edit Stock button
         gbc.gridx = 7;
-        gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.EAST;
         // Creates the Edit Stock button
         this.add(editStock, gbc);
+
+        // Sets the coordinates for the Convert Currency button
+        gbc.gridx = 8;
+        gbc.anchor = GridBagConstraints.EAST;
+        // Creates the Convert Currency Button
+        this.add(currencyButton, gbc);
+
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -174,7 +184,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridwidth = 6;
         gbc.gridheight = 2;
         this.add(plot, gbc);
-        gbc.gridx = 6;
+        gbc.gridx = 8;
         gbc.gridy = 2;
         gbc.gridheight = 5;
         gbc.anchor = GridBagConstraints.NORTH;
@@ -370,7 +380,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
-            gbc.gridx = 6;
+            gbc.gridx = 8;
             gbc.gridy = 2;
             gbc.gridheight = 5;
             gbc.anchor = GridBagConstraints.NORTH;
