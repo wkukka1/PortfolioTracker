@@ -58,10 +58,15 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     }
 
     @Override
-    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) {
-        Portfolio currPortfolio = portfolios.get(userID);
-        currPortfolio.addStockToStockList(newStock);
-        currPortfolio.setNetProfit(currPortfolio.getNetProfit() + stockProfitToDate);
+    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) throws
+            NoSuchElementException {
+        try {
+            Portfolio currPortfolio = portfolios.get(userID);
+            currPortfolio.addStockToStockList(newStock);
+            currPortfolio.setNetProfit(currPortfolio.getNetProfit() + stockProfitToDate);
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException(e);
+        }
 
         this.save();
     }
