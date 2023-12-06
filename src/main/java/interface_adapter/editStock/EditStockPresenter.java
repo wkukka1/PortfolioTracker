@@ -10,12 +10,9 @@ import javax.swing.*;
 
 public class EditStockPresenter implements EditStockOutputBoundary {
     private final LoggedInViewModel loggedInViewModel;
-    private ViewManagerModel viewManagerModel;
 
-    public EditStockPresenter(LoggedInViewModel loggedInViewModel,
-                              ViewManagerModel viewManagerModel){
+    public EditStockPresenter(LoggedInViewModel loggedInViewModel){
         this.loggedInViewModel = loggedInViewModel;
-        this.viewManagerModel = viewManagerModel;
     }
     @Override
     public void prepareSuccessView(EditStockOutputData outputData){
@@ -23,9 +20,6 @@ public class EditStockPresenter implements EditStockOutputBoundary {
         this.loggedInViewModel.setState(loggedInState);
         loggedInState.setTickersToAggregatedQuantities(outputData.getTickersToAggregatedQuantities());
         loggedInViewModel.firePropertyChanged();
-
-        viewManagerModel.setActiveView(loggedInViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
     }
 
     @Override
