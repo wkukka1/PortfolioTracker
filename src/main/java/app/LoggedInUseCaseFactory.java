@@ -49,7 +49,7 @@ public class LoggedInUseCaseFactory {
                                       DeleteViewModel deleteViewModel,
                                       FilePortfolioDataAccessObject portfolioDataAccessObject,
                                       StockPriceDataAccessInterface stockPriceClientImpl, LoginView loginView,
-                                      StockCalculationService stockCalculationServiceImpl) {
+                                      StockCalculationService stockCalculationServiceImpl, RemoveStockUserDataAccessInterface removeStockUserDataAccessObject) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
@@ -61,8 +61,11 @@ public class LoggedInUseCaseFactory {
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
 
+
+            RemoveStockController removeStockController = createRemoveStockUseCase(viewManagerModel, loggedInViewModel, removeStockUserDataAccessObject, portfolioDataAccessObject);
+
             return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator,
-                    addStockController, logoutController);
+                    addStockController, logoutController, removeStockController);
         } catch(IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
