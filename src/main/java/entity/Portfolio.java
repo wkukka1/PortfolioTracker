@@ -1,6 +1,10 @@
 package entity;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Portfolio {
     private List<Stock> stockList;
@@ -40,5 +44,21 @@ public class Portfolio {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    public Map<String, Double> generateTickersToQuantities() {
+        Map<String, Double> tickersToQuantities = new HashMap<>();
+        for (Stock stock : this.getStockList()) {
+            tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
+                    0.0) + stock.getQuantity());
+        }
+        tickersToQuantities.replaceAll((ticker, quantity) -> roundToHundredths(quantity));
+        return tickersToQuantities;
+    }
+
+    private double roundToHundredths(double value) {
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

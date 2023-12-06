@@ -7,11 +7,6 @@ import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.Portfolio;
 import entity.UserFactory;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.delete_user.DeleteController;
-import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.signup.SignupViewModel;
-import use_case.signup.PortfolioDataAccessInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +44,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
                 app = (JFrame) window;
             }
         }
@@ -73,7 +68,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
                 app = (JFrame) window;
             }
         }
@@ -96,7 +91,7 @@ public class DeleteUsersTest {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
-            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("StockTrack")) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
                 app = (JFrame) window;
             }
         }
@@ -109,7 +104,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(4);
+        return (JButton) lv.getComponent(6);
     }
 
     public int[] countLines() {
@@ -180,15 +175,21 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
+<<<<<<< HEAD:test/view/DeleteUsersTest.java
     public void getConfirmationTest() throws JsonProcessingException {
         Main.main(null);
+=======
+    public void getConfirmationTest() {
+>>>>>>> main:src/test/java/view/DeleteUsersTest.java
         addUser(1);
+        Main.main(null);
+
         LabelTextPanel[] textFields = getTextFields();
 
         createCloseTimer().start();
 
-        textFields[0].setText("user" + 1);
-        textFields[1].setText("password1");
+        textFields[0].setText("user0");
+        textFields[1].setText("password0");
 
         createCloseTimer().start();
 
@@ -206,10 +207,10 @@ public class DeleteUsersTest {
         Main.main(null);
         LabelTextPanel[] textField = getTextFields();
         System.out.println(textField[0].getLabel().getText());
-        assert (textField[0].getLabel().getText().equals("Username") &&
-                textField[1].getLabel().getText().equals("Password"));
+        assert (textField[0].getLabel().getText().equals("Username") && textField[1].getLabel().getText().equals("Password"));
     }
 
+<<<<<<< HEAD:test/view/DeleteUsersTest.java
     @org.junit.Test
     public void testGetDeleteBtn() throws JsonProcessingException {
         Main.main(null);
@@ -217,6 +218,8 @@ public class DeleteUsersTest {
         System.out.println(button.getText());
         assert (button.getText().equals("Delete Account"));
     }
+=======
+>>>>>>> main:src/test/java/view/DeleteUsersTest.java
 
     @org.junit.Test
     public void testDeleteOneAccount() throws JsonProcessingException {
@@ -261,6 +264,59 @@ public class DeleteUsersTest {
 
     }
 
+    @org.junit.Test
+    public void testUsernameError() {
+        addUser(1);
+        Main.main(null);
+
+        int[] lines = countLines();
+        int initalUsers = lines[0];
+        int initalPort = lines[1];
+
+        deleteWrongAcc();
+
+        int[] finalLines = countLines();
+        int finalUsers = finalLines[0];
+        int finalPortfolio = finalLines[1];
+
+        assert (initalUsers == finalUsers && initalPort == finalPortfolio);
+    }
+
+    private void deleteWrongAcc() {
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("PortfolioTracker")) {
+                app = (JFrame) window;
+            }
+        }
+        assertNotNull(app);
+
+        Component root = app.getComponent(0);
+        Component cp = ((JRootPane) root).getContentPane();
+        JPanel jp = (JPanel) cp;
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+        // Assuming LoginView is at index 1 in the JPanel
+        LoggedInView lv = (LoggedInView) jp2.getComponent(2);
+
+        JButton deleteBtn = (JButton) lv.getComponent(7);
+        deleteBtn.doClick();
+
+        windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame && ((JFrame) window).getTitle().equals("Confirmation")) {
+                app = (JFrame) window;
+            }
+        }
+        assertNotNull(app);
+
+        root = app.getComponent(0);
+        cp = ((JRootPane) root).getContentPane();
+
+        JButton confirmationBtn = (JButton) ((JPanel) cp).getComponent(1);
+        confirmationBtn.doClick();
+    }
+
 
     private Timer createCloseTimer() {
         ActionListener close = new ActionListener() {
@@ -277,8 +333,7 @@ public class DeleteUsersTest {
 
                         // this ignores old dialogs
                         if (dialog.isVisible()) {
-                            String s = ((JOptionPane) ((BorderLayout) dialog.getRootPane()
-                                    .getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER)).getMessage().toString();
+                            String s = ((JOptionPane) ((BorderLayout) dialog.getRootPane().getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER)).getMessage().toString();
                             System.out.println("message = " + s);
 
                             // store the information we got from the JDialog

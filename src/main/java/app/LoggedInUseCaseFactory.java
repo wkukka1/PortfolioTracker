@@ -6,6 +6,7 @@ import interface_adapter.logged_in.add_stock.AddStockPresenter;
 import use_case.add_stock.AddStockInputBoundary;
 import use_case.add_stock.AddStockInteractor;
 import use_case.add_stock.AddStockOutputBoundary;
+import use_case.add_stock.StockCalculationService;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 import view.LoggedInView;
@@ -30,6 +31,7 @@ import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoginView;
+import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -44,9 +46,8 @@ public class LoggedInUseCaseFactory {
                                       SignupUserDataAccessInterface userDataAccessInterface,
                                       DeleteViewModel deleteViewModel,
                                       FilePortfolioDataAccessObject portfolioDataAccessObject,
-                                      LoginView loginView,
-                                      StockFieldValidator stockFieldValidator,
-                                      StockPriceDataAccessInterface stockDataAccessObject
+                                      StockPriceDataAccessInterface stockDataAccessObject, LoginView loginView,
+                                      StockCalculationService stockCalculationServiceImpl
                                       ) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
@@ -56,8 +57,8 @@ public class LoggedInUseCaseFactory {
 
             DeleteState deleteState = new DeleteState();
             AddStockController addStockController = createAddStockUseCase(stockDataAccessObject,
-                    portfolioDataAccessObject, loggedInViewModel);
-//            StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
+                    portfolioDataAccessObject, loggedInViewModel, stockCalculationServiceImpl);
+            StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();;
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
             return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showController);
@@ -95,10 +96,11 @@ public class LoggedInUseCaseFactory {
 
     private static AddStockController createAddStockUseCase(StockPriceDataAccessInterface stockPriceClientImpl,
                                                             PortfolioDataAccessInterface portfolioDataAccessInterface,
-                                                            LoggedInViewModel loggedInViewModel) {
+                                                            LoggedInViewModel loggedInViewModel,
+                                                            StockCalculationService stockCalculationServiceImpl) {
         AddStockOutputBoundary addStockPresenter = new AddStockPresenter(loggedInViewModel);
         AddStockInputBoundary addStockInteractor = new AddStockInteractor(stockPriceClientImpl,
-                portfolioDataAccessInterface, addStockPresenter);
+                portfolioDataAccessInterface, addStockPresenter, stockCalculationServiceImpl);
         return new AddStockController(addStockInteractor);
     }
 }
