@@ -1,5 +1,6 @@
 package editStock;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.*;
@@ -129,7 +130,7 @@ public class EditStockTest {
     }
 
     @org.junit.Test
-    public void editOneStockTest(){
+    public void editOneStockTest() throws JsonProcessingException {
         // LoggedInViewModel
         LoggedInViewModel viewModel = new LoggedInViewModel();
 
@@ -180,7 +181,7 @@ public class EditStockTest {
     }
 
     @org.junit.Test
-    public void multipleStocksTest(){
+    public void multipleStocksTest() throws JsonProcessingException {
         // LoggedInViewModel
         LoggedInViewModel viewModel = new LoggedInViewModel();
 
@@ -234,7 +235,7 @@ public class EditStockTest {
     }
 
     @org.junit.Test
-    public void failViewTest(){
+    public void failViewTest() throws JsonProcessingException {
         // LoggedInViewModel
         LoggedInViewModel viewModel = new LoggedInViewModel();
 
