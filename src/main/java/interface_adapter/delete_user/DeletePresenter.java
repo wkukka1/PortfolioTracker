@@ -1,6 +1,7 @@
 package interface_adapter.delete_user;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import use_case.delete_user.DeleteOutputBoundary;
@@ -25,6 +26,10 @@ public class DeletePresenter implements DeleteOutputBoundary{
 
     @Override
     public void prepareSuccessView(DeleteOutputData user){
+        LoggedInState loggedInState = loggedInViewModel.getState();
+        loggedInState.setPanel(null);
+        this.loggedInViewModel.setState(loggedInState);
+        this.loggedInViewModel.firePropertyChanged();
         DeleteState deleteState = deleteViewModel.getState();
         deleteState.setUser(user.getUser());
         deleteState.setSuccess(true);

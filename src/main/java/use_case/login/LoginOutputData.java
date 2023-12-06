@@ -42,4 +42,5 @@ public class LoginOutputData {
     public void setTickersToQuantities(Map<String, Double> tickersToQuantities) {
         this.tickersToQuantities = tickersToQuantities;
     }
+
 }

@@ -1,6 +1,7 @@
 package view;
 
 import app.Main;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -166,7 +167,7 @@ public class DeleteUsersTest {
 
 
     @org.junit.Test
-    public void testGetLoginBtn() {
+    public void testGetLoginBtn() throws JsonProcessingException {
         Main.main(null);
         JButton button = getLoginBtn();
         System.out.println(button.getText());
@@ -174,7 +175,12 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
+<<<<<<< HEAD:test/view/DeleteUsersTest.java
+    public void getConfirmationTest() throws JsonProcessingException {
+        Main.main(null);
+=======
     public void getConfirmationTest() {
+>>>>>>> main:src/test/java/view/DeleteUsersTest.java
         addUser(1);
         Main.main(null);
 
@@ -197,16 +203,26 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
-    public void testGetTextFeilds() {
+    public void testGetTextFields() throws JsonProcessingException {
         Main.main(null);
         LabelTextPanel[] textField = getTextFields();
         System.out.println(textField[0].getLabel().getText());
         assert (textField[0].getLabel().getText().equals("Username") && textField[1].getLabel().getText().equals("Password"));
     }
 
+<<<<<<< HEAD:test/view/DeleteUsersTest.java
+    @org.junit.Test
+    public void testGetDeleteBtn() throws JsonProcessingException {
+        Main.main(null);
+        JButton button = getDeleteBtn();
+        System.out.println(button.getText());
+        assert (button.getText().equals("Delete Account"));
+    }
+=======
+>>>>>>> main:src/test/java/view/DeleteUsersTest.java
 
     @org.junit.Test
-    public void testDeleteOneAccount() {
+    public void testDeleteOneAccount() throws JsonProcessingException {
         addUser(1);
         Main.main(null);
 
@@ -225,7 +241,7 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
-    public void testDeleteMultipleAccounts() {
+    public void testDeleteMultipleAccounts() throws JsonProcessingException {
         addUser(5);
         Main.main(null);
 

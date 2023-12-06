@@ -5,12 +5,13 @@ import entity.Stock;
 import org.apache.commons.lang3.StringUtils;
 import use_case.PortfolioDataAccessInterface;
 import use_case.delete_user.DeletePortfolioAccessInterface;
+import use_case.show.ShowPortfolioDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterface, DeletePortfolioAccessInterface {
+public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterface, DeletePortfolioAccessInterface, ShowPortfolioDataAccessInterface {
     private final File csvFile;
     private final Map<String, Integer> headers = new LinkedHashMap<>();
     private final Map<Integer, Portfolio> portfolios = new HashMap<>();
@@ -21,7 +22,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     public FilePortfolioDataAccessObject(String csvPath) throws IOException {
         this.csvFile = new File(csvPath);
         headers.put("userID", 0);
-        headers.put("netWorth", 1);
+        headers.put("netProfit", 1);
         headers.put("stockList", 2);
 
         if (csvFile.length() == 0) {
@@ -34,7 +35,7 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
                     String[] col = row.split(",", headers.size());
 
                     int userID = Integer.parseInt(String.valueOf(col[headers.get("userID")]));
-                    double netProfit = Double.parseDouble(String.valueOf(col[headers.get("netWorth")]));
+                    double netProfit = Double.parseDouble(String.valueOf(col[headers.get("netProfit")]));
 
                     String encodedStocks = String.valueOf(col[headers.get("stockList")]);
                     ArrayList<Stock> decodedStockList = decodeStockStrIntoStockList(encodedStocks);
@@ -58,10 +59,15 @@ public class FilePortfolioDataAccessObject implements PortfolioDataAccessInterfa
     }
 
     @Override
-    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) {
-        Portfolio currPortfolio = portfolios.get(userID);
-        currPortfolio.addStockToStockList(newStock);
-        currPortfolio.setNetProfit(currPortfolio.getNetProfit() + stockProfitToDate);
+    public void addStockToPortfolioByID(int userID, Stock newStock, double stockProfitToDate) throws
+            NoSuchElementException {
+        try {
+            Portfolio currPortfolio = portfolios.get(userID);
+            currPortfolio.addStockToStockList(newStock);
+            currPortfolio.setNetProfit(currPortfolio.getNetProfit() + stockProfitToDate);
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException(e);
+        }
 
         this.save();
     }

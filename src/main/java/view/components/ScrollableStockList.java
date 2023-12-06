@@ -56,7 +56,7 @@ class DataPanel extends JPanel implements Scrollable {
         if (getComponentCount() > 0) {
             JComponent comp = (JComponent) getComponents()[0];
             int width = 200;
-            int height = 100;
+            int height = 800; // changed to 800 here from 100 originally
             Dimension d = new Dimension(width, height);
             System.out.println(d);
             return d;
