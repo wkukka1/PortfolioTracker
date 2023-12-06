@@ -5,6 +5,7 @@ import use_case.show.StockPriceDataAccessInterface;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
 
 public class StockFactory {
     private final StockPriceDataAccessInterface stockPriceClientImpl;
@@ -14,7 +15,7 @@ public class StockFactory {
         this.stockPriceClientImpl = stockPriceClientImpl;
     }
 
-    public Stock createStock(AddStockInputData addStockData) throws IOException {
+    public Stock createStock(AddStockInputData addStockData) throws NoSuchElementException {
         String purchaseDate = addStockData.getPurchaseLocalDateTime().format(formatter);
 
         try {
@@ -31,7 +32,7 @@ public class StockFactory {
             );
         } catch (IOException | IllegalArgumentException e) {
             // Handle exceptions or throw a custom exception
-            throw new IOException("Error creating stock: " + e.getMessage());
+            throw new NoSuchElementException("Error creating stock: " + e.getMessage());
         }
     }
 }
