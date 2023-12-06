@@ -52,6 +52,7 @@ public class AddStockInteractor implements AddStockInputBoundary {
             addStockPresenter.prepareNonSuccessView(ADD_STOCK_BAD_DATE_ERROR);
             return;
         }
+
         Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID());
         Map<String, Double> tickersToQuantities = currPortfolio.generateTickersToQuantities();
 
