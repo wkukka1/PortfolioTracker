@@ -23,24 +23,12 @@ public class AddStockInputData {
         return tickerSymbol;
     }
 
-    public void setTickerSymbol(String tickerSymbol) {
-        this.tickerSymbol = tickerSymbol;
-    }
-
     public LocalDateTime getPurchaseLocalDateTime() {
         return purchaseLocalDateTime;
     }
 
-    public void setPurchaseLocalDateTime(LocalDateTime purchaseLocalDateTime) {
-        this.purchaseLocalDateTime = purchaseLocalDateTime;
-    }
-
     public double getTotalValueAtPurchase() {
         return totalValueAtPurchase;
-    }
-
-    public void setTotalValueAtPurchase(double totalValueAtPurchase) {
-        this.totalValueAtPurchase = totalValueAtPurchase;
     }
 
     public int getUserID() {

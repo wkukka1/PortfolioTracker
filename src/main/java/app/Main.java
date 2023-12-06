@@ -81,7 +81,8 @@ public class Main {
 
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(application, loggedInViewModel, loginViewModel,
                 viewManagerModel, userDataAccessObject, deleteViewModel, portfolioDataAccessObject,
-                stockInfoClient, loginView, stockCalculationServiceImpl);
+                stockInfoClient, loginView, stockCalculationServiceImpl, userDataAccessObject);
+
         views.add(loggedInView, loggedInView.viewName);
 
 

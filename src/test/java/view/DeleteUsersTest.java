@@ -206,6 +206,7 @@ public class DeleteUsersTest {
         System.out.println(button.getText());
         assert (button.getText().equals("Delete Account"));
     }
+
     @org.junit.Test
     public void testDeleteOneAccount() throws JsonProcessingException {
         addUser(1);

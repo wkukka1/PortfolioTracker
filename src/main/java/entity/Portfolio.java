@@ -46,6 +46,16 @@ public class Portfolio {
         this.userID = userID;
     }
 
+    public Stock getStockByTicker(String tickerSymbol) {
+        for (Stock s : stockList) {
+            String ticker = s.getTickerSymbol();
+            if (ticker.equals(tickerSymbol)) {
+                return s;
+            }
+        }
+        System.out.println("No stock found");
+        return null;
+    }
     public Map<String, Double> generateTickersToQuantities() {
         Map<String, Double> tickersToQuantities = new HashMap<>();
         for (Investment stock : this.getStockList()) {
