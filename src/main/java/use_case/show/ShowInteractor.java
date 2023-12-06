@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Investment;
 import entity.Portfolio;
+import entity.Short;
 import entity.Stock;
 
 import java.awt.*;
@@ -48,6 +49,7 @@ public class ShowInteractor implements ShowInputBoundary {
         LocalDateTime startDate = today.minusDays(1000);
 
         for (Investment stock : stockList) {
+            double initialPrice = stock.getTotalValueAtPurchase();
             // Going through each stock in the list of stocks, making an API call for each one
             JSONObject rawStockInfo = stockDataAccessObject.getStockInfo(stock.getTickerSymbol());
             HashMap<String, HashMap<String, String>> processedStockInfo = jsonToHashMap(rawStockInfo);
@@ -59,8 +61,14 @@ public class ShowInteractor implements ShowInputBoundary {
                     if (dailyData != null) {
                         String closingPrice = dailyData.get("4. close");
                         Double price = Double.valueOf(closingPrice);
-                        dateToNetWorth.put(dateStringWithoutTime,
-                                dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0) + stock.getQuantity() * price);
+                        if(stock instanceof Short){
+                            dateToNetWorth.put(dateStringWithoutTime, dateToNetWorth.getOrDefault(dateStringWithoutTime,
+                                    0.0) + stock.getQuantity() * (initialPrice - price));
+                        } else if (stock instanceof Stock) {
+                            dateToNetWorth.put(dateStringWithoutTime,
+                                    dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0) + stock.getQuantity() * price);
+                        }
+
                     } else {
                         String dayBeforeStringWithoutTime = date.minusDays(1).toString().substring(0, 10);
                         dateToNetWorth.put(dateStringWithoutTime,
