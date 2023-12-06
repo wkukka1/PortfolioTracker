@@ -8,12 +8,15 @@ public class AddStockInputData {
     private double totalValueAtPurchase;
     private int userID;
 
+    private String investmentType;
+
     public AddStockInputData(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double totalValueAtPurchase,
-                             int userID) {
+                             int userID, String investmentType) {
         this.tickerSymbol = tickerSymbol;
         this.purchaseLocalDateTime = purchaseLocalDateTime;
         this.totalValueAtPurchase = totalValueAtPurchase;
         this.userID = userID;
+        this.investmentType = investmentType;
     }
 
     public String getTickerSymbol() {
@@ -46,5 +49,13 @@ public class AddStockInputData {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    public void setInvestmentType(String investmentType){
+        this.investmentType = investmentType;
+    }
+
+    public String getInvestmentType(){
+        return investmentType;
     }
 }
