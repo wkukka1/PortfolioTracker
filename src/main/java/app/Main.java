@@ -1,8 +1,9 @@
 package app;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import data_access.StockPriceClientImpl;
+import data_access.StockInfoClient;
 import entity.CommonUserFactory;
 
 import interface_adapter.delete_user.DeleteViewModel;
@@ -17,6 +18,7 @@ import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
+import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +27,7 @@ import java.io.IOException;
 public class Main {
     private static final String PORTFOLIOS_CSV_FILE_PATH = "./portfolios.csv";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         // Build the main program window, the main panel containing the
         // various cards, and the layout, and stitch them together.
 
@@ -73,14 +75,16 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel,
                 userDataAccessObject, signupView, portfolioDataAccessObject);
         views.add(loginView, loginView.viewName);
-        
-        StockPriceDataAccessInterface stockPriceClientImpl = new StockPriceClientImpl();
-        StockCalculationService stockCalculationServiceImpl = new StockCalculationServiceImpl(stockPriceClientImpl);
+
+        StockPriceDataAccessInterface stockInfoClient = new StockInfoClient();
+        StockCalculationService stockCalculationServiceImpl = new StockCalculationServiceImpl(stockInfoClient);
 
         LoggedInView loggedInView = LoggedInUseCaseFactory.create(application, loggedInViewModel, loginViewModel,
                 viewManagerModel, userDataAccessObject, deleteViewModel, portfolioDataAccessObject,
-                stockPriceClientImpl, loginView, stockCalculationServiceImpl, userDataAccessObject);
+                stockInfoClient, loginView, stockCalculationServiceImpl, userDataAccessObject);
+
         views.add(loggedInView, loggedInView.viewName);
+
 
         viewManagerModel.setActiveView(loginView.viewName);
         viewManagerModel.firePropertyChanged();

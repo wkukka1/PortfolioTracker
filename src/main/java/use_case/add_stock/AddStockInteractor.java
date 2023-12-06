@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class AddStockInteractor implements AddStockInputBoundary {
     private final StockPriceDataAccessInterface stockPriceClientImpl;
@@ -42,7 +43,9 @@ public class AddStockInteractor implements AddStockInputBoundary {
             newStockProfitToDate = stockCalculationServiceImpl.calculateNewStockProfitToDate(newStock);
             overallNetProfit = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID()).getNetProfit() +
                     newStockProfitToDate;
-        } catch (IOException e) {
+
+            portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
+        } catch (IOException | NoSuchElementException e) {
             addStockPresenter.prepareNonSuccessView(ADD_STOCK_DEFAULT_ERROR);
             return;
         } catch (IllegalArgumentException e) {
@@ -50,7 +53,6 @@ public class AddStockInteractor implements AddStockInputBoundary {
             return;
         }
 
-        portfolioDataAccessImpl.addStockToPortfolioByID(addStockData.getUserID(), newStock, newStockProfitToDate);
         Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(addStockData.getUserID());
         Map<String, Double> tickersToQuantities = currPortfolio.generateTickersToQuantities();
 

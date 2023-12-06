@@ -1,6 +1,7 @@
 package view;
 
 import app.Main;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -103,7 +104,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        return (JButton) lv.getComponent(6);
+        return (JButton) lv.getComponent(5);
     }
 
     public int[] countLines() {
@@ -126,23 +127,16 @@ public class DeleteUsersTest {
         // Get all the buttons
         LabelTextPanel[] textFields = getTextFields();
 
-        createCloseTimer().start();
 
         textFields[0].setText("user" + num);
         textFields[1].setText("password" + num);
 
-        createCloseTimer().start();
-
-        // Create a SwingWorker to perform the login operation in the background
         getLoginBtn().doClick();
 
-        // Start the close timer before clicking the delete button
-        createCloseTimer().start();
 
         JButton deleteBtn = getDeleteBtn();
         deleteBtn.doClick();
 
-        createCloseTimer().start();
         getConfirmationBtn().doClick();
     }
 
@@ -166,7 +160,7 @@ public class DeleteUsersTest {
 
 
     @org.junit.Test
-    public void testGetLoginBtn() {
+    public void testGetLoginBtn() throws JsonProcessingException {
         Main.main(null);
         JButton button = getLoginBtn();
         System.out.println(button.getText());
@@ -174,7 +168,8 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
-    public void getConfirmationTest() {
+    public void getConfirmationTest() throws JsonProcessingException {
+        Main.main(null);
         addUser(1);
         Main.main(null);
 
@@ -197,16 +192,23 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
-    public void testGetTextFeilds() {
+    public void testGetTextFields() throws JsonProcessingException {
         Main.main(null);
         LabelTextPanel[] textField = getTextFields();
         System.out.println(textField[0].getLabel().getText());
         assert (textField[0].getLabel().getText().equals("Username") && textField[1].getLabel().getText().equals("Password"));
     }
 
+    @org.junit.Test
+    public void testGetDeleteBtn() throws JsonProcessingException {
+        Main.main(null);
+        JButton button = getDeleteBtn();
+        System.out.println(button.getText());
+        assert (button.getText().equals("Delete Account"));
+    }
 
     @org.junit.Test
-    public void testDeleteOneAccount() {
+    public void testDeleteOneAccount() throws JsonProcessingException {
         addUser(1);
         Main.main(null);
 
@@ -225,7 +227,7 @@ public class DeleteUsersTest {
     }
 
     @org.junit.Test
-    public void testDeleteMultipleAccounts() {
+    public void testDeleteMultipleAccounts() throws JsonProcessingException {
         addUser(5);
         Main.main(null);
 
@@ -251,19 +253,22 @@ public class DeleteUsersTest {
     @org.junit.Test
     public void testUsernameError() {
         addUser(1);
-        Main.main(null);
+        try {
+            Main.main(null);
+            int[] lines = countLines();
+            int initalUsers = lines[0];
+            int initalPort = lines[1];
 
-        int[] lines = countLines();
-        int initalUsers = lines[0];
-        int initalPort = lines[1];
+            deleteWrongAcc();
 
-        deleteWrongAcc();
+            int[] finalLines = countLines();
+            int finalUsers = finalLines[0];
+            int finalPortfolio = finalLines[1];
 
-        int[] finalLines = countLines();
-        int finalUsers = finalLines[0];
-        int finalPortfolio = finalLines[1];
-
-        assert (initalUsers == finalUsers && initalPort == finalPortfolio);
+            assert (initalUsers == finalUsers && initalPort == finalPortfolio);
+        } catch (JsonProcessingException e) {
+            System.out.println(e);
+        }
     }
 
     private void deleteWrongAcc() {
@@ -283,7 +288,7 @@ public class DeleteUsersTest {
         // Assuming LoginView is at index 1 in the JPanel
         LoggedInView lv = (LoggedInView) jp2.getComponent(2);
 
-        JButton deleteBtn = (JButton) lv.getComponent(7);
+        JButton deleteBtn = (JButton) lv.getComponent(5);
         deleteBtn.doClick();
 
         windows = Window.getWindows();

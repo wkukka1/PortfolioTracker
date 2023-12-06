@@ -15,11 +15,16 @@ public class AVTimeSeriesDailyDeserializerImpl implements AVTimeSeriesDailyDeser
     private static String LOW_FIELD_NAME = "3. low";
     private static String CLOSE_FIELD_NAME = "4. close";
     private static String VOLUME_FIELD_NAME = "5. volume";
+    private static final String META_DATA_MARKER = "Meta Data";
 
     public AVTimeSeriesDailyResponse deserialize(String AVTimeSeriesDailyResStr, String date)
             throws IOException, IllegalArgumentException, NoSuchElementException {
         if (StringUtils.isEmpty(date)) {
             throw new IllegalArgumentException();
+        } else if (!AVTimeSeriesDailyResStr.contains(META_DATA_MARKER)) {
+            throw new IOException();
+        } else if (!AVTimeSeriesDailyResStr.contains(date)) {
+            throw new NoSuchElementException();
         }
 
         JsonFactory jsonFactory = new JsonFactory();
@@ -65,11 +70,6 @@ public class AVTimeSeriesDailyDeserializerImpl implements AVTimeSeriesDailyDeser
         }
 
         jsonParser.close();
-
-        if (open == -1 || high == -1 || low == -1 || close == -1 || volume == -1) {
-            throw new NoSuchElementException("No data exists for the provided date");
-        }
-
         return new AVTimeSeriesDailyResponse(date, open, high, low, close, volume);
     }
 }

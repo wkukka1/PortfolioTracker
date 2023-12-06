@@ -25,6 +25,7 @@ public class Portfolio {
         this.stockList = stockList;
     }
 
+
     public void addStockToStockList(Stock newStock) {
         stockList.add(newStock);
     }
@@ -61,17 +62,13 @@ public class Portfolio {
             tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
                     0.0) + stock.getQuantity());
         }
-        tickersToQuantities.replaceAll((ticker, quantity) -> round(quantity, 2));
+        tickersToQuantities.replaceAll((ticker, quantity) -> roundToHundredths(quantity));
         return tickersToQuantities;
     }
 
-    private double round(double value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-
+    private double roundToHundredths(double value) {
         BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
 }
