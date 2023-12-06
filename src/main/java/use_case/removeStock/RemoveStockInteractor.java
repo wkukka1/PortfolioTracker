@@ -1,6 +1,7 @@
 package use_case.removeStock;
 
 import java.util.List;
+import java.util.Map;
 
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.PortfolioDataAccessInterface;
@@ -29,17 +30,25 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
      */
     public void execute(RemoveStockInputData removeStockInputData){
         try{
-            Stock stock = removeStockInputData.getStock(); // Stock that needs to be removed
-            String username = loggedInViewModel.getLoggedInUser();
+            double netProfit;
+
+            String tickerSymbol = removeStockInputData.getTicker(); // Ticker of Stock that needs to be removed
+            String username = removeStockInputData.getUsername();
             User user = userDataAccessObject.get(username);
             int userId = user.getUserID();
             Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId); // Current user's portfolio
             List<Stock> stockList = portfolio.getStockList();
 
-            stockList.remove(stock);
-            portfolio.setStockList(stockList);
+            Stock stock = portfolio.getStockByTicker(tickerSymbol); // Stock to be removed
+            stockList.remove(stock); // Removes the stock
 
-            RemoveStockOutputData outputData = new RemoveStockOutputData(stockList);
+            portfolio.setStockList(stockList); // Updates the stock list
+
+            Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities();
+
+            netProfit = portfolio.getNetProfit(); // Updated net profit
+
+            RemoveStockOutputData outputData = new RemoveStockOutputData(netProfit, tickersToQuantities);
             removeStockPresenter.prepareSuccessView(outputData);
         } catch (Exception e){
             removeStockPresenter.prepareFailView(e.toString());
