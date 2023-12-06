@@ -183,6 +183,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             JFormattedTextField dateField = new JFormattedTextField(df);
 
+            JRadioButton longRadioButton = new JRadioButton("Long");
+            JRadioButton shortRadioButton = new JRadioButton("Short");
+
+            ButtonGroup buttonGroup = new ButtonGroup();
+            buttonGroup.add(longRadioButton);
+            buttonGroup.add(shortRadioButton);
+
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             panel.add(new JLabel("Enter Ticker Symbol:"));
@@ -191,6 +198,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             panel.add(dateField);
             panel.add(new JLabel("Enter Amount (USD):"));
             panel.add(amountField);
+            panel.add(new JLabel("Select Type of Investment:"));
+            panel.add(longRadioButton);
+            panel.add(shortRadioButton);
 
             int result = JOptionPane.showConfirmDialog(this, panel, "Add Stock",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -200,15 +210,24 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 String date = dateField.getText();
                 String amountStr = amountField.getText();
 
+                // Determine the selected position type
+                String investmentType;
+                if (shortRadioButton.isSelected()) {
+                    investmentType = "Short";
+                } else {
+                    investmentType = "Long";
+                }
+
                 try {
-                    validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
+                    validateAllFieldsOrShowErrorMsg(ticker, date, amountStr, investmentType);
                 } catch (ValidationException validationException) {
-                    System.out.println("Stock Field Validation Exception Occurred");;
+                    System.out.println("Stock Field Validation Exception Occurred");
                     return;
                 }
 
-                addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
+                addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID(), investmentType);
             }
+
 
         } if (evt.getSource() == deleteUser){
             deleteConfirmation();
@@ -268,7 +287,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     }
 
 
-    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr)
+    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr, String investementType)
             throws ValidationException {
         if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
             if (!this.stockFieldValidator.isDateStrValid(date)) {
@@ -278,6 +297,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             } else if (!this.stockFieldValidator.isAmountStrValid(amountStr)) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid (and non-zero) amount.");
+            }else if (!this.stockFieldValidator.isTypeValid(investementType)){
+                JOptionPane.showMessageDialog(this, "Please indicate what your investment type");
             } else {
                 return;
             }

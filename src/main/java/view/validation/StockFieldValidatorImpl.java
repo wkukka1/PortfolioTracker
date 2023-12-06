@@ -3,6 +3,7 @@ package view.validation;
 import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class StockFieldValidatorImpl implements StockFieldValidator {
@@ -61,5 +62,13 @@ public class StockFieldValidatorImpl implements StockFieldValidator {
             return false;
         }
         return !ZERO_VALUE_PATTERN.matcher(amount).matches();
+    }
+
+    @Override
+    public boolean isTypeValid(String investmentType) {
+        if(Objects.equals(investmentType, "Long") | Objects.equals(investmentType, "Short")){
+            return true;
+        }
+        return false;
     }
 }
