@@ -28,9 +28,7 @@ public class ExchangeRateClient implements CurrencyDataAccessInterface {
     public JSONObject getCurrencyInfo(String base, String symbol) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
-                .url(String.format(BASE_URL + "%s/pair/%s/%s",
-                        System.getenv("CURRENCY_API_KEY"), base, symbol))
-                .build();
+                .url(String.format("https://v6.exchangerate-api.com/v6/4494b073ffea48f4942b242b/latest/"+symbol)).build();
 
         try {
             Response response = client.newCall(request).execute();
