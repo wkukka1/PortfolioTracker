@@ -72,7 +72,7 @@ public class LoggedInUseCaseFactory {
                     portfolioDataAccessObject, loggedInViewModel, stockCalculationServiceImpl);
             StockFieldValidator stockFieldValidator = new StockFieldValidatorImpl();
 
-            EditStockController editStockController = createEditStockController(viewManagerModel, loggedInViewModel, editStockUserDataAccessInterface, portfolioDataAccessObject);
+            EditStockController editStockController = createEditStockController(loggedInViewModel, editStockUserDataAccessInterface, portfolioDataAccessObject);
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
             CurrencyController currencyController = createCurrentyController(loggedInViewModel);
@@ -108,12 +108,11 @@ public class LoggedInUseCaseFactory {
         return new DeleteController(deleteInteractor);
     }
 
-    private static EditStockController createEditStockController(ViewManagerModel viewManagerModel,
-                                                                 LoggedInViewModel loggedInViewModel,
+    private static EditStockController createEditStockController(LoggedInViewModel loggedInViewModel,
                                                                  EditStockUserDataAccessInterface userDataAccessInterface,
                                                                  FilePortfolioDataAccessObject portfolioDataAccessObject) {
         //Output boundary
-        EditStockOutputBoundary editStockOutputBoundary = new EditStockPresenter(loggedInViewModel, viewManagerModel);
+        EditStockOutputBoundary editStockOutputBoundary = new EditStockPresenter(loggedInViewModel);
 
         //Input boundary
         EditStockInputBoundary editStockInteractor = new EditStockInteractor(loggedInViewModel, editStockOutputBoundary, portfolioDataAccessObject, userDataAccessInterface);

@@ -3,7 +3,9 @@ package use_case.show;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import entity.Investment;
 import entity.Portfolio;
+import entity.Short;
 import entity.Stock;
 
 import java.awt.*;
@@ -37,7 +39,7 @@ public class ShowInteractor implements ShowInputBoundary {
     public void execute(ShowInputData showInputData) throws JsonProcessingException {
         LocalDateTime now = LocalDateTime.now();
         Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(showInputData.getUserID());
-        List<Stock> stockList = portfolio.getStockList();
+        List<Investment> stockList = portfolio.getStockList();
 
         TimeSeriesCollection dataset = new TimeSeriesCollection(); // For net worth plot
         TimeSeries series = new TimeSeries("Net Worth"); // For net worth plot
@@ -46,7 +48,8 @@ public class ShowInteractor implements ShowInputBoundary {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime startDate = today.minusDays(1000);
 
-        for (Stock stock : stockList) {
+        for (Investment stock : stockList) {
+            double initialPrice = stock.getTotalValueAtPurchase();
             // Going through each stock in the list of stocks, making an API call for each one
             JSONObject rawStockInfo = stockDataAccessObject.getStockInfo(stock.getTickerSymbol());
             HashMap<String, HashMap<String, String>> processedStockInfo = jsonToHashMap(rawStockInfo);
@@ -58,8 +61,14 @@ public class ShowInteractor implements ShowInputBoundary {
                     if (dailyData != null) {
                         String closingPrice = dailyData.get("4. close");
                         Double price = Double.valueOf(closingPrice);
-                        dateToNetWorth.put(dateStringWithoutTime,
-                                dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0) + stock.getQuantity() * price);
+                        if(stock instanceof Short){
+                            dateToNetWorth.put(dateStringWithoutTime, dateToNetWorth.getOrDefault(dateStringWithoutTime,
+                                    0.0) + stock.getQuantity() * (initialPrice - price));
+                        } else if (stock instanceof Stock) {
+                            dateToNetWorth.put(dateStringWithoutTime,
+                                    dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0) + stock.getQuantity() * price);
+                        }
+
                     } else {
                         String dayBeforeStringWithoutTime = date.minusDays(1).toString().substring(0, 10);
                         dateToNetWorth.put(dateStringWithoutTime,

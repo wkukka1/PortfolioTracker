@@ -5,6 +5,7 @@ import use_case.add_stock.AddStockInputData;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class AddStockController {
     private final AddStockInputBoundary addStockInteractor;
@@ -13,13 +14,13 @@ public class AddStockController {
         this.addStockInteractor = addStockInteractor;
     }
 
-    public void execute(String ticker, String date, String amount, int userID) {
+    public void execute(String ticker, String date, String amount, int userID, String investmentType) {
         String[] dateComponents = date.split("/");
         LocalDateTime purchaseLocalDateTime = LocalDate.of(Integer.parseInt(dateComponents[2]),
                 Integer.parseInt(dateComponents[1]), Integer.parseInt(dateComponents[0])).atStartOfDay();
 
         AddStockInputData addStockInputData = new AddStockInputData(ticker.toUpperCase(),
-                purchaseLocalDateTime, Double.parseDouble(amount), userID);
+                purchaseLocalDateTime, Double.parseDouble(amount), userID, investmentType);
 
         addStockInteractor.addStock(addStockInputData);
     }
