@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import entity.Investment;
-import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.PortfolioDataAccessInterface;
 import entity.Portfolio;
 import entity.User;
