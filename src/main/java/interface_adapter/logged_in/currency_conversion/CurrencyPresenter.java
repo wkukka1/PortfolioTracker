@@ -1,13 +1,9 @@
 package interface_adapter.logged_in.currency_conversion;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
-import use_case.currency_conversion.CurrencyInputBoundary;
-import use_case.currency_conversion.CurrencyInputData;
 import use_case.currency_conversion.CurrencyOutputBoundary;
 import use_case.currency_conversion.CurrencyOutputData;
-import use_case.show.ShowInputData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

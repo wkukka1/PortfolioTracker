@@ -4,6 +4,7 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import use_case.PortfolioDataAccessInterface;
 import use_case.signup.*;
 import entity.CommonUserFactory;
 import entity.UserFactory;

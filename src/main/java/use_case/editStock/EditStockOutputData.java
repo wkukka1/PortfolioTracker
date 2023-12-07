@@ -1,7 +1,5 @@
 package use_case.editStock;
 
-import entity.Stock;
-
 import java.util.Map;
 
 public class EditStockOutputData {

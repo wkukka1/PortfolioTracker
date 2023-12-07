@@ -4,18 +4,24 @@ import data_access.ExchangeRateClient;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.logged_in.add_stock.AddStockPresenter;
+import interface_adapter.removeStock.RemoveStockController;
+import interface_adapter.removeStock.RemoveStockPresenter;
 import interface_adapter.logged_in.currency_conversion.CurrencyController;
 import interface_adapter.logged_in.currency_conversion.CurrencyPresenter;
 import use_case.add_stock.AddStockInputBoundary;
 import use_case.add_stock.AddStockInteractor;
 import use_case.add_stock.AddStockOutputBoundary;
 import use_case.add_stock.StockCalculationService;
+import use_case.removeStock.RemoveStockInputBoundary;
+import use_case.removeStock.RemoveStockInteractor;
+import use_case.removeStock.RemoveStockOutputBoundary;
+import use_case.removeStock.RemoveStockUserDataAccessInterface;
 import use_case.currency_conversion.CurrencyDataAccessInterface;
 import use_case.currency_conversion.CurrencyInputBoundary;
 import use_case.currency_conversion.CurrencyInteractor;
 import use_case.currency_conversion.CurrencyOutputBoundary;
 import use_case.show.StockPriceDataAccessInterface;
-import use_case.signup.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 import view.LoggedInView;
 import view.validation.StockFieldValidator;
 import data_access.FilePortfolioDataAccessObject;
@@ -60,7 +66,8 @@ public class LoggedInUseCaseFactory {
                                       DeleteViewModel deleteViewModel,
                                       FilePortfolioDataAccessObject portfolioDataAccessObject,
                                       StockPriceDataAccessInterface stockDataAccessObject, LoginView loginView,
-                                      StockCalculationService stockCalculationServiceImpl, EditStockUserDataAccessInterface editStockUserDataAccessInterface) {
+                                      StockCalculationService stockCalculationServiceImpl, EditStockUserDataAccessInterface editStockUserDataAccessInterface,
+                                      RemoveStockUserDataAccessInterface removeStockUserDataAccessObject) {
         try {
             DeleteController deleteController = createDeleteController(deleteViewModel, loginViewModel, viewManagerModel,
                     userDataAccessInterface, loggedInViewModel, portfolioDataAccessObject);
@@ -75,9 +82,11 @@ public class LoggedInUseCaseFactory {
             EditStockController editStockController = createEditStockController(loggedInViewModel, editStockUserDataAccessInterface, portfolioDataAccessObject);
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
+
+            RemoveStockController removeStockController = createRemoveStockUseCase(viewManagerModel, loggedInViewModel, removeStockUserDataAccessObject, portfolioDataAccessObject);
             CurrencyController currencyController = createCurrentyController(loggedInViewModel);
-            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showController, editStockController, currencyController);
-        }catch(IOException e){
+            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showController, editStockController, currencyController, removeStockController);
+        } catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
         return null;
@@ -129,12 +138,21 @@ public class LoggedInUseCaseFactory {
     }
 
     private static AddStockController createAddStockUseCase(StockPriceDataAccessInterface stockPriceClientImpl,
-                                                            PortfolioDataAccessInterface portfolioDataAccessInterface,
+                                                            PortfolioDataAccessInterface portfolioDataAccessObject,
                                                             LoggedInViewModel loggedInViewModel,
                                                             StockCalculationService stockCalculationServiceImpl) {
         AddStockOutputBoundary addStockPresenter = new AddStockPresenter(loggedInViewModel);
         AddStockInputBoundary addStockInteractor = new AddStockInteractor(stockPriceClientImpl,
-                portfolioDataAccessInterface, addStockPresenter, stockCalculationServiceImpl);
+                portfolioDataAccessObject, addStockPresenter, stockCalculationServiceImpl);
         return new AddStockController(addStockInteractor);
+    }
+
+    private static RemoveStockController createRemoveStockUseCase(ViewManagerModel viewManagerModel,
+                                                                  LoggedInViewModel loggedInViewModel,
+                                                                  RemoveStockUserDataAccessInterface userDataAccessObject,
+                                                                  PortfolioDataAccessInterface portfolioDataAccessObject){
+        RemoveStockOutputBoundary removeStockPresenter = new RemoveStockPresenter(viewManagerModel, loggedInViewModel);
+        RemoveStockInputBoundary removeStockInteractor = new RemoveStockInteractor(userDataAccessObject, portfolioDataAccessObject, removeStockPresenter);
+        return new RemoveStockController(removeStockInteractor);
     }
 }

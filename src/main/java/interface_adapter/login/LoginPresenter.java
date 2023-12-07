@@ -7,8 +7,6 @@ import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 import view.SignupView;
 
-import javax.swing.*;
-
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;

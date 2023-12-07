@@ -5,16 +5,16 @@ import entity.UserFactory;
 import use_case.delete_user.DeleteUserDataAccessInterface;
 import use_case.editStock.EditStockUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
+import use_case.removeStock.RemoveStockUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface, DeleteUserDataAccessInterface, EditStockUserDataAccessInterface {
+public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface, DeleteUserDataAccessInterface, EditStockUserDataAccessInterface, RemoveStockUserDataAccessInterface {
 
     private final File csvFile;
 
@@ -67,7 +67,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
     }
 
     @Override
-    public User get(String username) {
+    public User getUserFromUsername(String username) {
         return accounts.get(username);
     }
 

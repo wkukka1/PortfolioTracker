@@ -1,8 +1,7 @@
-package use_case.signup;
+package use_case;
 
 import entity.Investment;
 import entity.Portfolio;
-import entity.Stock;
 
 import java.util.NoSuchElementException;
 
