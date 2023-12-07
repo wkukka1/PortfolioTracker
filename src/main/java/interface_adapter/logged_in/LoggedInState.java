@@ -12,6 +12,7 @@ public class LoggedInState {
     private String addStockError;
     private Map<String, Double> tickersToAggregatedQuantities;
     private ChartPanel panel = null;
+    private String currentCurrency = "USD";
 
     public LoggedInState(LoggedInState copy) {
         username = copy.username;
@@ -19,6 +20,7 @@ public class LoggedInState {
         addStockError = copy.addStockError;
         tickersToAggregatedQuantities = copy.getTickersToAggregatedQuantities();
         panel = copy.panel;
+        currentCurrency = copy.currentCurrency;
     }
 
     // Because of the previous copy constructor, the default constructor must be explicit.
@@ -71,5 +73,13 @@ public class LoggedInState {
 
     public void setPanel(ChartPanel panel) {
         this.panel = panel;
+    }
+
+    public String getCurrentCurrency() {
+        return currentCurrency;
+    }
+
+    public void setCurrentCurrency(String currentCurrency) {
+        this.currentCurrency = currentCurrency;
     }
 }
