@@ -3,10 +3,10 @@ package use_case.removeStock;
 import java.util.List;
 import java.util.Map;
 
+import entity.Investment;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.PortfolioDataAccessInterface;
 import entity.Portfolio;
-import entity.Stock;
 import entity.User;
 
 public class RemoveStockInteractor implements RemoveStockInputBoundary{
@@ -37,9 +37,9 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
             User user = userDataAccessObject.getUserFromUsername(username);
             int userId = user.getUserID();
             Portfolio portfolio = portfolioDataAccessObject.getPortfolioByID(userId); // Current user's portfolio
-            List<Stock> stockList = portfolio.getStockList();
+            List<Investment> stockList = portfolio.getStockList();
 
-            Stock stock = portfolio.getStockByTicker(tickerSymbol); // Stock to be removed
+            Investment stock = portfolio.getStockByTicker(tickerSymbol); // Stock to be removed
             stockList.remove(stock); // Removes the stock
 
             portfolio.setStockList(stockList); // Updates the stock list
