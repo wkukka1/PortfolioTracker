@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import use_case.show.StockPriceDataAccessInterface;
-import use_case.signup.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
