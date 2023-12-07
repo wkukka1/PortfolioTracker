@@ -1,7 +1,5 @@
 package use_case.removeStock;
 
-import entity.Stock;
-import java.util.List;
 import java.util.Map;
 
 public class RemoveStockOutputData {
@@ -17,15 +15,7 @@ public class RemoveStockOutputData {
         return newStockProfitToDate;
     }
 
-    public void setNewStockProfitToDate(double newStockProfitToDate) {
-        this.newStockProfitToDate = newStockProfitToDate;
-    }
-
     public Map<String, Double> getTickersToQuantities() {
         return tickersToQuantities;
-    }
-
-    public void setTickersToQuantities(Map<String, Double> tickersToQuantities) {
-        this.tickersToQuantities = tickersToQuantities;
     }
 }
