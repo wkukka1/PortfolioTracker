@@ -9,6 +9,9 @@ import use_case.currency_conversion.CurrencyOutputBoundary;
 import use_case.currency_conversion.CurrencyOutputData;
 import use_case.show.ShowInputData;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class CurrencyPresenter implements CurrencyOutputBoundary {
     private final LoggedInViewModel loggedInViewModel;
 
@@ -19,7 +22,7 @@ public class CurrencyPresenter implements CurrencyOutputBoundary {
     @Override
     public void prepareSuccessView(CurrencyOutputData data) {
         LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setNetProfit(Double.valueOf(loggedInState.getNetProfit()) * data.getExchangeRate());
+        loggedInState.setNetProfit(round(Double.valueOf(loggedInState.getNetProfit()) * data.getExchangeRate(), 2));
         loggedInState.setCurrentCurrency(data.getNewCurrency());
         loggedInViewModel.firePropertyChanged();
     }
@@ -27,5 +30,15 @@ public class CurrencyPresenter implements CurrencyOutputBoundary {
     @Override
     public void prepareFailView(String error) {
 
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
