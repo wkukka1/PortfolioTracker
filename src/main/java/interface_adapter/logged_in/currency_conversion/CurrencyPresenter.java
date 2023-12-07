@@ -20,6 +20,8 @@ public class CurrencyPresenter implements CurrencyOutputBoundary {
     public void prepareSuccessView(CurrencyOutputData data) {
         LoggedInState loggedInState = loggedInViewModel.getState();
         loggedInState.setNetProfit(Double.valueOf(loggedInState.getNetProfit()) * data.getExchangeRate());
+        loggedInState.setCurrentCurrency(data.getNewCurrency());
+        loggedInViewModel.firePropertyChanged();
     }
 
     @Override

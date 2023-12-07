@@ -1,12 +1,17 @@
 package use_case.currency_conversion;
 
-import org.jfree.chart.ChartPanel;
-
 public class CurrencyOutputData {
     private final double exchangeRate;
 
-    public CurrencyOutputData(double exchangeRate) {
+    public String getNewCurrency() {
+        return newCurrency;
+    }
+
+    private final String newCurrency;
+
+    public CurrencyOutputData(double exchangeRate, String newCurrency) {
         this.exchangeRate = exchangeRate;
+        this.newCurrency = newCurrency;
     }
 
     public double getExchangeRate() {

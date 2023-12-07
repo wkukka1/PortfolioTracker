@@ -12,13 +12,13 @@ import java.io.IOException;
 
 public class ExchangeRateClient implements CurrencyDataAccessInterface {
 
-    private static final String BASE_URL = "https://api.exchangeratesapi.io/v1/latest";
+    private static final String BASE_URL = "https://v6.exchangerate-api.com/v6/";
 
     // Note: API key needs to be stored as environment variable in IDE; set this up locally
 
     /**
-     * Returns a JSONObject that contains the Latest Rates Endpoint exchange rate data from
-     * the Exchange Rates API (https://exchangeratesapi.io/documentation/).
+     * Returns a JSONObject that contains the exchange rate data from
+     * ExchnageRate-API (https://www.exchangerate-api.com/docs/pair-conversion-requests).
      *
      * @param base the three-letter currency code of your preferred base currency.
      * @param symbol = the three-letter currency code of the currency you want to convert to.
@@ -28,7 +28,7 @@ public class ExchangeRateClient implements CurrencyDataAccessInterface {
     public JSONObject getCurrencyInfo(String base, String symbol) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder()
-                .url(String.format(BASE_URL + "?access_key=%s&base=%s&symbols=%s",
+                .url(String.format(BASE_URL + "%s/pair/%s/%s",
                         System.getenv("CURRENCY_API_KEY"), base, symbol))
                 .build();
 
