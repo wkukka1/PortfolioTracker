@@ -18,7 +18,6 @@ import view.LoggedInView;
 import view.LoginView;
 import view.SignupView;
 import view.ViewManager;
-import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
 import java.awt.*;
