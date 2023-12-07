@@ -20,11 +20,21 @@ public class CurrencyInteractor implements CurrencyInputBoundary {
     @Override
     public void execute(CurrencyInputData currencyInputData) throws JsonProcessingException {
         JSONObject rawCurrencyInfo = currencyDataAccessObject.getCurrencyInfo(currencyInputData.getCurrencyFrom(), currencyInputData.getCurrencyTo());
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println("test");
+        System.out.println("test");
+        System.out.println("test");
+        System.out.println("test");
+        System.out.println("test");
+        System.out.println("test");
+        System.out.println("test");
+        System.out.println("test");
         HashMap processedStockInfo = jsonToHashMap(rawCurrencyInfo);
         CurrencyOutputData currencyOutputData = new CurrencyOutputData((Double) processedStockInfo.get("conversion_rate"), currencyInputData.getCurrencyTo());
         currencyPresenter.prepareSuccessView(currencyOutputData);
     }
 
+    @Override
     public HashMap jsonToHashMap(JSONObject rawCurrencyInfo) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(rawCurrencyInfo.toString(), HashMap.class);

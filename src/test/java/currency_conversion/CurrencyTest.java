@@ -10,6 +10,7 @@ import interface_adapter.logged_in.LoggedInViewModel;
 
 import interface_adapter.logged_in.currency_conversion.CurrencyPresenter;
 import org.json.JSONObject;
+import org.junit.Test;
 import org.mockito.Mockito;
 import use_case.currency_conversion.*;
 import use_case.signup.PortfolioDataAccessInterface;
@@ -27,6 +28,7 @@ import org.junit.Before;
 
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -39,9 +41,31 @@ public class CurrencyTest {
     private CurrencyInputBoundary currencyInteractor;
     private final CurrencyOutputBoundary mockPresenter = Mockito.mock(CurrencyPresenter.class);
 
+    private final CurrencyInputBoundary mockInteractor = Mockito.mock(CurrencyInteractor.class);
+
     @Before
     public void setup(){
         this.currencyInteractor = new CurrencyInteractor(mockCurrencyClient, mockPresenter);
+    }
+
+    @Test
+    public void testExecuteWithException() throws JsonProcessingException {
+        // Arrange
+        CurrencyInputData input = new CurrencyInputData("USD", "EUR");
+        JSONObject mockRawCurrencyInfo = new JSONObject("{\"conversion_rate\": 1.2}");
+
+        // Mocking behavior to throw an exception when jsonToHashMap is called
+        doThrow(new JsonProcessingException("Mocked exception") {}).when(mockInteractor).jsonToHashMap(any());
+
+        when(mockCurrencyClient.getCurrencyInfo("USD", "EUR")).thenReturn(mockRawCurrencyInfo);
+
+        // Act and Assert
+        assertThrows(JsonProcessingException.class, () -> {
+            currencyInteractor.execute(input);
+        });
+
+        // Verify that the presenter was not called
+        verify(mockPresenter, never()).prepareSuccessView(any());
     }
 
     @org.junit.Test
