@@ -18,7 +18,7 @@ public class ExchangeRateClient implements CurrencyDataAccessInterface {
 
     /**
      * Returns a JSONObject that contains the exchange rate data from
-     * ExchnageRate-API (https://www.exchangerate-api.com/docs/pair-conversion-requests).
+     * ExchangeRate-API (https://www.exchangerate-api.com/docs/pair-conversion-requests).
      *
      * @param base the three-letter currency code of your preferred base currency.
      * @param symbol = the three-letter currency code of the currency you want to convert to.
