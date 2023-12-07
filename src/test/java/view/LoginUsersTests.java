@@ -4,9 +4,7 @@ import app.Main;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
-import entity.CommonUserFactory;
-import entity.Portfolio;
-import entity.UserFactory;
+import entity.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +28,12 @@ public class LoginUsersTests {
         }
         for (int i = 0; i < numOfUsers; i++) {
             fudao.save(uf.create("user" + i, "password" + i, LocalDateTime.now(), i));
-            fpdao.savePortfolio(new Portfolio(new ArrayList<>(), 0, i));
+            ArrayList<Investment> stockList = new ArrayList<>();
+
+            Stock stock = new Stock("AAPL", LocalDateTime.now(), 10, 10);
+
+            stockList.add(stock);
+            fpdao.savePortfolio(new Portfolio(stockList, 10, 1));
         }
     }
 
