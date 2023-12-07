@@ -1,5 +1,7 @@
 package use_case.removeStock;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +28,6 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
      */
     public void execute(RemoveStockInputData removeStockInputData){
         try{
-            double netProfit;
-
             String tickerSymbol = removeStockInputData.getTicker(); // Ticker of Stock that needs to be removed
             String username = removeStockInputData.getUsername();
             User user = userDataAccessObject.getUserFromUsername(username);
@@ -42,16 +42,23 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
 
             Map<String, Double> tickersToQuantities = portfolio.generateTickersToQuantities();
 
-            netProfit = portfolio.getNetProfit(); // Updated net profit
-
             portfolioDataAccessObject.savePortfolio(portfolio); // Saves user's portfolio to the database
 
-            RemoveStockOutputData outputData = new RemoveStockOutputData(netProfit, tickersToQuantities);
+            RemoveStockOutputData outputData = new RemoveStockOutputData(tickersToQuantities);
             removeStockPresenter.prepareSuccessView(outputData);
         } catch (Exception e){
             removeStockPresenter.prepareFailView(e.toString());
             System.out.println(e.toString());
         }
 
+    }
+    private double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

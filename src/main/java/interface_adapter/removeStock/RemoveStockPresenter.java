@@ -4,9 +4,7 @@ import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.removeStock.RemoveStockOutputBoundary;
 import interface_adapter.ViewManagerModel;
-import use_case.removeStock.RemoveStockOutputBoundary;
 import use_case.removeStock.RemoveStockOutputData;
-import view.LoggedInView;
 
 import javax.swing.*;
 
@@ -25,7 +23,6 @@ public class RemoveStockPresenter implements RemoveStockOutputBoundary {
     @Override
     public void prepareSuccessView(RemoveStockOutputData response){
         LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setNetProfit(response.getNewStockProfitToDate());
         loggedInState.setTickersToAggregatedQuantities(response.getTickersToQuantities());
         loggedInViewModel.firePropertyChanged();
     }
