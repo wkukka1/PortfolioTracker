@@ -118,4 +118,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
     public int getUserId(String username) {
         return accounts.get(username).getUserID();
     }
+
+    public User getUserFromUsername(String username){
+        return accounts.get(username);
+    }
 }
