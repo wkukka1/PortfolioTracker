@@ -5,7 +5,6 @@ import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.*;
 import interface_adapter.logged_in.LoggedInViewModel;
-import use_case.editStock.*;
 import view.LabelTextPanel;
 import view.LoggedInView;
 import view.LoginView;
@@ -64,7 +63,7 @@ public class EditStockTest {
         return (JButton) buttons.getComponent(0);
     }
 
-    private LabelTextPanel[] getTextfeilds() {
+    private LabelTextPanel[] getTextfields() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -156,7 +155,7 @@ public class EditStockTest {
 
         Main.main(null);
 
-        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel[] textfield = getTextfields();
         LabelTextPanel usernameInputField = textfield[0];
         LabelTextPanel passwordInputField = textfield[1];
 
@@ -210,7 +209,7 @@ public class EditStockTest {
 
         Main.main(null);
 
-        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel[] textfield = getTextfields();
         LabelTextPanel usernameInputField = textfield[0];
         LabelTextPanel passwordInputField = textfield[1];
 
@@ -261,7 +260,7 @@ public class EditStockTest {
 
         Main.main(null);
 
-        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel[] textfield = getTextfields();
         LabelTextPanel usernameInputField = textfield[0];
         LabelTextPanel passwordInputField = textfield[1];
 
