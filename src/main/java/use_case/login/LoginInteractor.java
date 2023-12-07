@@ -37,13 +37,13 @@ public class LoginInteractor implements LoginInputBoundary {
         if (!userDataAccessObject.existsByName(username)) {
             loginPresenter.prepareFailView(username + ": Account does not exist.");
         } else {
-            String pwd = userDataAccessObject.get(username).getPassword();
+            String pwd = userDataAccessObject.getUserFromUsername(username).getPassword();
             //checks if the password on the csv file does not match the password the user inputted
             if (!password.equals(pwd)) {
                 loginPresenter.prepareFailView("Incorrect password for " + username + ".");
             } else {
 
-                User user = userDataAccessObject.get(loginInputData.getUsername());
+                User user = userDataAccessObject.getUserFromUsername(loginInputData.getUsername());
                 Portfolio currPortfolio = portfolioDataAccessImpl.getPortfolioByID(user.getUserID());
                 double overallNetProfit = currPortfolio.getNetProfit();
 
