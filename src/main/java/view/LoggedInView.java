@@ -168,13 +168,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         // Sets the coordinates for the Edit Stock button
         gbc.gridx = 7;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.anchor = GridBagConstraints.NORTH;
         // Creates the Edit Stock button
         this.add(editStock, gbc);
 
         // Sets the coordinates for the Convert Currency button
         gbc.gridx = 8;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.anchor = GridBagConstraints.NORTH;
         // Creates the Convert Currency Button
         this.add(currencyButton, gbc);
 
@@ -242,6 +242,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
 
                 addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
+
+                // Must convert to current currency, as netProfit calculated by add use case uses USD
+                try {
+                    currencyController.execute("USD", loggedInViewModel.getState().getCurrentCurrency());
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
 
