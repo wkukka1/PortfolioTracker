@@ -255,13 +255,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
 
                 addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID(), investmentType);
-
-                // Must convert to current currency, as netProfit calculated by add use case uses USD
-                try {
-                    currencyController.execute("USD", loggedInViewModel.getState().getCurrentCurrency());
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
             }
 
 
