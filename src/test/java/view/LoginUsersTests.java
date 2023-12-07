@@ -58,7 +58,7 @@ public class LoginUsersTests {
         return (JButton) buttons.getComponent(0);
     }
 
-    private LabelTextPanel[] getTextfeilds() {
+    private LabelTextPanel[] getTextfields() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
         for (Window window : windows) {
@@ -83,7 +83,7 @@ public class LoginUsersTests {
 
 
     private boolean loginUser(String username, String password) {
-        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel[] textfield = getTextfields();
         LabelTextPanel usernameInputField = textfield[0];
         LabelTextPanel passwordInputField = textfield[1];
 
@@ -130,7 +130,7 @@ public class LoginUsersTests {
     public void loginIncorrectPassword() throws JsonProcessingException {
         addUser(1);
         Main.main(null);
-        LabelTextPanel[] textPanels = getTextfeilds();
+        LabelTextPanel[] textPanels = getTextfields();
         textPanels[0].setText("user0");
         textPanels[1].setText("password1");
 
@@ -142,7 +142,7 @@ public class LoginUsersTests {
     @org.junit.Test
     public void loginIncorrectUser() throws JsonProcessingException {
         Main.main(null);
-        LabelTextPanel[] textfield = getTextfeilds();
+        LabelTextPanel[] textfield = getTextfields();
         LabelTextPanel usernameInputField = textfield[0];
         LabelTextPanel passwordInputField = textfield[1];
 
