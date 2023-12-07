@@ -45,6 +45,8 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
 
             netProfit = portfolio.getNetProfit(); // Updated net profit
 
+            portfolioDataAccessObject.savePortfolio(portfolio); // Saves user's portfolio to the database
+
             RemoveStockOutputData outputData = new RemoveStockOutputData(netProfit, tickersToQuantities);
             removeStockPresenter.prepareSuccessView(outputData);
         } catch (Exception e){
