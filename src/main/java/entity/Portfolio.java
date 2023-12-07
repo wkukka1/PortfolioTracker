@@ -71,13 +71,4 @@ public class Portfolio {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-
-    public Stock getStockByTicker(String tickerSymbol){
-        for (Stock stock : stockList){
-            if (stock.getTickerSymbol().equals(tickerSymbol)){
-                return stock;
-            }
-        }
-        return null;
-    }
 }
