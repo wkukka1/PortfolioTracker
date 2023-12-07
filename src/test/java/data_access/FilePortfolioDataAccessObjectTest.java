@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import use_case.signup.PortfolioDataAccessInterface;
+import use_case.PortfolioDataAccessInterface;
 
 import java.io.*;
 import java.time.LocalDateTime;
