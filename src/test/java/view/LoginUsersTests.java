@@ -33,7 +33,7 @@ public class LoginUsersTests {
             Stock stock = new Stock("AAPL", LocalDateTime.now(), 10, 10);
 
             stockList.add(stock);
-            fpdao.savePortfolio(new Portfolio(stockList, 10, 1));
+            fpdao.savePortfolio(new Portfolio(stockList, 10, i));
         }
     }
 
