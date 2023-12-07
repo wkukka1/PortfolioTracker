@@ -1,5 +1,4 @@
 package use_case.removeStock;
-import entity.Stock;
 
 public class RemoveStockInputData {
     final private String ticker;

@@ -1,6 +1,5 @@
 package interface_adapter.editStock;
 
-import interface_adapter.ViewManagerModel;
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
 import use_case.editStock.EditStockOutputBoundary;

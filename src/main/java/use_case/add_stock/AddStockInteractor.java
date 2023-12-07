@@ -1,6 +1,5 @@
 package use_case.add_stock;
 import entity.Short;
-import entity.Investment;
 import entity.Portfolio;
 import entity.Stock;
 import use_case.show.StockPriceDataAccessInterface;

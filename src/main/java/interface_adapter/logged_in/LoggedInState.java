@@ -2,7 +2,6 @@ package interface_adapter.logged_in;
 
 import org.jfree.chart.ChartPanel;
 
-import javax.swing.*;
 import java.util.Map;
 
 public class LoggedInState {

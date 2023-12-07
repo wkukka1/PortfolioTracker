@@ -2,7 +2,6 @@ package use_case.login;
 
 import entity.Investment;
 import entity.Portfolio;
-import entity.Stock;
 import entity.User;
 import use_case.PortfolioDataAccessInterface;
 
