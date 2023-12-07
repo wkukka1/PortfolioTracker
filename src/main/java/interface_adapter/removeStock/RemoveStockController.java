@@ -1,7 +1,6 @@
 package interface_adapter.removeStock;
 
 import use_case.removeStock.RemoveStockInputBoundary;
-import entity.Stock;
 import use_case.removeStock.RemoveStockInputData;
 
 public class RemoveStockController {
