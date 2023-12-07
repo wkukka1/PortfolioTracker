@@ -1,12 +1,19 @@
 package app;
 
+import data_access.ExchangeRateClient;
 import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.logged_in.add_stock.AddStockPresenter;
+import interface_adapter.logged_in.currency_conversion.CurrencyController;
+import interface_adapter.logged_in.currency_conversion.CurrencyPresenter;
 import use_case.add_stock.AddStockInputBoundary;
 import use_case.add_stock.AddStockInteractor;
 import use_case.add_stock.AddStockOutputBoundary;
 import use_case.add_stock.StockCalculationService;
+import use_case.currency_conversion.CurrencyDataAccessInterface;
+import use_case.currency_conversion.CurrencyInputBoundary;
+import use_case.currency_conversion.CurrencyInteractor;
+import use_case.currency_conversion.CurrencyOutputBoundary;
 import use_case.show.StockPriceDataAccessInterface;
 import use_case.signup.PortfolioDataAccessInterface;
 import view.LoggedInView;
@@ -18,14 +25,12 @@ import interface_adapter.delete_user.DeletePresenter;
 import interface_adapter.delete_user.DeleteState;
 import interface_adapter.delete_user.DeleteViewModel;
 import interface_adapter.editStock.EditStockController;
-import interface_adapter.logged_in.LoggedInViewModel;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logged_in.show.ShowController;
 import interface_adapter.logged_in.show.ShowPresenter;
 import use_case.delete_user.DeleteInputBoundary;
 import use_case.delete_user.DeleteInteractor;
 import use_case.delete_user.DeleteOutputBoundary;
-import use_case.delete_user.DeleteUserDataAccessInterface;
 import use_case.editStock.EditStockInputBoundary;
 import use_case.editStock.EditStockOutputBoundary;
 import use_case.editStock.EditStockUserDataAccessInterface;
@@ -39,8 +44,6 @@ import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupUserDataAccessInterface;
 import view.LoginView;
-import view.ViewManager;
-import view.validation.StockFieldValidator;
 import view.validation.StockFieldValidatorImpl;
 
 import javax.swing.*;
@@ -72,11 +75,19 @@ public class LoggedInUseCaseFactory {
             EditStockController editStockController = createEditStockController(loggedInViewModel, editStockUserDataAccessInterface, portfolioDataAccessObject);
 
             LogoutController logoutController = createLogoutController(loginViewModel, loggedInViewModel, viewManagerModel);
-            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showController, editStockController);
+            CurrencyController currencyController = createCurrentyController(loggedInViewModel);
+            return new LoggedInView(appFrame, loggedInViewModel, deleteState, deleteController, loginView, stockFieldValidator, addStockController, logoutController, showController, editStockController, currencyController);
         }catch(IOException e){
             JOptionPane.showMessageDialog(null, "Could not open user data file");
         }
         return null;
+    }
+
+    private static CurrencyController createCurrentyController(LoggedInViewModel loggedInViewModel) {
+        CurrencyOutputBoundary currencyPresenter = new CurrencyPresenter(loggedInViewModel);
+        CurrencyDataAccessInterface currencyClient = new ExchangeRateClient();
+        CurrencyInputBoundary currencyInteractor = new CurrencyInteractor(currencyClient, currencyPresenter);
+        return new CurrencyController(currencyInteractor);
     }
 
     private static LogoutController createLogoutController(LoginViewModel loginViewModel, LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel) {

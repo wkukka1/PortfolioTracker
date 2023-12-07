@@ -79,7 +79,6 @@ public class ShowInteractor implements ShowInputBoundary {
                             dateToNetWorth.getOrDefault(dateStringWithoutTime, 0.0));
                 }
             }
-            ;
         }
 
         for (Map.Entry<String, Double> entry : dateToNetWorth.entrySet()) {

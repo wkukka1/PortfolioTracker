@@ -7,6 +7,7 @@ import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
 import interface_adapter.editStock.EditStockController;
+import interface_adapter.logged_in.currency_conversion.CurrencyController;
 import interface_adapter.logged_in.show.ShowController;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartPanel;
@@ -23,7 +24,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LoggedInView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -39,6 +43,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     private final JFrame appFrame;
     private final LogoutController logoutController;
+    private final CurrencyController currencyController;
     JLabel title;
     JLabel netProfitLabel;
     JLabel netProfitValue;
@@ -49,6 +54,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     JButton editStock;
     JButton showButton;
+    JButton currencyButton;
     JPanel stocksScrollableList;
     JPanel plot;
 
@@ -58,9 +64,10 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
                         DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
-                        AddStockController addStockController, LogoutController logoutController, ShowController showController, EditStockController editStockController) {
+                        AddStockController addStockController, LogoutController logoutController, ShowController showController, EditStockController editStockController, CurrencyController currencyController) {
         this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
+        this.currencyController = currencyController;
         this.loggedInViewModel.addPropertyChangeListener(this);
         this.deleteState = deleteState;
         this.deleteController = deleteController;
@@ -99,6 +106,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         showButton = new JButton("Update Plot and Net Profit");
         showButton.addActionListener(this);
 
+        currencyButton = new JButton("Change Net Profit Currency");
+        currencyButton.addActionListener(this);
+
         this.setLayout(new GridBagLayout()); // Use GridBagLayout
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -106,7 +116,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
         title = new JLabel("Home");
-        netProfitLabel = new JLabel("Net Profit (USD):");
+        netProfitLabel = new JLabel("Net Profit:");
         netProfitValue = new JLabel(); // You can set the value later
 
         addStockButton = new JButton("Add Stock");
@@ -158,10 +168,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
         // Sets the coordinates for the Edit Stock button
         gbc.gridx = 7;
-        gbc.gridwidth = 4;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.anchor = GridBagConstraints.NORTH;
         // Creates the Edit Stock button
         this.add(editStock, gbc);
+
+        // Sets the coordinates for the Convert Currency button
+        gbc.gridx = 8;
+        gbc.anchor = GridBagConstraints.NORTH;
+        // Creates the Convert Currency Button
+        this.add(currencyButton, gbc);
+
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -174,7 +190,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridwidth = 6;
         gbc.gridheight = 2;
         this.add(plot, gbc);
-        gbc.gridx = 6;
+        gbc.gridx = 8;
         gbc.gridy = 2;
         gbc.gridheight = 5;
         gbc.anchor = GridBagConstraints.NORTH;
@@ -236,10 +252,48 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
 
                 addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID(), investmentType);
+
+                // Must convert to current currency, as netProfit calculated by add use case uses USD
+                try {
+                    currencyController.execute("USD", loggedInViewModel.getState().getCurrentCurrency());
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
 
-        } if (evt.getSource() == deleteUser){
+        } if (evt.getSource() == currencyButton) {
+            // Handle the "Currency" button click
+            JTextField symbolField = new JTextField(10);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(new JLabel("Enter 3-letter symbol of currency to convert to:"));
+            panel.add(symbolField);
+
+            int result = JOptionPane.showConfirmDialog(this, panel, "Convert Currency",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String symbol = symbolField.getText();
+
+                try {
+                    currencyValidateAllFieldsOrShowErrorMsg(symbol);
+                } catch (ValidationException validationException) {
+                    System.out.println("Currency Validation Exception Occurred");;
+                    return;
+                }
+
+                try {
+                    currencyController.execute(loggedInViewModel.getState().getCurrentCurrency(), symbol);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+
+        }
+        if (evt.getSource() == deleteUser){
             deleteConfirmation();
         } if (evt.getSource() == logOut) {
             logoutController.execute(loggedInViewModel.getLoggedInUser());
@@ -367,11 +421,26 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         throw new ValidationException();
     }
 
+    private void currencyValidateAllFieldsOrShowErrorMsg(String symbol) throws ValidationException {
+        Set<String> validSymbols = new HashSet<>(Arrays.asList("AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY", "COP", "CRC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "FOK", "GBP", "GEL", "GGP", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "IMP", "INR", "IQD", "IRR", "ISK", "JEP", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KID", "KMF", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLE", "SOS", "SRD", "SSP", "STN", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TVD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XDR", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL"
+        ));
+        if (!symbol.isEmpty()) {
+            if (!validSymbols.contains(symbol.toUpperCase())) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid 3-letter currency code.");
+            }
+            else {return;}
+        } else {
+            JOptionPane.showMessageDialog(this, "Please fill in the field.");
+        }
+
+        throw new ValidationException();
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoggedInState state = (LoggedInState) evt.getNewValue();
         // Update the net profit value using state data
-        netProfitValue.setText("$" + state.getNetProfit());
+        netProfitValue.setText(state.getCurrentCurrency() + " " + state.getNetProfit());
         GridBagConstraints gbc = new GridBagConstraints();
         if (!StringUtils.isEmpty(state.getAddStockError())) {
             JOptionPane.showMessageDialog(this, state.getAddStockError());
@@ -381,7 +450,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             this.remove(stocksScrollableList);
             stocksScrollableList = new ScrollableStockList(state.getTickersToAggregatedQuantities());
 
-            gbc.gridx = 6;
+            gbc.gridx = 8;
             gbc.gridy = 2;
             gbc.gridheight = 5;
             gbc.anchor = GridBagConstraints.NORTH;
