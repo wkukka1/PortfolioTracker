@@ -1,5 +1,6 @@
 package use_case.login;
 
+import entity.Investment;
 import entity.Portfolio;
 import entity.Stock;
 import entity.User;
@@ -66,7 +67,7 @@ public class LoginInteractor implements LoginInputBoundary {
 
     private Map<String, Double> generateTickersToQuantities(Portfolio currPortfolio) {
         Map<String, Double> tickersToQuantities = new HashMap<>();
-        for (Stock stock : currPortfolio.getStockList()) {
+        for (Investment stock : currPortfolio.getStockList()) {
             tickersToQuantities.put(stock.getTickerSymbol(), tickersToQuantities.getOrDefault(stock.getTickerSymbol(),
                     0.0) + stock.getQuantity());
         }

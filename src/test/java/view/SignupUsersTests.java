@@ -1,6 +1,7 @@
 package view;
 
 import app.Main;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data_access.FilePortfolioDataAccessObject;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -194,7 +195,7 @@ public class SignupUsersTests {
 
 
     @org.junit.Test
-    public void testGetSignUpTextFields() {
+    public void testGetSignUpTextFields() throws JsonProcessingException {
         Main.main(null);
         LabelTextPanel[] textFields = getSignupTextFields();
         assert (textFields[0].getName().equals("username") && textFields[1].getName().equals("password1")
@@ -202,7 +203,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testGetSignupBtn() {
+    public void testGetSignupBtn() throws JsonProcessingException {
         Main.main(null);
         JButton button = getSignupBtn();
         System.out.println(button.getText());
@@ -210,7 +211,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testGetSwitchButton() {
+    public void testGetSwitchButton() throws JsonProcessingException {
         Main.main(null);
         JButton button = getSwitchButton();
         System.out.println(button.getText());
@@ -218,7 +219,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testSignupOneUser() {
+    public void testSignupOneUser() throws JsonProcessingException {
         String user = StringGenerator.generateRandomString(10);
         Main.main(null);
 
@@ -245,7 +246,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testSignupExistingUser() {
+    public void testSignupExistingUser() throws JsonProcessingException {
         addUser(1);
 
         Main.main(null);
@@ -269,7 +270,7 @@ public class SignupUsersTests {
     }
 
     @org.junit.Test
-    public void testSignupDifferentPasswords() {
+    public void testSignupDifferentPasswords() throws JsonProcessingException {
         Main.main(null);
         JButton signupBtn = getSignupBtn();
 

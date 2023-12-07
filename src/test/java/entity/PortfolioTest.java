@@ -19,7 +19,7 @@ public class PortfolioTest {
 
     @Before
     public void setup() {
-        List<Stock> stockList = new ArrayList<>();
+        List<Investment> stockList = new ArrayList<>();
         stockList.add(new Stock("A", LocalDateTime.now(), 1.0, 100.0));
         stockList.add(new Stock("B", LocalDateTime.now(), 1.0, 100.0));
         stockList.add(new Stock("A", LocalDateTime.now(), 1.4, 100.0));
@@ -34,7 +34,7 @@ public class PortfolioTest {
 
     @Test
     public void testSetStockList() {
-        List<Stock> newStockList = new ArrayList<>();
+        List<Investment> newStockList = new ArrayList<>();
         portfolio.setStockList(newStockList);
 
         assertEquals(newStockList, portfolio.getStockList());

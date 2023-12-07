@@ -2,13 +2,13 @@ package entity;
 
 import java.time.LocalDateTime;
 
-public class Stock extends Investment{
+public class Short extends Investment{
     private String tickerSymbol;
     private LocalDateTime purchaseLocalDateTime;
     private double quantity;
     private double totalValueAtPurchase;
 
-    public Stock(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double quantity, double totalValueAtPurchase) {
+    public Short(String tickerSymbol, LocalDateTime purchaseLocalDateTime, double quantity, double totalValueAtPurchase) {
         this.tickerSymbol = tickerSymbol;
         this.purchaseLocalDateTime = purchaseLocalDateTime;
         this.quantity = quantity;
@@ -22,31 +22,31 @@ public class Stock extends Investment{
     public void setTickerSymbol(String tickerSymbol) {
         this.tickerSymbol = tickerSymbol;
     }
-   @Override
+    @Override
     public LocalDateTime getPurchaseLocalDateTime() {
         return purchaseLocalDateTime;
     }
-
     @Override
     public void setPurchaseLocalDateTime(LocalDateTime purchaseLocalDateTime) {
-        this.purchaseLocalDateTime = purchaseLocalDateTime;
+
     }
+
     @Override
     public double getQuantity() {
         return quantity;
     }
-    @Override
 
+    @Override
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
-    @Override
 
+    @Override
     public double getTotalValueAtPurchase() {
         return totalValueAtPurchase;
     }
-    @Override
 
+    @Override
     public void setTotalValueAtPurchase(double totalValueAtPurchase) {
         this.totalValueAtPurchase = totalValueAtPurchase;
     }

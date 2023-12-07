@@ -15,15 +15,7 @@ public class AddStockOutputData {
         return newStockProfitToDate;
     }
 
-    public void setNewStockProfitToDate(double newStockProfitToDate) {
-        this.newStockProfitToDate = newStockProfitToDate;
-    }
-
     public Map<String, Double> getTickersToQuantities() {
         return tickersToQuantities;
-    }
-
-    public void setTickersToQuantities(Map<String, Double> tickersToQuantities) {
-        this.tickersToQuantities = tickersToQuantities;
     }
 }

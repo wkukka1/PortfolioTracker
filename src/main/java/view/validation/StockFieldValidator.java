@@ -6,4 +6,6 @@ public interface StockFieldValidator {
     boolean isTickerStrValid(String ticker);
 
     boolean isAmountStrValid(String amount);
+
+    boolean isTypeValid(String investmentType);
 }

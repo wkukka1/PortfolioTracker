@@ -7,6 +7,7 @@ import interface_adapter.removeStock.RemoveStockController;
 import interface_adapter.logged_in.add_stock.AddStockController;
 import interface_adapter.delete_user.DeleteController;
 import interface_adapter.delete_user.DeleteState;
+import interface_adapter.editStock.EditStockController;
 import interface_adapter.logged_in.show.ShowController;
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartPanel;
@@ -35,6 +36,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     private final DeleteController deleteController;
     private final ShowController showController;
     private final LoginView loginView;
+    private final EditStockController editStockController;
+
     private final JFrame appFrame;
     private final LogoutController logoutController;
 
@@ -46,6 +49,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     JButton addStockButton;
     JButton logOut;
     JButton deleteUser;
+
+    JButton editStock;
     JButton showButton;
     JPanel stocksScrollableList;
     JPanel plot;
@@ -53,9 +58,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     /**
      * A window with a title, a "Net Profit" label, a value for net profit, and an "Add Stock" button.
      */
+
     public LoggedInView(JFrame appFrame, LoggedInViewModel loggedInViewModel, DeleteState deleteState,
                         DeleteController deleteController, LoginView loginView, StockFieldValidator stockFieldValidator,
-                        AddStockController addStockController, LogoutController logoutController, ShowController showController, RemoveStockController removeStockController) {
+                        AddStockController addStockController, LogoutController logoutController, ShowController showController,
+                        EditStockController editStockController, RemoveStockController removeStockController) {
         this.appFrame = appFrame;
         this.loggedInViewModel = loggedInViewModel;
         this.loggedInViewModel.addPropertyChangeListener(this);
@@ -65,6 +72,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.loginView = loginView;
         this.logoutController = logoutController;
         this.stockFieldValidator = stockFieldValidator;
+        this.editStockController = editStockController;
         this.addStockController = addStockController;
         this.removeStockController = removeStockController;
 
@@ -90,6 +98,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         deleteUser = new JButton(LoggedInViewModel.DELETE_USER_LABEL);
         deleteUser.addActionListener(this);
 
+        editStock = new JButton(LoggedInViewModel.EDIT_STOCK_LABEL);
+        editStock.addActionListener(this);
 
         showButton = new JButton("Update Plot and Net Profit");
         showButton.addActionListener(this);
@@ -97,6 +107,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.setLayout(new GridBagLayout()); // Use GridBagLayout
 
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.insets = new Insets(10, 10, 10, 10); // Add padding
 
         title = new JLabel("Home");
@@ -150,6 +161,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.anchor = GridBagConstraints.NORTH;
         this.add(showButton, gbc);
 
+        // Sets the coordinates for the Edit Stock button
+        gbc.gridx = 7;
+        gbc.gridwidth = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        // Creates the Edit Stock button
+        this.add(editStock, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         plot = new JPanel();
@@ -166,9 +184,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         gbc.gridheight = 5;
         gbc.anchor = GridBagConstraints.NORTH;
         this.add(stocksScrollableList, gbc);
-
     }
-    //TODO: Implement the Remove Stock button next to the stocks that have been added
     /**
      * React to a button click that results in evt.
      */
@@ -181,6 +197,13 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             JFormattedTextField dateField = new JFormattedTextField(df);
 
+            JRadioButton longRadioButton = new JRadioButton("Long");
+            JRadioButton shortRadioButton = new JRadioButton("Short");
+
+            ButtonGroup buttonGroup = new ButtonGroup();
+            buttonGroup.add(longRadioButton);
+            buttonGroup.add(shortRadioButton);
+
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             panel.add(new JLabel("Enter Ticker Symbol:"));
@@ -189,6 +212,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             panel.add(dateField);
             panel.add(new JLabel("Enter Amount (USD):"));
             panel.add(amountField);
+            panel.add(new JLabel("Select Type of Investment:"));
+            panel.add(longRadioButton);
+            panel.add(shortRadioButton);
 
             int result = JOptionPane.showConfirmDialog(this, panel, "Add Stock",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -198,20 +224,76 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 String date = dateField.getText();
                 String amountStr = amountField.getText();
 
+                // Determine the selected position type
+                String investmentType;
+                if (shortRadioButton.isSelected()) {
+                    investmentType = "Short";
+                } else {
+                    investmentType = "Long";
+                }
+
                 try {
-                    validateAllFieldsOrShowErrorMsg(ticker, date, amountStr);
+                    validateAllFieldsOrShowErrorMsg(ticker, date, amountStr, investmentType);
                 } catch (ValidationException validationException) {
-                    System.out.println("Stock Field Validation Exception Occurred");;
+                    System.out.println("Stock Field Validation Exception Occurred");
                     return;
                 }
 
-                addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID());
+                addStockController.execute(ticker, date, amountStr, loggedInViewModel.getState().getUserID(), investmentType);
             }
+
 
         } if (evt.getSource() == deleteUser){
             deleteConfirmation();
         } if (evt.getSource() == logOut) {
             logoutController.execute(loggedInViewModel.getLoggedInUser());
+        } if (evt.getSource() == editStock) {
+            LabelTextPanel tickerField = new LabelTextPanel(new JLabel("Enter Ticker Symbol:"), new JTextField(10));
+            LabelTextPanel amountField = new LabelTextPanel(new JLabel("Enter Amount of Shares:"), new JTextField(10));
+
+            JFrame editStockFrame = new JFrame("Edit Stock");
+            editStockFrame.setLayout(new BoxLayout(editStockFrame.getContentPane(), BoxLayout.Y_AXIS));
+
+            // Adding the text fields
+            editStockFrame.add(tickerField);
+            editStockFrame.add(amountField);
+
+            // Creating a panel for the buttons with a FlowLayout
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+            JButton okButton = new JButton("OK");
+            okButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String ticker = tickerField.getText();
+                    double newQuantity = Double.parseDouble(amountField.getText());
+                    String username = loggedInViewModel.getLoggedInUser();
+
+                    editStockController.execute(ticker, newQuantity, username);
+
+                    editStockFrame.dispose();  // Close the frame after the operation
+                }
+            });
+
+            JButton cancelButton = new JButton("Cancel");
+            cancelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    editStockFrame.dispose();  // Close the frame on cancel
+                }
+            });
+
+            // Adding buttons to the button panel
+            buttonPanel.add(okButton);
+            buttonPanel.add(cancelButton);
+
+            // Adding the button panel to the main frame
+            editStockFrame.add(buttonPanel);
+
+            editStockFrame.setSize(300, 200);
+            editStockFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            editStockFrame.setLocationRelativeTo(this);
+            editStockFrame.setVisible(true);
         } if (evt.getSource() == showButton) {
             try {
                 showController.execute(loggedInViewModel.getState().getUserID());
@@ -219,6 +301,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 throw new RuntimeException(e);
             }
         }
+
     }
 
     private void deleteConfirmation(){
@@ -266,7 +349,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     }
 
 
-    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr)
+    private void validateAllFieldsOrShowErrorMsg(String ticker, String date, String amountStr, String investementType)
             throws ValidationException {
         if (!ticker.isEmpty() && !date.isEmpty() && !amountStr.isEmpty()) {
             if (!this.stockFieldValidator.isDateStrValid(date)) {
@@ -276,6 +359,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
             } else if (!this.stockFieldValidator.isAmountStrValid(amountStr)) {
                 JOptionPane.showMessageDialog(this,
                         "Please enter a valid (and non-zero) amount.");
+            }else if (!this.stockFieldValidator.isTypeValid(investementType)){
+                JOptionPane.showMessageDialog(this, "Please indicate what your investment type");
             } else {
                 return;
             }
