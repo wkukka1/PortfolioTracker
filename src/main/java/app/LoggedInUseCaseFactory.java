@@ -142,7 +142,7 @@ public class LoggedInUseCaseFactory {
                                                                   RemoveStockUserDataAccessInterface userDataAccessObject,
                                                                   PortfolioDataAccessInterface portfolioDataAccessObject){
         RemoveStockOutputBoundary removeStockPresenter = new RemoveStockPresenter(viewManagerModel, loggedInViewModel);
-        RemoveStockInputBoundary removeStockInteractor = new RemoveStockInteractor(userDataAccessObject, portfolioDataAccessObject, removeStockPresenter, loggedInViewModel);
+        RemoveStockInputBoundary removeStockInteractor = new RemoveStockInteractor(userDataAccessObject, portfolioDataAccessObject, removeStockPresenter);
         return new RemoveStockController(removeStockInteractor);
     }
 }

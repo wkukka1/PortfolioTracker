@@ -13,15 +13,12 @@ public class RemoveStockInteractor implements RemoveStockInputBoundary{
     final RemoveStockUserDataAccessInterface userDataAccessObject;
     final PortfolioDataAccessInterface portfolioDataAccessObject;
     final RemoveStockOutputBoundary removeStockPresenter;
-    final LoggedInViewModel loggedInViewModel;
     public RemoveStockInteractor(RemoveStockUserDataAccessInterface userDataAccessObject,
                                  PortfolioDataAccessInterface portfolioDataAccessObject,
-                                 RemoveStockOutputBoundary removeStockPresenter,
-                                 LoggedInViewModel loggedInViewModel){
+                                 RemoveStockOutputBoundary removeStockPresenter){
         this.userDataAccessObject = userDataAccessObject;
         this.portfolioDataAccessObject = portfolioDataAccessObject;
         this.removeStockPresenter = removeStockPresenter;
-        this.loggedInViewModel = loggedInViewModel;
     }
 
     /**
