@@ -8,13 +8,16 @@ StockTrack is an app that allows the user to input their portfolio and track it 
 
 Some of the features include:
 
-* Real-time stock price updates
-* Relevant news to updates related to one's stock picks
-* Analytics on the market including fastest fastest-growing stock
+* Tracking your portfolio's total net profit and net worth
+* Gets updated with daily stock information
+* Graphs your portfolio's net worth over the past 1000 days
+* Supports currency conversion, allowing you to view your net profit in any currency
 
 # APIS
-MarketStack: https://marketstack.com/documentation
-* Gets Realtime stock prices
+* [Alpha Vantage](alphavantage.co/documentation/#daily): Gets end-of-day stock prices
+* [ExchangeRate API](exchangeratesapi.io/documentation/): Gets daily currency exchange rate data
+
+
 
 ![Screenshot of API call](/images/sample_api_call.png)
 
